@@ -45,6 +45,7 @@ def test_prelude_surface() -> None:
         models.Record,
         models.CandidatePair,
         models.MatchDecision,
+        models.MatchError,
         models.Source,
         results.LabeledPairs,
         results.LinkageResult,
@@ -61,6 +62,20 @@ def test_value_objects_are_dataclasses(cls: type) -> None:
 def test_record_fields() -> None:
     names = {f.name for f in dataclasses.fields(models.Record)}
     assert names == {"id", "text", "fields"}
+
+
+def test_match_decision_is_bool_only_no_error_field() -> None:
+    # Pinned contract: is_match is a real bool; failures are modelled by the
+    # sibling MatchError + LinkageResult.errors, never inside MatchDecision.
+    names = {f.name for f in dataclasses.fields(models.MatchDecision)}
+    assert names == {"is_match", "confidence", "rationale"}
+    assert models.MatchDecision.__annotations__["is_match"] in (bool, "bool")
+    assert {f.name for f in dataclasses.fields(models.MatchError)} == {"reason"}
+
+
+def test_linkage_result_has_separate_errors_channel() -> None:
+    fields = {f.name for f in dataclasses.fields(results.LinkageResult)}
+    assert fields == {"decisions", "errors"}
 
 
 @pytest.mark.parametrize(

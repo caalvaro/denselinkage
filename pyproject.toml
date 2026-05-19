@@ -37,6 +37,11 @@ Issues = "https://github.com/caalvaro/denselinkage/issues"
 langchain = ["langchain-core>=0.3", "langchain-openai>=0.2"]
 faiss = ["faiss-cpu>=1.8"]
 sentence-transformers = ["sentence-transformers>=3.0"]
+# Reserved for v2 trainers (EmbedderTrainer / CrossEncoderTrainer). The
+# `denselinkage.training` namespace is reserved now; intentionally empty in
+# v1 so the import path and extra name are stable. v2 fills this with
+# torch / transformers / sentence-transformers.
+train = []
 all = [
     "langchain-core>=0.3",
     "langchain-openai>=0.2",
@@ -83,3 +88,7 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = [
+    "adapter: requires an optional heavy adapter (faiss / sentence-transformers / langchain)",
+    "slow: long-running test",
+]

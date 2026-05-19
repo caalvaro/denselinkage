@@ -11,7 +11,15 @@ from denselinkage.core.results import (
 )
 
 
-def linkage_metrics(result: LinkageResult, *, gold: LabeledPairs) -> LinkageMetrics: ...
+def linkage_metrics(result: LinkageResult, *, gold: LabeledPairs) -> LinkageMetrics:
+    """Precision/recall/F1 over all candidate pairs against ``gold``.
+
+    Errored pairs (a ``MatchError`` in ``result.errors``) are excluded from
+    tp/fp/fn and surfaced as ``LinkageMetrics.n_errors``. Every ``gold`` pair
+    not predicted a match counts as a false negative — including gold pairs
+    the blocker never surfaced — so recall is honest end-to-end.
+    """
+    ...
 
 
 def blocking_metrics(

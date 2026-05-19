@@ -4,7 +4,12 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from denselinkage.core.models import CandidatePair, MatchDecision
+from denselinkage.core.models import (
+    CandidatePair,
+    MatchDecision,
+    MatchError,
+    Record,
+)
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -30,15 +35,33 @@ class LinkageResult:
     """All candidate pairs with their match decisions."""
 
     decisions: tuple[tuple[CandidatePair, MatchDecision], ...]
+    errors: tuple[tuple[CandidatePair, MatchError], ...] = ()
 
     def to_frame(self) -> "pd.DataFrame":
-        """Fixed schema: left_id, right_id, match, confidence, reason,
-        similarity — independent of input column names."""
+        """One row per *decided* candidate pair (matches AND non-matches,
+        required for honest precision). Errored pairs are NOT rows here — they
+        live in :attr:`errors` and are counted as ``LinkageMetrics.n_errors``.
+
+        Fixed column schema, independent of input id-column names (echoing
+        them would collide on dedupe):
+
+        - ``left_id``, ``right_id``, ``similarity`` — always populated.
+        - ``match`` (``bool``) — always populated (errors are not rows).
+        - ``confidence`` (``float | None``), ``reason`` (``str | None``) —
+          nullable; ``None`` when the matcher does not produce them
+          (e.g. ``ThresholdMatcher``).
+        """
         ...
 
 
 @dataclass(frozen=True, slots=True)
 class LinkageMetrics:
+    """Contract: pairs that errored (a ``MatchError`` in
+    ``LinkageResult.errors``) are excluded from tp/fp/fn and reported as
+    ``n_errors``. ``false_negative`` counts every gold pair not predicted a
+    match — including gold pairs the blocker never surfaced — so recall is
+    honest end-to-end, not conditional on blocking."""
+
     true_positive: int
     false_positive: int
     false_negative: int
@@ -73,3 +96,44 @@ class Clustering:
     def n_clusters(self) -> int: ...
 
     def to_frame(self) -> "pd.DataFrame": ...
+
+
+@dataclass(frozen=True, slots=True)
+class TrainingPairs:
+    """Supervised material for a Trainer (v2). A distinct sibling of
+    ``LabeledPairs`` — never an overload: ``LabeledPairs`` is positives-only
+    gold for *evaluation*; ``TrainingPairs`` carries negatives and is consumed
+    only by training. ``batches`` preserves in-batch contrastive grouping
+    (the paper's loss is batch-structure dependent)."""
+
+    positives: tuple[tuple[Record, Record], ...]
+    negatives: tuple[tuple[Record, Record], ...]
+    batches: tuple[tuple[int, ...], ...] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ThresholdSweep:
+    """Full precision/recall/F1 curve over a threshold grid. Typed accessor,
+    never a bare ``{threshold: f1}`` dict."""
+
+    rows: tuple[tuple[float, LinkageMetrics], ...]
+
+    def best_f1(self) -> tuple[float, LinkageMetrics]: ...
+
+    def at_recall(self, target: float) -> tuple[float, LinkageMetrics]: ...
+
+
+@dataclass(frozen=True, slots=True)
+class AdjustedMetrics:
+    """End-to-end honest number: matcher metrics adjusted by blocker
+    pair-completeness@k (``recall_adjusted = matcher.recall * pc@k``)."""
+
+    matcher: LinkageMetrics
+    blocking_recall_at_k: float
+    k: int
+
+    @property
+    def recall_adjusted(self) -> float: ...
+
+    @property
+    def f1_adjusted(self) -> float: ...

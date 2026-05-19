@@ -28,12 +28,27 @@ class CandidatePair:
 
 @dataclass(frozen=True, slots=True)
 class MatchDecision:
-    """``is_match is None`` => undecided/errored."""
+    """A successful decision — ``is_match`` is always a real ``bool``.
 
-    is_match: bool | None
+    Failures are NOT represented here. A matcher that cannot decide a pair
+    yields the sibling :class:`MatchError` (see ``Matcher.match`` and
+    ``LinkageResult.errors``), keeping this type a pure decision.
+    ``confidence`` / ``rationale`` are matcher-dependent — both ``None`` for
+    matchers that do not produce them (e.g. ``ThresholdMatcher``).
+    """
+
+    is_match: bool
     confidence: float | None = None
     rationale: str | None = None
-    error: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class MatchError:
+    """A pair the matcher could not decide (retries exhausted / backend
+    error). Carried in ``LinkageResult.errors`` and counted as
+    ``LinkageMetrics.n_errors`` — never mixed into tp/fp/fn."""
+
+    reason: str
 
 
 @dataclass(frozen=True, slots=True)
