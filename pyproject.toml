@@ -1,0 +1,86 @@
+[project]
+name = "denselinkage"
+version = "0.1.0"
+description = "Record linkage with dense blocking using text embeddings and LLM matching"
+readme = "README.md"
+authors = [
+    { name = "Alvaro", email = "alvarocarvalho@live.com" }
+]
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["record-linkage", "entity-resolution", "embeddings", "blocking", "llm"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
+]
+# Core stays light: numpy (vectors) + pandas (the tabular IO layer). Heavy ML
+# backends are optional extras so the core installs dependency-free of them.
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/caalvaro/denselinkage"
+Repository = "https://github.com/caalvaro/denselinkage"
+Issues = "https://github.com/caalvaro/denselinkage/issues"
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.3", "langchain-openai>=0.2"]
+faiss = ["faiss-cpu>=1.8"]
+sentence-transformers = ["sentence-transformers>=3.0"]
+all = [
+    "langchain-core>=0.3",
+    "langchain-openai>=0.2",
+    "faiss-cpu>=1.8",
+    "sentence-transformers>=3.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11",
+    "ruff>=0.6",
+    "pytest>=8",
+    "pandas-stubs>=2.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.24,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["denselinkage"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src"]
+strict = true
+# Structure stage: bodies are `...` placeholders by design, so the strict
+# `empty-body` check is intentionally off until implementations land. Every
+# other strict check stays on (signatures/types are the contract).
+disable_error_code = ["empty-body"]
+# numpy ships py.typed; pandas types come from pandas-stubs (dev). Optional
+# heavy adapters that lack stubs are tolerated.
+[[tool.mypy.overrides]]
+module = ["faiss.*", "sentence_transformers.*", "langchain_openai.*", "langchain_core.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
