@@ -4,6 +4,14 @@ This is the source of truth. Everything else in the package either implements a
 port here or orchestrates ports defined here.
 """
 
+from denselinkage.core.errors import (
+    DenseLinkageError,
+    DimensionMismatch,
+    DuplicateRecordId,
+    EmptySource,
+    InvalidTopK,
+    UnknownIdColumn,
+)
 from denselinkage.core.models import (
     CandidatePair,
     MatchDecision,
@@ -37,7 +45,12 @@ __all__ = [
     "BlockingMetrics",
     "CandidatePair",
     "Clustering",
+    "DenseLinkageError",
+    "DimensionMismatch",
+    "DuplicateRecordId",
     "Embedder",
+    "EmptySource",
+    "InvalidTopK",
     "LabeledPairs",
     "LinkageMetrics",
     "LinkageResult",
@@ -51,5 +64,6 @@ __all__ = [
     "ThresholdSweep",
     "Trainer",
     "TrainingPairs",
+    "UnknownIdColumn",
     "VectorIndex",
 ]

@@ -1,39 +1,45 @@
 #!/usr/bin/env pwsh
-# Local CI parity — runs the same checks GitHub Actions runs.
+# Local CI parity — runs the same checks GitHub Actions runs, against the
+# repo's single .venv (created from .python-version).
 #
-# CI (see .github/workflows/ci.yml) runs:
-#   * lint-and-type on Python 3.12: ruff check src/ tests/ && mypy src/
-#   * test matrix on 3.10/3.11/3.12: pytest -m "not adapter and not slow"
+# CI (.github/workflows/ci.yml) runs, per Python 3.10–3.13:
+#   * lint-and-type: ruff check + ruff format --check + mypy + compileall,
+#     over src/ tests/ examples/
+#   * test matrix: pytest -m "not adapter and not slow"
 #
-# This script reproduces the lint + type-check exactly (Python 3.12 venv
-# is required because pandas-stubs / numpy stubs have shipped strict-mode
-# changes between versions). The test suite runs under .venv (Python 3.10
-# locally) — close enough for most regressions; the full matrix lives in CI.
+# This reproduces all of that once, under the repo's single .venv; the full
+# interpreter matrix lives in CI.
 
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
-$Py312 = Join-Path $RepoRoot '.venv-py312\Scripts'
-$Py310 = Join-Path $RepoRoot '.venv\Scripts'
+$Bin = Join-Path $RepoRoot '.venv\Scripts'
 
-if (-not (Test-Path "$Py312\mypy.exe")) {
-    Write-Error "Missing $Py312 — run: uv venv --python 3.12 .venv-py312; uv pip install --python .venv-py312\Scripts\python.exe -e '.[dev]'"
-}
-if (-not (Test-Path "$Py310\pytest.exe")) {
-    Write-Error "Missing $Py310 — run: uv venv --python 3.10 .venv; uv pip install --python .venv\Scripts\python.exe -e '.[dev,faiss]'"
+if (-not (Test-Path "$Bin\ruff.exe") -or
+    -not (Test-Path "$Bin\mypy.exe") -or
+    -not (Test-Path "$Bin\pytest.exe")) {
+    Write-Error "Missing dev tools in .venv — run: uv venv .venv; uv pip install --python .venv\Scripts\python.exe -e '.[dev]'"
 }
 
-Write-Host '== ruff (py3.12) ==' -ForegroundColor Cyan
-& "$Py312\ruff.exe" check src/ tests/
+Write-Host '== ruff check (src, tests, examples) ==' -ForegroundColor Cyan
+& "$Bin\ruff.exe" check src/ tests/ examples/
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host '== mypy (py3.12) ==' -ForegroundColor Cyan
-& "$Py312\mypy.exe" src/
+Write-Host '== ruff format --check ==' -ForegroundColor Cyan
+& "$Bin\ruff.exe" format --check src/ tests/ examples/
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host '== pytest (py3.10, CI markers) ==' -ForegroundColor Cyan
-& "$Py310\pytest.exe" -m "not adapter and not slow" -q
+Write-Host '== mypy (src + examples) ==' -ForegroundColor Cyan
+& "$Bin\mypy.exe" src/ examples/
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host '== compileall examples ==' -ForegroundColor Cyan
+& "$Bin\python.exe" -m compileall -q examples
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host '== pytest (CI markers) ==' -ForegroundColor Cyan
+& "$Bin\pytest.exe" -m "not adapter and not slow" -q
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host 'All checks passed.' -ForegroundColor Green

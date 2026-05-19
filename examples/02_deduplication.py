@@ -5,7 +5,7 @@ itself and suppresses self-pairs internally — there is no
 ``suppress_self_pairs`` knob on the public surface. The same ``DenseLinker``
 config works for both ``link`` and ``dedupe``; the task is the method name.
 
-``connected_components`` returns a typed ``Clustering`` (M4), not a loose dict.
+``connected_components`` returns a typed ``Clustering``, not a loose dict.
 
 NOTE: Design mock — heavy adapters are deferred, so this type-checks against
 the real core but does not run end to end yet.

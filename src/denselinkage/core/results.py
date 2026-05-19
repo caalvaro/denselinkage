@@ -9,6 +9,7 @@ from denselinkage.core.models import (
     MatchDecision,
     MatchError,
     Record,
+    RecordId,
 )
 
 if TYPE_CHECKING:
@@ -17,9 +18,24 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class LabeledPairs:
-    """The gold set of true matches — one type everywhere."""
+    """The gold set of true matches — one type everywhere.
 
-    pairs: frozenset[tuple[str, str]]
+    Pairs are stored
+    **exactly as given (ordered)**; no symmetrization happens at construction.
+    Each tuple is ``(left_id, right_id)``. Evaluation comparison depends on the
+    verb:
+
+    - ``link`` (two sources): the order is meaningful — a gold ``(a, b)``
+      matches a result pair whose left id is ``a`` and right id is ``b``.
+    - ``dedupe`` (one source): left/right is arbitrary, so metrics canonicalize
+      *both* gold and result pairs to an unordered key (``frozenset({a, b})``)
+      before comparing. This removes the silent recall/precision fork.
+
+    See the matching docstrings of ``linkage_metrics`` /
+    ``pair_completeness_at_k`` for which comparison each applies.
+    """
+
+    pairs: frozenset[tuple[RecordId, RecordId]]
 
     @classmethod
     def from_pairs(cls, pairs: Iterable[tuple[str, str]]) -> "LabeledPairs": ...
@@ -80,17 +96,28 @@ class LinkageMetrics:
 
 @dataclass(frozen=True, slots=True)
 class BlockingMetrics:
-    """Pair-completeness@k via ``pc_at(k)``."""
+    """Pair-completeness@k. ``pc_at(k)`` is the sole supported accessor;
+    construct via :meth:`from_pc_map` (no leading-underscore public
+    constructor param)."""
 
-    _pc: Mapping[int, float]
+    pc: Mapping[int, float]
     n_gold: int
 
-    def pc_at(self, k: int) -> float: ...
+    @classmethod
+    def from_pc_map(
+        cls, pc: Mapping[int, float], *, n_gold: int
+    ) -> "BlockingMetrics": ...
+
+    def pc_at(self, k: int) -> float:
+        """PC@k. Raises ``KeyError`` if ``k`` was not among the ``ks`` passed
+        to ``blocking_metrics`` (no silent 0.0 — an uncomputed k is a usage
+        error, not a zero result)."""
+        ...
 
 
 @dataclass(frozen=True, slots=True)
 class Clustering:
-    labels: Mapping[str, int]
+    labels: Mapping[RecordId, int]
 
     @property
     def n_clusters(self) -> int: ...

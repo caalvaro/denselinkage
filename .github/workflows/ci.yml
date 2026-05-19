@@ -25,10 +25,14 @@ jobs:
         run: pip install --upgrade uv
       - name: Install project (dev extras)
         run: uv pip install --system -e ".[dev]"
-      - name: Ruff
-        run: ruff check src/ tests/
-      - name: Mypy
-        run: mypy src/
+      - name: Ruff lint (src, tests, examples)
+        run: ruff check src/ tests/ examples/
+      - name: Ruff format check
+        run: ruff format --check src/ tests/ examples/
+      - name: Mypy (src + examples; examples are the spec)
+        run: mypy src/ examples/
+      - name: Compile examples
+        run: python -m compileall examples
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -36,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}

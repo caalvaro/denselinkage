@@ -2,9 +2,9 @@
 
 Explicitly assembled components: a dense blocker (SentenceTransformer
 embeddings + a FAISS index) then an LLM matcher. Vector indexes live in
-``denselinkage.indexing`` (their own port, parallel to embedders — M1).
+``denselinkage.indexing`` (their own port, parallel to embedders).
 
-The prompt carries ONLY the semantic question (H2): the matcher owns output
+The prompt carries ONLY the semantic question: the matcher owns output
 structure and returns typed ``MatchDecision``s, so a brittle "Answer YES or
 NO" instruction is neither needed nor wanted.
 
@@ -45,7 +45,7 @@ def main() -> None:
     blocker = DenseBlocker(
         embedder=SentenceTransformerEmbedder("all-MiniLM-L6-v2"),
         vector_index=FaissFlatIndex(),
-        similarity_threshold=0.80,  # retrieve top_k, then keep >= this (L4)
+        similarity_threshold=0.80,  # retrieve top_k, then keep >= this
         top_k=5,
     )
 
@@ -81,9 +81,11 @@ def main() -> None:
     result = linker.link(left, right)  # one call, no mutation
 
     print("\n--- Match Results ---")
-    # Fixed schema, independent of input column names (H3):
-    # left_id, right_id, match (bool|None), confidence (float|None),
-    # reason (str|None), similarity (float). Contains ALL candidate pairs.
+    # Fixed schema, independent of input column names:
+    # left_id, right_id, similarity (float), match (bool),
+    # confidence (float|None), reason (str|None). One row per *decided*
+    # pair (matches AND non-matches); pairs the matcher could not decide
+    # are in result.errors, not rows here.
     print(result.to_frame())
 
     print("\n--- Evaluation Metrics ---")

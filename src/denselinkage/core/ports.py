@@ -8,6 +8,7 @@ from denselinkage.core.models import (
     MatchDecision,
     MatchError,
     Record,
+    RecordId,
 )
 
 if TYPE_CHECKING:
@@ -25,6 +26,12 @@ else:
 # Trainer is a *factory* — train() returns a NEW frozen component and never
 # mutates self or `base`, so it preserves the package's immutability contract.
 ComponentT = TypeVar("ComponentT")
+
+# ``@runtime_checkable`` is
+# retained ONLY so the structure-stage contract test can assert
+# ``_is_runtime_protocol`` (tests/test_contract.py). No runtime ``isinstance``
+# dispatch against these ports exists or is intended; first-party adapters
+# subclass their port explicitly and mypy completeness-checks them.
 
 
 @runtime_checkable
@@ -51,11 +58,11 @@ class Embedder(Protocol):
 
 @runtime_checkable
 class VectorIndex(Protocol):
-    def add(self, vectors: Vectors, ids: Sequence[str]) -> None: ...
+    def add(self, vectors: Vectors, ids: Sequence[RecordId]) -> None: ...
 
     def search(
         self, queries: Vectors, *, top_k: int
-    ) -> list[list[tuple[str, float]]]: ...
+    ) -> list[list[tuple[RecordId, float]]]: ...
 
 
 @runtime_checkable

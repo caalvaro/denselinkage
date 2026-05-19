@@ -16,6 +16,11 @@ from denselinkage.core import models, ports, results
 from denselinkage.embedding import HashedNGramEmbedder, SentenceTransformerEmbedder
 from denselinkage.indexing import FaissFlatIndex, NumpyFlatIndex
 from denselinkage.matching import LangChainMatcher, RetryPolicy, ThresholdMatcher
+from denselinkage.serialize import (
+    FieldwiseSerializer,
+    TemplateSerializer,
+    WholeRowSerializer,
+)
 
 EXPECTED_PRELUDE = {
     "BlockingMetrics",
@@ -97,6 +102,9 @@ def test_ports_are_runtime_checkable_protocols(port: type) -> None:
         (FaissFlatIndex, ports.VectorIndex),
         (ThresholdMatcher, ports.Matcher),
         (LangChainMatcher, ports.Matcher),
+        (TemplateSerializer, ports.Serializer),
+        (FieldwiseSerializer, ports.Serializer),
+        (WholeRowSerializer, ports.Serializer),
     ],
 )
 def test_adapters_declare_their_port(adapter: type, port: type) -> None:

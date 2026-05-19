@@ -1,7 +1,7 @@
 """Example 00 — Quickstart (the shortest real path).
 
 Schema-aligned data + ``Source`` defaulting to the whole-row serializer means
-this is genuinely minimal (L1): no template, no column mapping, one call.
+this is genuinely minimal: no template, no column mapping, one call.
 
 ``DenseLinker.with_defaults()`` is the low-floor entry point. The reference
 components it would pick (``HashedNGramEmbedder`` + ``NumpyFlatIndex`` +
