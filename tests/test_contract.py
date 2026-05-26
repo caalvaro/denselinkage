@@ -12,8 +12,10 @@ import pytest
 
 import denselinkage as dl
 from denselinkage.blocking import DenseBlocker
+from denselinkage.cluster import ConnectedComponentsClusterer
 from denselinkage.core import models, ports, results
 from denselinkage.embedding import HashedNGramEmbedder, SentenceTransformerEmbedder
+from denselinkage.filtering import SimilarityThresholdFilter
 from denselinkage.indexing import FaissFlatIndex, NumpyFlatIndex
 from denselinkage.matching import LangChainMatcher, RetryPolicy, ThresholdMatcher
 from denselinkage.serialize import (
@@ -25,6 +27,7 @@ from denselinkage.serialize import (
 EXPECTED_PRELUDE = {
     "BlockingMetrics",
     "Clustering",
+    "ClusteringMetrics",
     "DenseLinker",
     "FieldwiseSerializer",
     "LabeledPairs",
@@ -57,6 +60,7 @@ def test_prelude_surface() -> None:
         results.LinkageMetrics,
         results.BlockingMetrics,
         results.Clustering,
+        results.ClusteringMetrics,
         RetryPolicy,
     ],
 )
@@ -85,7 +89,15 @@ def test_linkage_result_has_separate_errors_channel() -> None:
 
 @pytest.mark.parametrize(
     "port",
-    [ports.Serializer, ports.Embedder, ports.VectorIndex, ports.Blocker, ports.Matcher],
+    [
+        ports.Serializer,
+        ports.Embedder,
+        ports.VectorIndex,
+        ports.Blocker,
+        ports.Filter,
+        ports.Matcher,
+        ports.Clusterer,
+    ],
 )
 def test_ports_are_runtime_checkable_protocols(port: type) -> None:
     # @runtime_checkable protocols expose _is_runtime_protocol.
@@ -105,6 +117,8 @@ def test_ports_are_runtime_checkable_protocols(port: type) -> None:
         (TemplateSerializer, ports.Serializer),
         (FieldwiseSerializer, ports.Serializer),
         (WholeRowSerializer, ports.Serializer),
+        (ConnectedComponentsClusterer, ports.Clusterer),
+        (SimilarityThresholdFilter, ports.Filter),
     ],
 )
 def test_adapters_declare_their_port(adapter: type, port: type) -> None:

@@ -29,7 +29,7 @@ class ThresholdMatcher(Matcher):
 class LangChainMatcher(Matcher):
     """LLM matcher (extra: ``[langchain]``).
 
-    Prompt/output contract (pinned; A7 implements against this): ``prompt``
+    Prompt/output contract: ``prompt``
     carries ONLY the semantic question and may reference the pair fields. The
     response *structure* is framework-owned — the matcher binds structured
     output and returns typed ``MatchDecision``s; callers never parse text and

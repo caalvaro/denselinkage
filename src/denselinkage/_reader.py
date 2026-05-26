@@ -1,4 +1,4 @@
-"""Internal Source -> Record materialization seam (2.3).
+"""Internal Source -> Record materialization seam.
 
 This names the one orchestration boundary that was otherwise implicit: every
 other architectural boundary in the package is an explicit port, but turning a
@@ -7,7 +7,7 @@ had no named owner. It is **not** a public port — underscore-private, absent
 from the prelude — but it is named and its responsibility is documented so the
 contract has no unspecified seam.
 
-Responsibilities (the documented contract; body lands in A1):
+Responsibilities (the documented contract):
 
 1. Resolve ``Source.serializer is None`` to
    :func:`denselinkage.serialize.default_serializer` (a ``WholeRowSerializer``).

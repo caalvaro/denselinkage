@@ -1,4 +1,4 @@
-"""Ports — structural contracts (``typing.Protocol``, no ``I`` prefix)."""
+"""Ports — structural contracts (``typing.Protocol``)."""
 
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any, Protocol, TypeVar, runtime_checkable
@@ -15,16 +15,12 @@ if TYPE_CHECKING:
     import numpy as np
     import numpy.typing as npt
 
-    from denselinkage.core.results import TrainingPairs
+    from denselinkage.core.results import Clustering, LinkageResult, TrainingPairs
 
     Vectors = npt.NDArray[np.float32]
 else:
     Vectors = Any
 
-# Trainability is an orthogonal capability: it is a separate port, never a
-# method on Embedder/Matcher (a HashedNGramEmbedder cannot be trained). A
-# Trainer is a *factory* — train() returns a NEW frozen component and never
-# mutates self or `base`, so it preserves the package's immutability contract.
 ComponentT = TypeVar("ComponentT")
 
 # ``@runtime_checkable`` is
@@ -73,12 +69,35 @@ class Blocker(Protocol):
 
 
 @runtime_checkable
+class Filter(Protocol):
+    """A second comparison-space reduction, distinct from blocking: prune a
+    candidate set before matching. Pure over already-generated pairs (carries
+    no indexing state). ``SimilarityThresholdFilter`` is the dependency-free
+    reference adapter; multi-pass / rule-based filters conform here.
+    """
+
+    def filter(self, pairs: Sequence[CandidatePair]) -> list[CandidatePair]: ...
+
+
+@runtime_checkable
 class Matcher(Protocol):
     def match(self, pairs: Sequence[CandidatePair]) -> list[MatchDecision | MatchError]:
         """One outcome per input pair, aligned by position. A pair the matcher
         cannot decide yields a ``MatchError`` (never raises into the batch, so
         one bad call does not abort the rest)."""
         ...
+
+
+@runtime_checkable
+class Clusterer(Protocol):
+    """Groups a ``LinkageResult``'s matches into entity clusters — a swappable
+    strategy, not a fixed step. ``ConnectedComponentsClusterer`` (wrapping the
+    ``connected_components`` reference function) declares this port; alternative
+    algorithms (e.g. agglomerative, incremental) conform here. Pure over an
+    already-computed ``LinkageResult``; carries no blocking/matching state.
+    """
+
+    def cluster(self, result: "LinkageResult") -> "Clustering": ...
 
 
 @runtime_checkable

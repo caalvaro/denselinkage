@@ -31,6 +31,7 @@ CORE_MODULES = (
     "denselinkage.serialize",
     "denselinkage.blocking",
     "denselinkage.embedding",
+    "denselinkage.filtering",
     "denselinkage.indexing",
     "denselinkage.matching",
     "denselinkage.training",

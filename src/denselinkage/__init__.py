@@ -12,6 +12,7 @@ from denselinkage.core.models import Source
 from denselinkage.core.results import (
     BlockingMetrics,
     Clustering,
+    ClusteringMetrics,
     LabeledPairs,
     LinkageMetrics,
     LinkageResult,
@@ -28,6 +29,7 @@ __version__ = "0.1.0"
 __all__ = [
     "BlockingMetrics",
     "Clustering",
+    "ClusteringMetrics",
     "DenseLinker",
     "FieldwiseSerializer",
     "LabeledPairs",

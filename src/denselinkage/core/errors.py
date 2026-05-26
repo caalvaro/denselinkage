@@ -1,4 +1,4 @@
-"""Hard-failure exception taxonomy (2.1).
+"""Hard-failure exception taxonomy.
 
 Two distinct failure models, deliberately separate:
 
