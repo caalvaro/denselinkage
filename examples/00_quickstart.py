@@ -3,11 +3,10 @@
 Schema-aligned data + ``Source`` defaulting to the whole-row serializer means
 this is genuinely minimal: no template, no column mapping, one call.
 
-``DenseLinker.with_defaults()`` is the low-floor entry point. The reference
-components it would pick (``HashedNGramEmbedder`` + ``NumpyFlatIndex`` +
-``ThresholdMatcher``) are not implemented yet, so until they land pass
-``blocker=``/``matcher=`` explicitly (see ``01``/``03``). Calling it bare
-raises an actionable ``NotImplementedError`` rather than failing obscurely.
+``DenseLinker.with_defaults()`` is the low-floor entry point: it wires the
+dependency-free reference stack (``HashedNGramEmbedder`` + ``NumpyFlatIndex``
+behind a ``DenseBlocker``, plus ``ThresholdMatcher``). Pass ``blocker=`` /
+``matcher=`` to override either half (see ``01``/``03`` for full control).
 
 The default stack is **lexical** (``HashedNGramEmbedder`` is character n-gram
 feature hashing): it recovers abbreviations, punctuation and typos
@@ -15,9 +14,6 @@ feature hashing): it recovers abbreviations, punctuation and typos
 ``Google LLC`` / ``Google``) but not semantic renames such as
 ``Google`` -> ``Alphabet``. The gold below is lexically recoverable on purpose;
 for semantic matches reach for ``SentenceTransformerEmbedder`` (see ``01``).
-
-NOTE: Design mock — components are deferred, so this type-checks but does not
-run end to end yet.
 """
 
 import pandas as pd
@@ -50,7 +46,7 @@ def main() -> None:
 
     result = linker.link(left, right)  # -> LinkageResult
 
-    # columns: left_id, right_id, match, confidence, reason, similarity
+    # columns: left_id, right_id, similarity, match, confidence, reason
     print(result.to_frame())
     metrics = linkage_metrics(result, gold=gold)  # -> LinkageMetrics
     print(f"P/R/F1: {metrics.precision:.3f} {metrics.recall:.3f} {metrics.f1:.3f}")

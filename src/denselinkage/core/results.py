@@ -38,12 +38,19 @@ class LabeledPairs:
     pairs: frozenset[tuple[RecordId, RecordId]]
 
     @classmethod
-    def from_pairs(cls, pairs: Iterable[tuple[str, str]]) -> "LabeledPairs": ...
+    def from_pairs(cls, pairs: Iterable[tuple[str, str]]) -> "LabeledPairs":
+        return cls(pairs=frozenset(pairs))
 
     @classmethod
     def from_frame(
         cls, frame: "pd.DataFrame", *, left_id: str, right_id: str
-    ) -> "LabeledPairs": ...
+    ) -> "LabeledPairs":
+        return cls(
+            pairs=frozenset(
+                (str(left), str(right))
+                for left, right in zip(frame[left_id], frame[right_id], strict=True)
+            )
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,7 +74,21 @@ class LinkageResult:
           nullable; ``None`` when the matcher does not produce them
           (e.g. ``ThresholdMatcher``).
         """
-        ...
+        import pandas as pd
+
+        columns = ["left_id", "right_id", "similarity", "match", "confidence", "reason"]
+        rows = [
+            {
+                "left_id": pair.record_a.id,
+                "right_id": pair.record_b.id,
+                "similarity": pair.similarity_score,
+                "match": decision.is_match,
+                "confidence": decision.confidence,
+                "reason": decision.rationale,
+            }
+            for pair, decision in self.decisions
+        ]
+        return pd.DataFrame(rows, columns=columns)
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,13 +106,19 @@ class LinkageMetrics:
     n_errors: int = 0
 
     @property
-    def precision(self) -> float: ...
+    def precision(self) -> float:
+        denom = self.true_positive + self.false_positive
+        return self.true_positive / denom if denom else 0.0
 
     @property
-    def recall(self) -> float: ...
+    def recall(self) -> float:
+        denom = self.true_positive + self.false_negative
+        return self.true_positive / denom if denom else 0.0
 
     @property
-    def f1(self) -> float: ...
+    def f1(self) -> float:
+        denom = self.precision + self.recall
+        return 2 * self.precision * self.recall / denom if denom else 0.0
 
 
 @dataclass(frozen=True, slots=True)
