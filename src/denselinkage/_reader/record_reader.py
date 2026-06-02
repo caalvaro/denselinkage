@@ -5,7 +5,7 @@ from typing import Any
 
 from denselinkage.core.errors import DuplicateRecordId, EmptySource, UnknownIdColumn
 from denselinkage.core.models import Record, RecordId, Source
-from denselinkage.serialize import default_serializer
+from denselinkage.serializing import default_serializer
 
 
 class RecordReader:

@@ -11,8 +11,8 @@ This package is a façade: implementations live in sibling modules; import the
 public names here.
 """
 
-from denselinkage.cluster.connected_components import connected_components
-from denselinkage.cluster.connected_components_clusterer import (
+from denselinkage.clustering.connected_components import connected_components
+from denselinkage.clustering.connected_components_clusterer import (
     ConnectedComponentsClusterer,
 )
 

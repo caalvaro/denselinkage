@@ -1,7 +1,12 @@
-"""The dependency-free contract: models, ports, results.
+"""The dependency-free contract: models, ports, the outputs ports reference,
+and errors.
 
 This is the source of truth. Everything else in the package either implements a
-port here or orchestrates ports defined here.
+port here or orchestrates ports defined here. Evaluation *report* types
+(``LinkageMetrics``, ``BlockingMetrics``, ``ClusteringMetrics``,
+``ThresholdSweep``, ``AdjustedMetrics``) deliberately live in
+``denselinkage.metrics``, not here — nothing in ``core`` depends on them
+(ADR-0002).
 """
 
 from denselinkage.core.errors import (
@@ -33,26 +38,18 @@ from denselinkage.core.ports import (
     VectorIndex,
 )
 from denselinkage.core.results import (
-    AdjustedMetrics,
-    BlockingMetrics,
-    Clustering,
-    ClusteringMetrics,
+    ClusteringResult,
     LabeledPairs,
-    LinkageMetrics,
     LinkageResult,
-    ThresholdSweep,
     TrainingPairs,
 )
 
 __all__ = [
-    "AdjustedMetrics",
     "Blocker",
     "BlockingIndex",
-    "BlockingMetrics",
     "CandidatePair",
     "Clusterer",
-    "Clustering",
-    "ClusteringMetrics",
+    "ClusteringResult",
     "DenseLinkageError",
     "DimensionMismatch",
     "DuplicateRecordId",
@@ -61,7 +58,6 @@ __all__ = [
     "Filter",
     "InvalidTopK",
     "LabeledPairs",
-    "LinkageMetrics",
     "LinkageResult",
     "MatchDecision",
     "MatchError",
@@ -71,7 +67,6 @@ __all__ = [
     "SearchableIndex",
     "Serializer",
     "Source",
-    "ThresholdSweep",
     "Trainer",
     "TrainingPairs",
     "UnknownIdColumn",

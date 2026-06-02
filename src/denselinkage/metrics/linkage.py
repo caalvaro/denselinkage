@@ -1,7 +1,40 @@
-"""``linkage_metrics`` — pairwise precision/recall/F1 against gold."""
+"""Pairwise linkage metrics — the ``LinkageMetrics`` report and the
+``linkage_metrics`` function that produces it."""
+
+from dataclasses import dataclass
 
 from denselinkage.core.models import RecordId
-from denselinkage.core.results import LabeledPairs, LinkageMetrics, LinkageResult
+from denselinkage.core.results import LabeledPairs, LinkageResult
+
+
+@dataclass(frozen=True, slots=True)
+class LinkageMetrics:
+    """Contract: pairs that errored (a ``MatchError`` in
+    ``LinkageResult.errors``) are excluded from tp/fp/fn and reported as
+    ``n_errors``. ``false_negative`` counts every gold pair not predicted a
+    match — including gold pairs the blocker never surfaced — so recall is
+    honest end-to-end, not conditional on blocking."""
+
+    true_positive: int
+    false_positive: int
+    false_negative: int
+    n_gold: int
+    n_errors: int = 0
+
+    @property
+    def precision(self) -> float:
+        denom = self.true_positive + self.false_positive
+        return self.true_positive / denom if denom else 0.0
+
+    @property
+    def recall(self) -> float:
+        denom = self.true_positive + self.false_negative
+        return self.true_positive / denom if denom else 0.0
+
+    @property
+    def f1(self) -> float:
+        denom = self.precision + self.recall
+        return 2 * self.precision * self.recall / denom if denom else 0.0
 
 
 def _pair_key(

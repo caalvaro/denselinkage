@@ -36,7 +36,7 @@
 
 Named: internal `denselinkage._reader.RecordReader` (underscore-private; not
 a public port, not in the prelude). Documented responsibility: resolve
-`Source.serializer is None` → `denselinkage.serialize.default_serializer`
+`Source.serializer is None` → `denselinkage.serializing.default_serializer`
 (`WholeRowSerializer`), apply the serializer (incl. `column_mapping`),
 validate the frame raising the taxonomy above. Referenced from the `Source`
 and `linker` docstrings so the contract has no unspecified boundary.
@@ -45,7 +45,7 @@ and `linker` docstrings so the contract has no unspecified boundary.
 
 - **RecordId** threaded through identity-bearing types (`LabeledPairs.pairs`,
   `VectorIndex.build` / `SearchableIndex.search` ids+returns across the
-  `Numpy*` / `Faiss*` adapters, `Clustering.labels`). `Record.id` already used
+  `Numpy*` / `Faiss*` adapters, `ClusteringResult.labels`). `Record.id` already used
   it. Alias kept (not dropped).
 - **`from __future__ import annotations`** removed from `_optional.py` — the
   package convention is uniformly quoted forward refs / `TYPE_CHECKING`, no

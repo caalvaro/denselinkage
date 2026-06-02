@@ -10,7 +10,7 @@ contract has no unspecified seam.
 Responsibilities (the documented contract):
 
 1. Resolve ``Source.serializer is None`` to
-   :func:`denselinkage.serialize.default_serializer` (a ``WholeRowSerializer``).
+   :func:`denselinkage.serializing.default_serializer` (a ``WholeRowSerializer``).
 2. Apply the serializer (including its ``column_mapping`` when present) to
    each row to produce ``Record.text``; carry the raw row in ``Record.fields``.
 3. Validate, raising the ``denselinkage.core.errors`` taxonomy:

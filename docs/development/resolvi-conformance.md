@@ -60,7 +60,7 @@ blocker-optional). Decision must be explicit either way.
 algorithm cannot be injected through the contract. Resolvi: clustering is a
 swappable **Strategy** (agglomerative is incremental).
 **Ruling (recommended, ratify pre-freeze).** Add a `Clusterer` Protocol to
-`denselinkage.core.ports` (`cluster(result: LinkageResult) -> Clustering`); a
+`denselinkage.core.ports` (`cluster(result: LinkageResult) -> ClusteringResult`); a
 `ConnectedComponentsClusterer` reference adapter (in `cluster.py`) declares the
 port and joins the adapter-declares-its-port contract test, while the existing
 `connected_components` function is kept as its prelude convenience wrapper

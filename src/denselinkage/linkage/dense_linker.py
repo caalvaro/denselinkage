@@ -7,7 +7,7 @@ from denselinkage._reader import RecordReader
 from denselinkage.core.models import CandidatePair, Source
 from denselinkage.core.ports import Blocker, Matcher
 from denselinkage.core.results import LinkageResult
-from denselinkage.linker.linkage_index import LinkageIndex
+from denselinkage.linkage.linkage_index import LinkageIndex
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

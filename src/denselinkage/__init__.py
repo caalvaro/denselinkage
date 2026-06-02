@@ -7,18 +7,12 @@ the top level is the orchestration entry points plus the canonical
 reference serializers and result types.
 """
 
-from denselinkage.cluster import connected_components
+from denselinkage.clustering import connected_components
 from denselinkage.core.models import Source
-from denselinkage.core.results import (
-    BlockingMetrics,
-    Clustering,
-    ClusteringMetrics,
-    LabeledPairs,
-    LinkageMetrics,
-    LinkageResult,
-)
-from denselinkage.linker import DenseLinker, LinkageIndex
-from denselinkage.serialize import (
+from denselinkage.core.results import ClusteringResult, LabeledPairs, LinkageResult
+from denselinkage.linkage import DenseLinker, LinkageIndex
+from denselinkage.metrics import BlockingMetrics, ClusteringMetrics, LinkageMetrics
+from denselinkage.serializing import (
     FieldwiseSerializer,
     TemplateSerializer,
     WholeRowSerializer,
@@ -28,8 +22,8 @@ __version__ = "0.1.0"
 
 __all__ = [
     "BlockingMetrics",
-    "Clustering",
     "ClusteringMetrics",
+    "ClusteringResult",
     "DenseLinker",
     "FieldwiseSerializer",
     "LabeledPairs",

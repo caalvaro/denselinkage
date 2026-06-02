@@ -122,3 +122,29 @@ exported from `denselinkage.core`. Construction API byte-identical
 `tests/test_contract.py` (the two new ports joined the adapter-declares-port and
 runtime-checkable fitness functions). Contract-shape: adding these ports
 post-freeze would be breaking, so they land now.
+
+## D7 — Evaluation report types live in the metrics layer, not `core`
+**Ruling (recommended default, no override; ADR-0002; implemented).** `core`
+keeps only the contract/domain types — the outputs a port references
+(`LinkageResult`, `ClusteringResult`), the gold / training value objects
+(`LabeledPairs`, `TrainingPairs`), plus models, ports and errors. The evaluation
+**report** types — `LinkageMetrics`, `BlockingMetrics`, `ClusteringMetrics`,
+`ThresholdSweep`, `AdjustedMetrics` — move to `denselinkage.metrics`,
+co-located with the functions that produce them, because **nothing in `core`
+depends on them**. Decisive test: `core/ports.py` references only
+`LinkageResult` / `ClusteringResult` / `TrainingPairs` from results, never the five
+reports.
+
+**Classification — contract-shape (CS).** Five public types change module; the
+public prelude re-exports them from the new home, so `from denselinkage import
+LinkageMetrics` is unchanged. Landed pre-freeze (2026-06-02). `LabeledPairs`
+stays in `core` as domain ground-truth (not port-referenced, but a value object
+like `Source`, and read beyond evaluation by Phase-B mining).
+
+Full record: [`docs/ADRs/0002-evaluation-types-out-of-core.md`](../ADRs/0002-evaluation-types-out-of-core.md).
+Recorded in: `core/__init__.py` (`__all__` + docstring), `denselinkage/__init__.py`
+(prelude re-export), the `metrics` modules (`linkage`/`blocking`/`clustering`/
+`tuning`/`adjusted`), and the fitness functions `tests/test_contract.py` /
+`tests/test_a05_contract.py` / `tests/test_phase_a_additions.py` (the reports now
+assert membership in `metrics`, not `core`). The `core/results.py` →
+`core/outputs.py` rename is deferred (cosmetic; would churn every import site).

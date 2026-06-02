@@ -8,9 +8,9 @@ This package is a façade: implementations live in sibling modules; import the
 public names here.
 """
 
-from denselinkage.serialize.fieldwise_serializer import FieldwiseSerializer
-from denselinkage.serialize.template_serializer import TemplateSerializer
-from denselinkage.serialize.whole_row_serializer import (
+from denselinkage.serializing.fieldwise_serializer import FieldwiseSerializer
+from denselinkage.serializing.template_serializer import TemplateSerializer
+from denselinkage.serializing.whole_row_serializer import (
     WholeRowSerializer,
     default_serializer,
 )

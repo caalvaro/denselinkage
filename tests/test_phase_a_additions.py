@@ -1,26 +1,36 @@
 """Phase A0 / A0.2: the training & evaluation types and the ``Trainer``
-protocol are part of the locked core contract, and ``DenseLinker``'s
+protocol are part of the locked contract, and ``DenseLinker``'s
 optional-blocker shape is pinned at the signature level.
+
+Per ADR-0002 the evaluation *report* types (``ThresholdSweep``,
+``AdjustedMetrics``, and the per-stage ``*Metrics``) live in
+``denselinkage.metrics``, not ``core``; only the ``Trainer`` port and its
+training-input type (``TrainingPairs``) stay in ``core``.
 """
 
 import dataclasses
 
-from denselinkage import core
+from denselinkage import core, metrics
 from denselinkage.core import ports, results
-from denselinkage.linker import DenseLinker
+from denselinkage.linkage import DenseLinker
 
-NEW_CORE_SYMBOLS = {
-    "AdjustedMetrics",
-    "ThresholdSweep",
-    "Trainer",
-    "TrainingPairs",
-}
+# Contract types that stay in core: the Trainer port + its training input.
+CORE_CONTRACT_SYMBOLS = {"Trainer", "TrainingPairs"}
+# Evaluation report types relocated to the metrics layer (ADR-0002).
+METRICS_REPORT_SYMBOLS = {"AdjustedMetrics", "ThresholdSweep"}
 
 
-def test_new_core_symbols_exported() -> None:
-    assert set(core.__all__) >= NEW_CORE_SYMBOLS
-    for name in NEW_CORE_SYMBOLS:
+def test_core_contract_symbols_exported() -> None:
+    assert set(core.__all__) >= CORE_CONTRACT_SYMBOLS
+    for name in CORE_CONTRACT_SYMBOLS:
         assert hasattr(core, name), name
+
+
+def test_evaluation_reports_live_in_metrics_not_core() -> None:
+    for name in METRICS_REPORT_SYMBOLS:
+        assert name in metrics.__all__, f"{name} not exported from denselinkage.metrics"
+        assert hasattr(metrics, name), name
+        assert not hasattr(core, name), f"{name} should have moved out of core"
 
 
 def test_trainer_is_runtime_checkable_protocol() -> None:
@@ -28,12 +38,9 @@ def test_trainer_is_runtime_checkable_protocol() -> None:
 
 
 def test_training_eval_types_are_dataclasses() -> None:
-    for cls in (
-        results.TrainingPairs,
-        results.ThresholdSweep,
-        results.AdjustedMetrics,
-    ):
-        assert dataclasses.is_dataclass(cls)
+    assert dataclasses.is_dataclass(results.TrainingPairs)
+    assert dataclasses.is_dataclass(metrics.ThresholdSweep)
+    assert dataclasses.is_dataclass(metrics.AdjustedMetrics)
 
 
 def test_denselinker_blocker_optional_matcher_required() -> None:

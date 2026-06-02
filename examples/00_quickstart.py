@@ -18,8 +18,7 @@ for semantic matches reach for ``SentenceTransformerEmbedder`` (see ``01``).
 
 import pandas as pd
 
-from denselinkage import DenseLinker, Source
-from denselinkage.core.results import LabeledPairs
+from denselinkage import DenseLinker, LabeledPairs, Source
 from denselinkage.metrics import linkage_metrics
 
 

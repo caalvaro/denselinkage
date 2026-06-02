@@ -10,7 +10,7 @@ This package is a façade: implementations live in sibling modules
 (``dense_linker``, ``linkage_index``); import the public names here.
 """
 
-from denselinkage.linker.dense_linker import DenseLinker
-from denselinkage.linker.linkage_index import LinkageIndex
+from denselinkage.linkage.dense_linker import DenseLinker
+from denselinkage.linkage.linkage_index import LinkageIndex
 
 __all__ = ["DenseLinker", "LinkageIndex"]

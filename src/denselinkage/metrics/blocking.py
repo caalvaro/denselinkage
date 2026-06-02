@@ -1,9 +1,33 @@
-"""Blocking-quality metrics — pair-completeness@k over candidate pairs."""
+"""Blocking-quality metrics — the ``BlockingMetrics`` report and the
+``blocking_metrics`` / ``pair_completeness_at_k`` functions over candidate
+pairs."""
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 
 from denselinkage.core.models import CandidatePair
-from denselinkage.core.results import BlockingMetrics, LabeledPairs
+from denselinkage.core.results import LabeledPairs
+
+
+@dataclass(frozen=True, slots=True)
+class BlockingMetrics:
+    """Pair-completeness@k. ``pc_at(k)`` is the sole supported accessor;
+    construct via :meth:`from_pc_map` (no leading-underscore public
+    constructor param)."""
+
+    pc: Mapping[int, float]
+    n_gold: int
+
+    @classmethod
+    def from_pc_map(
+        cls, pc: Mapping[int, float], *, n_gold: int
+    ) -> "BlockingMetrics": ...
+
+    def pc_at(self, k: int) -> float:
+        """PC@k. Raises ``KeyError`` if ``k`` was not among the ``ks`` passed
+        to ``blocking_metrics`` (no silent 0.0 — an uncomputed k is a usage
+        error, not a zero result)."""
+        ...
 
 
 def blocking_metrics(

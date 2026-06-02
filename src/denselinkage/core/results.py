@@ -1,4 +1,14 @@
-"""Typed results / metrics / labels the API returns."""
+"""Typed pipeline outputs and gold / training value objects the API returns and
+consumes.
+
+Per ADR-0002, evaluation *report* types (``LinkageMetrics``, ``BlockingMetrics``,
+``ClusteringMetrics``, ``ThresholdSweep``, ``AdjustedMetrics``) live in
+``denselinkage.metrics``, co-located with the functions that produce them.
+``core`` keeps only the outputs a port references (``LinkageResult``,
+``ClusteringResult``) plus the domain gold / training value objects
+(``LabeledPairs``,
+``TrainingPairs``).
+"""
 
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
@@ -92,97 +102,13 @@ class LinkageResult:
 
 
 @dataclass(frozen=True, slots=True)
-class LinkageMetrics:
-    """Contract: pairs that errored (a ``MatchError`` in
-    ``LinkageResult.errors``) are excluded from tp/fp/fn and reported as
-    ``n_errors``. ``false_negative`` counts every gold pair not predicted a
-    match — including gold pairs the blocker never surfaced — so recall is
-    honest end-to-end, not conditional on blocking."""
-
-    true_positive: int
-    false_positive: int
-    false_negative: int
-    n_gold: int
-    n_errors: int = 0
-
-    @property
-    def precision(self) -> float:
-        denom = self.true_positive + self.false_positive
-        return self.true_positive / denom if denom else 0.0
-
-    @property
-    def recall(self) -> float:
-        denom = self.true_positive + self.false_negative
-        return self.true_positive / denom if denom else 0.0
-
-    @property
-    def f1(self) -> float:
-        denom = self.precision + self.recall
-        return 2 * self.precision * self.recall / denom if denom else 0.0
-
-
-@dataclass(frozen=True, slots=True)
-class BlockingMetrics:
-    """Pair-completeness@k. ``pc_at(k)`` is the sole supported accessor;
-    construct via :meth:`from_pc_map` (no leading-underscore public
-    constructor param)."""
-
-    pc: Mapping[int, float]
-    n_gold: int
-
-    @classmethod
-    def from_pc_map(
-        cls, pc: Mapping[int, float], *, n_gold: int
-    ) -> "BlockingMetrics": ...
-
-    def pc_at(self, k: int) -> float:
-        """PC@k. Raises ``KeyError`` if ``k`` was not among the ``ks`` passed
-        to ``blocking_metrics`` (no silent 0.0 — an uncomputed k is a usage
-        error, not a zero result)."""
-        ...
-
-
-@dataclass(frozen=True, slots=True)
-class Clustering:
+class ClusteringResult:
     labels: Mapping[RecordId, int]
 
     @property
     def n_clusters(self) -> int: ...
 
     def to_frame(self) -> "pd.DataFrame": ...
-
-
-@dataclass(frozen=True, slots=True)
-class ClusteringMetrics:
-    """B³ (Bagga-Baldwin) clustering quality.
-
-    Gold clusters are the transitive closure of ``LabeledPairs`` (gold pairs ->
-    connected components), so the same gold that scores pairwise
-    ``linkage_metrics`` also scores clustering — one gold type everywhere.
-    ``b3_precision`` / ``b3_recall`` are per-record B³ averages; ``b3_f1`` is
-    their harmonic mean. ``n_clusters`` / ``n_gold_clusters`` are reported for
-    context. Construct via :meth:`from_b3` — the two adjacent ratios are easy to
-    transpose positionally, so the keyword constructor is the supported path
-    (mirrors ``BlockingMetrics.from_pc_map``).
-    """
-
-    b3_precision: float
-    b3_recall: float
-    n_clusters: int
-    n_gold_clusters: int
-
-    @classmethod
-    def from_b3(
-        cls,
-        *,
-        b3_precision: float,
-        b3_recall: float,
-        n_clusters: int,
-        n_gold_clusters: int,
-    ) -> "ClusteringMetrics": ...
-
-    @property
-    def b3_f1(self) -> float: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -196,31 +122,3 @@ class TrainingPairs:
     positives: tuple[tuple[Record, Record], ...]
     negatives: tuple[tuple[Record, Record], ...]
     batches: tuple[tuple[int, ...], ...] | None = None
-
-
-@dataclass(frozen=True, slots=True)
-class ThresholdSweep:
-    """Full precision/recall/F1 curve over a threshold grid. Typed accessor,
-    never a bare ``{threshold: f1}`` dict."""
-
-    rows: tuple[tuple[float, LinkageMetrics], ...]
-
-    def best_f1(self) -> tuple[float, LinkageMetrics]: ...
-
-    def at_recall(self, target: float) -> tuple[float, LinkageMetrics]: ...
-
-
-@dataclass(frozen=True, slots=True)
-class AdjustedMetrics:
-    """End-to-end honest number: matcher metrics adjusted by blocker
-    pair-completeness@k (``recall_adjusted = matcher.recall * pc@k``)."""
-
-    matcher: LinkageMetrics
-    blocking_recall_at_k: float
-    k: int
-
-    @property
-    def recall_adjusted(self) -> float: ...
-
-    @property
-    def f1_adjusted(self) -> float: ...
