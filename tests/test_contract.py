@@ -7,16 +7,22 @@ implementation.
 """
 
 import dataclasses
+import inspect
 
 import pytest
 
 import denselinkage as dl
-from denselinkage.blocking import DenseBlocker
+from denselinkage.blocking import DenseBlocker, DenseBlockingIndex
 from denselinkage.cluster import ConnectedComponentsClusterer
 from denselinkage.core import models, ports, results
 from denselinkage.embedding import HashedNGramEmbedder, SentenceTransformerEmbedder
 from denselinkage.filtering import SimilarityThresholdFilter
-from denselinkage.indexing import FaissFlatIndex, NumpyFlatIndex
+from denselinkage.indexing import (
+    FaissFlatIndex,
+    FaissSearchableIndex,
+    NumpyFlatIndex,
+    NumpySearchableIndex,
+)
 from denselinkage.matching import LangChainMatcher, RetryPolicy, ThresholdMatcher
 from denselinkage.serialize import (
     FieldwiseSerializer,
@@ -93,7 +99,9 @@ def test_linkage_result_has_separate_errors_channel() -> None:
         ports.Serializer,
         ports.Embedder,
         ports.VectorIndex,
+        ports.SearchableIndex,
         ports.Blocker,
+        ports.BlockingIndex,
         ports.Filter,
         ports.Matcher,
         ports.Clusterer,
@@ -108,10 +116,13 @@ def test_ports_are_runtime_checkable_protocols(port: type) -> None:
     ("adapter", "port"),
     [
         (DenseBlocker, ports.Blocker),
+        (DenseBlockingIndex, ports.BlockingIndex),
         (HashedNGramEmbedder, ports.Embedder),
         (SentenceTransformerEmbedder, ports.Embedder),
         (NumpyFlatIndex, ports.VectorIndex),
+        (NumpySearchableIndex, ports.SearchableIndex),
         (FaissFlatIndex, ports.VectorIndex),
+        (FaissSearchableIndex, ports.SearchableIndex),
         (ThresholdMatcher, ports.Matcher),
         (LangChainMatcher, ports.Matcher),
         (TemplateSerializer, ports.Serializer),
@@ -126,3 +137,36 @@ def test_adapters_declare_their_port(adapter: type, port: type) -> None:
     # members (e.g. Embedder's properties), so check explicit subclassing via
     # the MRO instead.
     assert port in adapter.__mro__
+
+
+def test_spec_ports_build_artifacts_not_legacy_methods() -> None:
+    # D6: specs expose a single `build` factory; the pre-refactor mutating
+    # methods (`add`/`index`) and the artifacts' read methods are gone from them.
+    assert hasattr(ports.VectorIndex, "build")
+    assert not hasattr(ports.VectorIndex, "add")
+    assert not hasattr(ports.VectorIndex, "search")
+    assert hasattr(ports.Blocker, "build")
+    assert not hasattr(ports.Blocker, "index")
+    assert not hasattr(ports.Blocker, "query")
+
+
+def test_artifact_ports_expose_read_methods_not_build() -> None:
+    # D6: artifacts are produced by `build`; they never expose it.
+    assert hasattr(ports.SearchableIndex, "search")
+    assert hasattr(ports.SearchableIndex, "extended")  # incremental escape hatch
+    assert not hasattr(ports.SearchableIndex, "build")
+    assert not hasattr(ports.SearchableIndex, "add")
+    assert hasattr(ports.BlockingIndex, "query")
+    assert not hasattr(ports.BlockingIndex, "build")
+
+
+@pytest.mark.parametrize("owner", [ports.BlockingIndex, DenseBlockingIndex])
+def test_blocking_index_query_overrides_are_keyword_only(owner: type) -> None:
+    # top_k / similarity_threshold are query-time overrides
+    # so a ThresholdSweep reuses one built index. Pin them keyword-only with a
+    # None default, on both the port and the reference adapter.
+    sig = inspect.signature(owner.query)
+    for name in ("top_k", "similarity_threshold"):
+        param = sig.parameters[name]
+        assert param.kind is inspect.Parameter.KEYWORD_ONLY
+        assert param.default is None

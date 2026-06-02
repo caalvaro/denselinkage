@@ -54,18 +54,83 @@ class Embedder(Protocol):
 
 @runtime_checkable
 class VectorIndex(Protocol):
-    def add(self, vectors: Vectors, ids: Sequence[RecordId]) -> None: ...
+    """Spec for a vector-index backend — stateless and reusable.
+
+    Holds no vectors, only the configuration of *which* index to build.
+    ``build`` is a factory (cf. :class:`Trainer`, "a factory, not a fit"): it
+    returns a fresh populated :class:`SearchableIndex` and mutates neither
+    ``self`` nor its arguments, so one spec safely builds many artifacts over
+    different datasets.
+    """
+
+    def build(self, vectors: Vectors, ids: Sequence[RecordId]) -> "SearchableIndex": ...
+
+
+@runtime_checkable
+class SearchableIndex(Protocol):
+    """Immutable fitted artifact produced by :meth:`VectorIndex.build`.
+
+    Holds the indexed vectors for one dataset and answers nearest-neighbour
+    queries; it has no ``add`` — the vectors are fixed at build time.
+    ``search`` raises ``DimensionMismatch`` if a query's width differs from the
+    indexed vectors.
+
+    v1 is batch-oriented and the artifact is immutable. Incremental update is
+    out of scope for v1; :meth:`extended` is the designed (not-yet-implemented)
+    escape hatch — it returns a NEW artifact rather than mutating this one.
+    """
 
     def search(
         self, queries: Vectors, *, top_k: int
     ) -> list[list[tuple[RecordId, float]]]: ...
 
+    def extended(self, vectors: Vectors, ids: Sequence[RecordId]) -> "SearchableIndex":
+        """Return a NEW artifact holding this index's vectors plus ``vectors``;
+        this instance is left unchanged (the immutable-artifact guarantee).
+        ``ids`` align positionally with ``vectors`` and must be disjoint from
+        the ids already indexed; ``vectors`` must match the indexed width or
+        ``DimensionMismatch`` is raised.
+
+        Incremental indexing is out of scope for v1, so the v1 reference
+        artifacts raise ``NotImplementedError`` rather than returning ``None``;
+        the signature is fixed pre-freeze so the capability can
+        land later without a breaking change.
+        """
+        ...
+
 
 @runtime_checkable
 class Blocker(Protocol):
-    def index(self, records: Sequence[Record]) -> None: ...
+    """Spec for candidate generation — stateless and reusable.
 
-    def query(self, records: Sequence[Record]) -> list[CandidatePair]: ...
+    ``build`` is a factory: it indexes ``records`` into a fresh
+    :class:`BlockingIndex` and mutates nothing, so one ``Blocker`` (and the
+    immutable ``DenseLinker`` that holds it) can be reused across datasets.
+    """
+
+    def build(self, records: Sequence[Record]) -> "BlockingIndex": ...
+
+
+@runtime_checkable
+class BlockingIndex(Protocol):
+    """Immutable fitted artifact produced by :meth:`Blocker.build`.
+
+    Holds the indexed (left/reference) records and generates ``CandidatePair``s
+    for a query record set. ``top_k`` and ``similarity_threshold`` are
+    query-time parameters: they default to the values fixed on the originating
+    ``Blocker`` spec but may be overridden per call, so a ``top_k`` / threshold
+    sweep reuses one built index instead of rebuilding it. An override
+    ``top_k <= 0`` raises ``InvalidTopK`` (parity with the index-time validation
+    documented on :meth:`~denselinkage.linker.DenseLinker.index`).
+    """
+
+    def query(
+        self,
+        records: Sequence[Record],
+        *,
+        top_k: int | None = None,
+        similarity_threshold: float | None = None,
+    ) -> list[CandidatePair]: ...
 
 
 @runtime_checkable

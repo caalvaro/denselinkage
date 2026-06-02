@@ -22,10 +22,12 @@ from denselinkage.core.models import (
 )
 from denselinkage.core.ports import (
     Blocker,
+    BlockingIndex,
     Clusterer,
     Embedder,
     Filter,
     Matcher,
+    SearchableIndex,
     Serializer,
     Trainer,
     VectorIndex,
@@ -45,6 +47,7 @@ from denselinkage.core.results import (
 __all__ = [
     "AdjustedMetrics",
     "Blocker",
+    "BlockingIndex",
     "BlockingMetrics",
     "CandidatePair",
     "Clusterer",
@@ -65,6 +68,7 @@ __all__ = [
     "Matcher",
     "Record",
     "RecordId",
+    "SearchableIndex",
     "Serializer",
     "Source",
     "ThresholdSweep",

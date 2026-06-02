@@ -11,16 +11,16 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from denselinkage.core.models import CandidatePair, Source
-from denselinkage.core.ports import Blocker, Matcher
+from denselinkage.core.ports import Blocker, BlockingIndex, Matcher
 from denselinkage.core.results import LinkageResult
 
 
 class LinkageIndex:
-    """Prepared (indexed) state. Constructed by ``DenseLinker.index``; not
-    typically built directly. ``kw_only`` for consistency with
-    ``DenseLinker``."""
+    """Prepared linkage state: a built ``BlockingIndex`` fused with a
+    ``Matcher``. Constructed by ``DenseLinker.index``; not typically built
+    directly. ``kw_only`` for consistency with ``DenseLinker``."""
 
-    def __init__(self, *, blocker: Blocker, matcher: Matcher) -> None: ...
+    def __init__(self, *, blocking_index: BlockingIndex, matcher: Matcher) -> None: ...
 
     def query(self, source: Source) -> LinkageResult:
         """Query the prepared index with ``source``.
@@ -59,7 +59,9 @@ class DenseLinker:
     ) -> "DenseLinker": ...
 
     def index(self, source: Source) -> LinkageIndex:
-        """Build the searchable index.
+        """Build the prepared linkage state by delegating indexing to
+        ``self.blocker.build`` (which returns a fresh ``BlockingIndex`` — this
+        frozen config is never mutated) and composing it with ``self.matcher``.
 
         Raises ``ValueError`` if ``blocker`` is ``None``. From the RecordReader
         seam: ``UnknownIdColumn``, ``EmptySource``, ``DuplicateRecordId``;
