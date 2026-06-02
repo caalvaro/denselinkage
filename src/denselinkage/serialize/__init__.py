@@ -13,7 +13,14 @@ from denselinkage.core.ports import Serializer
 
 class TemplateSerializer(Serializer):
     """``"Name: {name}"``; ``column_mapping`` maps this source's columns onto
-    the template variables."""
+    the template variables.
+
+    Security: ``template`` is trusted, developer-supplied configuration. It is
+    rendered with ``str.format_map`` over each row, so do not build it from
+    untrusted input — a hostile template could read attributes of the
+    substituted values (the standard ``str.format`` injection vector). Field
+    *values* are only substituted, never parsed, so untrusted row data is safe.
+    """
 
     def __init__(
         self, template: str, *, column_mapping: Mapping[str, str] | None = None

@@ -50,7 +50,7 @@ class NumpySearchableIndex(SearchableIndex):
         results: list[list[tuple[RecordId, float]]] = []
         for row in scores:
             top = np.argpartition(-row, k - 1)[:k]
-            top = top[np.argsort(-row[top])]  # order the k neighbours by score
+            top = top[np.argsort(-row[top], kind="stable")]  # deterministic order
             results.append([(self._ids[int(j)], float(row[int(j)])) for j in top])
         return results
 

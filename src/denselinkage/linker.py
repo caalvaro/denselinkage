@@ -37,6 +37,12 @@ class LinkageIndex:
         records = RecordReader().read(source)
         pairs = self._blocking_index.query(records)
         outcomes = self._matcher.match(pairs)
+        if len(outcomes) != len(pairs):
+            raise ValueError(
+                f"matcher returned {len(outcomes)} outcomes for {len(pairs)} "
+                "pairs; Matcher.match must return exactly one outcome per input "
+                "pair, aligned by position"
+            )
         decisions: list[tuple[CandidatePair, MatchDecision]] = []
         errors: list[tuple[CandidatePair, MatchError]] = []
         for pair, outcome in zip(pairs, outcomes, strict=True):

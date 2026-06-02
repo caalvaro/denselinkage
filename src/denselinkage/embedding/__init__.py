@@ -41,6 +41,8 @@ class HashedNGramEmbedder(Embedder):
         out = np.zeros((len(texts), self._n_features), dtype=np.float32)
         for i, text in enumerate(texts):
             lowered = text.lower()
+            if not lowered.strip():
+                continue  # empty / whitespace-only -> zero vector (matches nothing)
             for j in range(max(1, len(lowered) - self._ngram + 1)):
                 gram = lowered[j : j + self._ngram]
                 bucket = zlib.crc32(gram.encode("utf-8")) % self._n_features
