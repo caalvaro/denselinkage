@@ -1,16 +1,7 @@
-"""Evaluation — pure functions over already-computed outputs."""
+"""``linkage_metrics`` — pairwise precision/recall/F1 against gold."""
 
-from collections.abc import Sequence
-
-from denselinkage.core.models import CandidatePair, RecordId
-from denselinkage.core.results import (
-    BlockingMetrics,
-    Clustering,
-    ClusteringMetrics,
-    LabeledPairs,
-    LinkageMetrics,
-    LinkageResult,
-)
+from denselinkage.core.models import RecordId
+from denselinkage.core.results import LabeledPairs, LinkageMetrics, LinkageResult
 
 
 def _pair_key(
@@ -56,56 +47,3 @@ def linkage_metrics(
         n_gold=len(gold.pairs),
         n_errors=len(result.errors),
     )
-
-
-def blocking_metrics(
-    candidates: Sequence[CandidatePair],
-    *,
-    gold: LabeledPairs,
-    ks: Sequence[int],
-    directed: bool = True,
-) -> BlockingMetrics:
-    """Pair-completeness@k for each k in ``ks``.
-
-    Pair identity (D1): same rule as ``linkage_metrics`` — ``directed=True``
-    (``link``) compares ordered; ``directed=False`` (``dedupe``) canonicalizes
-    to an unordered key.
-    """
-    ...
-
-
-def pair_completeness_at_k(
-    candidates: Sequence[CandidatePair],
-    *,
-    gold: LabeledPairs,
-    k: int,
-    directed: bool = True,
-) -> float:
-    """Single-k pair-completeness (kwarg ``gold``, consistent with the other
-    metrics). Pair identity (D1): same rule as ``linkage_metrics``; pass
-    ``directed=False`` for ``dedupe`` candidates."""
-
-    ...
-
-
-def clustering_metrics(
-    clustering: Clustering, *, gold: LabeledPairs
-) -> ClusteringMetrics:
-    """B³ clustering quality of ``clustering`` against ``gold``.
-
-    ``gold`` pairs are treated as edges and closed transitively into gold
-    clusters, so the same ``LabeledPairs`` used for ``linkage_metrics`` scores
-    clustering too — one gold type everywhere (kwarg ``gold``, consistent with
-    the other metrics). Records present in ``clustering`` but in no gold pair
-    are singleton gold clusters. Returns B³ precision/recall/F1; see
-    :class:`denselinkage.core.results.ClusteringMetrics`.
-    """
-    ...
-
-
-__all__ = [
-    "blocking_metrics",
-    "clustering_metrics",
-    "linkage_metrics",
-    "pair_completeness_at_k",
-]

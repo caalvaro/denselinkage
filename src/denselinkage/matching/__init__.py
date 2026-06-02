@@ -1,68 +1,13 @@
 """Matchers. ``LangChainMatcher`` is the heavy adapter (extra:
 ``[langchain]``). The user prompt is only the question; the matcher owns
-output and returns typed ``MatchDecision``s."""
+output and returns typed ``MatchDecision``s.
 
-from collections.abc import Sequence
-from dataclasses import dataclass
-from typing import Any
+This package is a façade: implementations live in sibling modules; import the
+public names here.
+"""
 
-from denselinkage.core.models import CandidatePair, MatchDecision, MatchError
-from denselinkage.core.ports import Matcher
-
-
-@dataclass(frozen=True, slots=True)
-class RetryPolicy:
-    max_retries: int = 3
-    backoff_seconds: float = 0.0
-
-
-class ThresholdMatcher(Matcher):
-    """Dependency-free reference matcher; gates on the carried similarity."""
-
-    def __init__(self, *, threshold: float = 0.5) -> None:
-        self._threshold = threshold
-
-    def match(self, pairs: Sequence[CandidatePair]) -> list[MatchDecision | MatchError]:
-        outcomes: list[MatchDecision | MatchError] = []
-        for pair in pairs:
-            if pair.similarity_score is None:
-                outcomes.append(
-                    MatchError(
-                        reason="ThresholdMatcher needs a similarity score; the "
-                        "candidate pair carried none"
-                    )
-                )
-            else:
-                outcomes.append(
-                    MatchDecision(is_match=pair.similarity_score >= self._threshold)
-                )
-        return outcomes
-
-
-class LangChainMatcher(Matcher):
-    """LLM matcher (extra: ``[langchain]``).
-
-    Prompt/output contract: ``prompt``
-    carries ONLY the semantic question and may reference the pair fields. The
-    response *structure* is framework-owned — the matcher binds structured
-    output and returns typed ``MatchDecision``s; callers never parse text and
-    the prompt never asks for a format. On exhausted ``retry`` the matcher
-    yields a ``MatchError(reason=...)`` for that pair (aligned by position),
-    never raising into the batch.
-    """
-
-    def __init__(
-        self,
-        *,
-        llm: Any,
-        prompt: str,
-        retry: RetryPolicy | None = None,
-        max_concurrency: int = 1,
-    ) -> None: ...
-
-    def match(
-        self, pairs: Sequence[CandidatePair]
-    ) -> list[MatchDecision | MatchError]: ...
-
+from denselinkage.matching.langchain_matcher import LangChainMatcher
+from denselinkage.matching.retry_policy import RetryPolicy
+from denselinkage.matching.threshold_matcher import ThresholdMatcher
 
 __all__ = ["LangChainMatcher", "RetryPolicy", "ThresholdMatcher"]
