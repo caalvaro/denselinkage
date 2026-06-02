@@ -10,7 +10,8 @@ failures are ``MatchError`` in ``LinkageResult.errors``, never exceptions.
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from denselinkage.core.models import CandidatePair, Source
+from denselinkage._reader import RecordReader
+from denselinkage.core.models import CandidatePair, MatchDecision, MatchError, Source
 from denselinkage.core.ports import Blocker, BlockingIndex, Matcher
 from denselinkage.core.results import LinkageResult
 
@@ -20,7 +21,9 @@ class LinkageIndex:
     ``Matcher``. Constructed by ``DenseLinker.index``; not typically built
     directly. ``kw_only`` for consistency with ``DenseLinker``."""
 
-    def __init__(self, *, blocking_index: BlockingIndex, matcher: Matcher) -> None: ...
+    def __init__(self, *, blocking_index: BlockingIndex, matcher: Matcher) -> None:
+        self._blocking_index = blocking_index
+        self._matcher = matcher
 
     def query(self, source: Source) -> LinkageResult:
         """Query the prepared index with ``source``.
@@ -31,7 +34,17 @@ class LinkageIndex:
         query embedding width differs from the indexed vectors. All subclass
         ``denselinkage.core.errors.DenseLinkageError``.
         """
-        ...
+        records = RecordReader().read(source)
+        pairs = self._blocking_index.query(records)
+        outcomes = self._matcher.match(pairs)
+        decisions: list[tuple[CandidatePair, MatchDecision]] = []
+        errors: list[tuple[CandidatePair, MatchError]] = []
+        for pair, outcome in zip(pairs, outcomes, strict=True):
+            if isinstance(outcome, MatchError):
+                errors.append((pair, outcome))
+            else:
+                decisions.append((pair, outcome))
+        return LinkageResult(decisions=tuple(decisions), errors=tuple(errors))
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -56,7 +69,30 @@ class DenseLinker:
     @classmethod
     def with_defaults(
         cls, *, blocker: Blocker | None = None, matcher: Matcher | None = None
-    ) -> "DenseLinker": ...
+    ) -> "DenseLinker":
+        """Low-floor entry point: wire the dependency-free reference stack
+        (``HashedNGramEmbedder`` + ``NumpyFlatIndex`` behind ``DenseBlocker``,
+        plus ``ThresholdMatcher``). Pass ``blocker=`` / ``matcher=`` to override
+        either half. The default stack is lexical (character n-gram hashing) —
+        it recovers abbreviations/punctuation/typos, not semantic renames.
+        Imports are local so ``import denselinkage`` stays light.
+        """
+        if blocker is None:
+            from denselinkage.blocking import DenseBlocker
+            from denselinkage.embedding import HashedNGramEmbedder
+            from denselinkage.indexing import NumpyFlatIndex
+
+            blocker = DenseBlocker(
+                embedder=HashedNGramEmbedder(n_features=1024, ngram=3),
+                vector_index=NumpyFlatIndex(),
+                similarity_threshold=0.0,
+                top_k=5,
+            )
+        if matcher is None:
+            from denselinkage.matching import ThresholdMatcher
+
+            matcher = ThresholdMatcher(threshold=0.5)
+        return cls(blocker=blocker, matcher=matcher)
 
     def index(self, source: Source) -> LinkageIndex:
         """Build the prepared linkage state by delegating indexing to
@@ -69,7 +105,15 @@ class DenseLinker:
         if the embedder width differs from the index. All
         ``denselinkage.core.errors`` subclasses.
         """
-        ...
+        if self.blocker is None:
+            raise ValueError(
+                "index() requires a blocker; construct the linker with one "
+                "(DenseLinker(blocker=..., matcher=...) or "
+                "DenseLinker.with_defaults())"
+            )
+        records = RecordReader().read(source)
+        blocking_index = self.blocker.build(records)
+        return LinkageIndex(blocking_index=blocking_index, matcher=self.matcher)
 
     def link(self, left: Source, right: Source) -> LinkageResult:
         """Two-table linkage.
@@ -79,7 +123,7 @@ class DenseLinker:
         ``EmptySource``, ``DuplicateRecordId``, ``InvalidTopK``,
         ``DimensionMismatch``), evaluated for each of ``left``/``right``.
         """
-        ...
+        return self.index(left).query(right)
 
     def dedupe(self, source: Source) -> LinkageResult:
         """Single-table dedupe (self-pairs suppressed).

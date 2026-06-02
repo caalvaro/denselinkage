@@ -17,24 +17,38 @@ class TemplateSerializer(Serializer):
 
     def __init__(
         self, template: str, *, column_mapping: Mapping[str, str] | None = None
-    ) -> None: ...
+    ) -> None:
+        self._template = template
+        self._column_mapping = dict(column_mapping) if column_mapping else {}
 
-    def serialize(self, record: Mapping[str, Any]) -> str: ...
+    def serialize(self, record: Mapping[str, Any]) -> str:
+        values: dict[str, Any] = dict(record)
+        for source_column, template_var in self._column_mapping.items():
+            if source_column in record:
+                values[template_var] = record[source_column]
+        return self._template.format_map(values)
 
 
 class FieldwiseSerializer(Serializer):
-    def __init__(self, fields: Sequence[str], sep: str = " | ") -> None: ...
+    def __init__(self, fields: Sequence[str], sep: str = " | ") -> None:
+        self._fields = list(fields)
+        self._sep = sep
 
-    def serialize(self, record: Mapping[str, Any]) -> str: ...
+    def serialize(self, record: Mapping[str, Any]) -> str:
+        return self._sep.join(str(record.get(field, "")) for field in self._fields)
 
 
 class WholeRowSerializer(Serializer):
-    """Package default when ``Source(serializer=None)``."""
+    """Package default when ``Source(serializer=None)``. Joins the row's values
+    (in column order) with `` | `` — a deterministic, lexical-friendly rendering
+    suited to the dependency-free default stack."""
 
-    def serialize(self, record: Mapping[str, Any]) -> str: ...
+    def serialize(self, record: Mapping[str, Any]) -> str:
+        return " | ".join(str(value) for value in record.values())
 
 
-def default_serializer() -> WholeRowSerializer: ...
+def default_serializer() -> WholeRowSerializer:
+    return WholeRowSerializer()
 
 
 __all__ = [
