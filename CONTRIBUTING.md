@@ -41,6 +41,16 @@ All of the above run in CI (`.github/workflows/ci.yml`) on Python
   by mypy); third-party code may conform structurally.
 - Public types are typed and immutable where reasonable; the package ships a
   `py.typed` marker.
+- Stateful components follow **spec→artifact** (D6): a stateless *spec*
+  (`VectorIndex`, `Blocker`) exposes `build(...)` returning an immutable
+  *artifact* (`SearchableIndex`, `BlockingIndex`). Per-dataset state lives only
+  in artifacts, never on injected configuration — do not give a spec a mutating
+  method or hand it a populated collaborator.
+- Similarity-cutoff naming: the blocking stage names its retrieval cutoff
+  `similarity_threshold` (it sits beside `top_k` as a retrieval knob on
+  `DenseBlocker` / `BlockingIndex.query`); single-purpose decision/filter
+  components whose class name already carries the qualifier use `threshold`
+  (`ThresholdMatcher`, `SimilarityThresholdFilter`).
 
 ## Optional extras (for implementing/running adapters)
 
