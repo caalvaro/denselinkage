@@ -1,13 +1,20 @@
 """Example 00 — Quickstart (the shortest real path).
 
 Schema-aligned data + ``Source`` defaulting to the whole-row serializer means
-this is genuinely minimal (L1): no template, no column mapping, one call.
+this is genuinely minimal: no template, no column mapping, one call.
 
 ``DenseLinker.with_defaults()`` is the low-floor entry point. The reference
 components it would pick (``HashedNGramEmbedder`` + ``NumpyFlatIndex`` +
 ``ThresholdMatcher``) are not implemented yet, so until they land pass
 ``blocker=``/``matcher=`` explicitly (see ``01``/``03``). Calling it bare
 raises an actionable ``NotImplementedError`` rather than failing obscurely.
+
+The default stack is **lexical** (``HashedNGramEmbedder`` is character n-gram
+feature hashing): it recovers abbreviations, punctuation and typos
+(``Apple Inc`` / ``Apple Incorporated``; ``Microsoft Corp`` / ``Microsoft``;
+``Google LLC`` / ``Google``) but not semantic renames such as
+``Google`` -> ``Alphabet``. The gold below is lexically recoverable on purpose;
+for semantic matches reach for ``SentenceTransformerEmbedder`` (see ``01``).
 
 NOTE: Design mock — components are deferred, so this type-checks but does not
 run end to end yet.
@@ -31,7 +38,7 @@ def main() -> None:
     df_b = pd.DataFrame(
         {
             "id": ["B1", "B2", "B3"],
-            "name": ["Apple Incorporated", "Microsoft", "Alphabet"],
+            "name": ["Apple Incorporated", "Microsoft", "Google"],
             "city": ["Cupertino", "Redmond", "Mountain View"],
         }
     )

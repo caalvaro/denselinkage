@@ -1,10 +1,17 @@
-"""Reference serializers."""
+"""Reference serializers.
+
+First-party adapters subclass their port explicitly (CONTRIBUTING convention;
+mypy completeness-checks the implementation) — so these declare
+``Serializer``, like every other adapter family.
+"""
 
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from denselinkage.core.ports import Serializer
 
-class TemplateSerializer:
+
+class TemplateSerializer(Serializer):
     """``"Name: {name}"``; ``column_mapping`` maps this source's columns onto
     the template variables."""
 
@@ -15,13 +22,13 @@ class TemplateSerializer:
     def serialize(self, record: Mapping[str, Any]) -> str: ...
 
 
-class FieldwiseSerializer:
+class FieldwiseSerializer(Serializer):
     def __init__(self, fields: Sequence[str], sep: str = " | ") -> None: ...
 
     def serialize(self, record: Mapping[str, Any]) -> str: ...
 
 
-class WholeRowSerializer:
+class WholeRowSerializer(Serializer):
     """Package default when ``Source(serializer=None)``."""
 
     def serialize(self, record: Mapping[str, Any]) -> str: ...

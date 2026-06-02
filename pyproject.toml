@@ -37,6 +37,11 @@ Issues = "https://github.com/caalvaro/denselinkage/issues"
 langchain = ["langchain-core>=0.3", "langchain-openai>=0.2"]
 faiss = ["faiss-cpu>=1.8"]
 sentence-transformers = ["sentence-transformers>=3.0"]
+# Reserved for v2 trainers (EmbedderTrainer / CrossEncoderTrainer). The
+# `denselinkage.training` namespace is reserved now; intentionally empty in
+# v1 so the import path and extra name are stable. v2 fills this with
+# torch / transformers / sentence-transformers.
+train = []
 all = [
     "langchain-core>=0.3",
     "langchain-openai>=0.2",
@@ -75,11 +80,26 @@ strict = true
 # other strict check stays on (signatures/types are the contract).
 disable_error_code = ["empty-body"]
 # numpy ships py.typed; pandas types come from pandas-stubs (dev). Optional
-# heavy adapters that lack stubs are tolerated.
+# heavy adapters that lack stubs are tolerated — both the package and its
+# submodules, so `mypy src/ examples/` resolves the examples' heavy imports
+# (e.g. `from langchain_openai import ChatOpenAI`) with no extras installed.
 [[tool.mypy.overrides]]
-module = ["faiss.*", "sentence_transformers.*", "langchain_openai.*", "langchain_core.*"]
+module = [
+    "faiss",
+    "faiss.*",
+    "sentence_transformers",
+    "sentence_transformers.*",
+    "langchain_openai",
+    "langchain_openai.*",
+    "langchain_core",
+    "langchain_core.*",
+]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+addopts = "-q --strict-markers"
+markers = [
+    "adapter: requires an optional heavy adapter (faiss / sentence-transformers / langchain)",
+    "slow: long-running test",
+]

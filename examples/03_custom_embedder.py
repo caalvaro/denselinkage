@@ -4,8 +4,8 @@ The ports (``Embedder``, ``VectorIndex``, ``Serializer``, ...) are plain
 ``typing.Protocol``s. First-party adapters are encouraged to **subclass them
 explicitly** — that is valid Python and lets the type checker verify the
 implementation is complete; third-party code can also conform purely
-structurally without importing anything. (This resolves the old
-docstring-vs-code contradiction, M3.)
+structurally without importing anything (this resolves the old
+docstring-vs-code contradiction).
 
 Wired on the dependency-free stack: ``NumpyFlatIndex`` + ``ThresholdMatcher``,
 no GPU / FAISS / API key. The package also ships its own ``HashedNGramEmbedder``
@@ -15,6 +15,7 @@ NOTE: Design mock — ``NumpyFlatIndex``/``ThresholdMatcher`` bodies are deferre
 so this type-checks against the real core but does not run yet.
 """
 
+import zlib
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -56,7 +57,10 @@ class CharNGramEmbedder(Embedder):
         for i, t in enumerate(texts):
             t = t.lower()
             for j in range(max(1, len(t) - self._k + 1)):
-                out[i, hash(t[j : j + self._k]) % self._n] += 1.0
+                # zlib.crc32 is a stable hash — deterministic across processes,
+                # unlike builtin hash() which is PYTHONHASHSEED-salted on str.
+                gram = t[j : j + self._k]
+                out[i, zlib.crc32(gram.encode("utf-8")) % self._n] += 1.0
             norm = np.linalg.norm(out[i])
             if norm > 0:  # L2-normalise so inner product == cosine
                 out[i] /= norm
@@ -90,9 +94,9 @@ def main() -> None:
         }
     )
 
-    # ThresholdMatcher gates on the similarity the blocker already carried
-    # (M5): set it ABOVE the blocker's similarity_threshold so it is a real
-    # second gate, not a pass-through.
+    # ThresholdMatcher gates on the similarity the blocker already carried:
+    # set it ABOVE the blocker's similarity_threshold so it is a real second
+    # gate, not a pass-through.
     linker = DenseLinker(
         blocker=DenseBlocker(
             embedder=CharNGramEmbedder(n_features=512, ngram=3),
