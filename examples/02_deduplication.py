@@ -5,7 +5,8 @@ itself and suppresses self-pairs internally — there is no
 ``suppress_self_pairs`` knob on the public surface. The same ``DenseLinker``
 config works for both ``link`` and ``dedupe``; the task is the method name.
 
-``connected_components`` returns a typed ``Clustering``, not a loose dict. This
+``connected_components`` returns a typed ``ClusteringResult``, not a loose dict.
+This
 example also shows the honest dedup tail: B3 cluster quality via
 ``clustering_metrics`` against the same ``LabeledPairs`` gold, and triaging the
 matcher's per-pair ``MatchError``s from ``result.errors``.
@@ -19,9 +20,14 @@ import logging
 import pandas as pd
 from langchain_openai import ChatOpenAI
 
-from denselinkage import DenseLinker, Source, TemplateSerializer, connected_components
+from denselinkage import (
+    DenseLinker,
+    LabeledPairs,
+    Source,
+    TemplateSerializer,
+    connected_components,
+)
 from denselinkage.blocking import DenseBlocker
-from denselinkage.core.results import LabeledPairs
 from denselinkage.embedding import SentenceTransformerEmbedder
 from denselinkage.indexing import FaissFlatIndex
 from denselinkage.matching import LangChainMatcher
@@ -97,7 +103,7 @@ def main() -> None:
     # three land in one cluster even when A and C were never matched. With a
     # noisy / LLM matcher this can snowball into runaway mega-clusters — watch
     # for B3 recall >> precision and oversized clusters.
-    clusters = connected_components(result)  # -> Clustering
+    clusters = connected_components(result)  # -> ClusteringResult
     print(f"\n--- {clusters.n_clusters} Clusters ---")
     print(clusters.to_frame())
 

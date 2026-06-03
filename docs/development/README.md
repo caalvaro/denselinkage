@@ -10,9 +10,9 @@ split into the focused documents below.
 - [roadmap.md](./roadmap.md) — phases (A0 → C) and their exit criteria.
 - [freeze-gate.md](./freeze-gate.md) — what "frozen" means, the four-oracle A0.5
   freeze gate, and the re-declared frozen contract.
-- [decisions.md](./decisions.md) — the recorded decision log (D1, D2, D3, D6)
-  and the ADR-0001 summary. (D4 and D5 are Resolvi-surfaced forks recorded in
-  resolvi-conformance.md.)
+- [decisions.md](./decisions.md) — the recorded decision log (D1, D2, D3, D6,
+  D7, D8) and the ADR-0001 summary. (D4 and D5 are Resolvi-surfaced forks
+  recorded in resolvi-conformance.md.)
 - [contract.md](./contract.md) — the contract reference: the reference component
   map, the hard-failure exception taxonomy, the Source→Record seam, and the
   Part-5 polish outcomes.

@@ -122,3 +122,53 @@ exported from `denselinkage.core`. Construction API byte-identical
 `tests/test_contract.py` (the two new ports joined the adapter-declares-port and
 runtime-checkable fitness functions). Contract-shape: adding these ports
 post-freeze would be breaking, so they land now.
+
+## D7 — Evaluation report types live in the metrics layer, not `core`
+**Ruling (recommended default, no override; ADR-0002; implemented).** `core`
+keeps only the contract/domain types — the outputs a port references
+(`LinkageResult`, `ClusteringResult`), the gold / training value objects
+(`LabeledPairs`, `TrainingPairs`), plus models, ports and errors. The evaluation
+**report** types — `LinkageMetrics`, `BlockingMetrics`, `ClusteringMetrics`,
+`ThresholdSweep`, `AdjustedMetrics` — move to `denselinkage.metrics`,
+co-located with the functions that produce them, because **nothing in `core`
+depends on them**. Decisive test: `core/ports.py` references only
+`LinkageResult` / `ClusteringResult` / `TrainingPairs` from results, never the five
+reports.
+
+**Classification — contract-shape (CS).** Five public types change module; the
+public prelude re-exports them from the new home, so `from denselinkage import
+LinkageMetrics` is unchanged. Landed pre-freeze (2026-06-02). `LabeledPairs`
+stays in `core` as domain ground-truth (not port-referenced, but a value object
+like `Source`, and read beyond evaluation by Phase-B mining).
+
+Full record: [`docs/ADRs/0002-evaluation-types-out-of-core.md`](../ADRs/0002-evaluation-types-out-of-core.md).
+Recorded in: `core/__init__.py` (`__all__` + docstring), `denselinkage/__init__.py`
+(prelude re-export), the `metrics` modules (`linkage`/`blocking`/`clustering`/
+`tuning`/`adjusted`), and the fitness functions `tests/test_contract.py` /
+`tests/test_a05_contract.py` / `tests/test_phase_a_additions.py` (the reports now
+assert membership in `metrics`, not `core`). The `core/results.py` →
+`core/outputs.py` rename is deferred (cosmetic; would churn every import site).
+
+## D8 — Pre-freeze contract ratification (ADR-0003)
+**Ruling (ratified; ADR-0003).** Freeze readiness is governed by the
+**add/remove asymmetry**: post-freeze, new ports/types/methods and new optional
+fields are additive (safe), but adding a member to an existing port or changing a
+field type / signature is breaking — while removing an *unused* port member later
+is cheap. So only existing-port signatures, field types, and calling conventions
+must be correct *now*. Ratified calls:
+
+- **D4 declined** — `matcher` stays required (`ThresholdMatcher` covers the
+  degenerate "no real matcher" case); recorded as a decision, not a default.
+- **Two-tier errors** — `ValueError` = API misuse / programmer error
+  (`blocker=None`, wrong-length matcher return); `DenseLinkageError` =
+  data/runtime hard failure. Documented on `core/errors.py`.
+- **Keep + document speculative port surface** — `Embedder.model_id` /
+  `embedding_dim`, the conformance ports (`Filter`, `Clusterer`, `Trainer`), and
+  `SearchableIndex.extended` stay (the asymmetry punishes trimming); intended
+  consumers documented rather than removed.
+- **Frozen-object hashability** — standard Python behaviour; nothing hashes
+  them; documented-or-ignored, out of freeze scope.
+- **Freeze checklist** — the one remaining high-value task is an adversarial
+  signatures-and-field-types pass; then flip the gate.
+
+Full record: [`docs/ADRs/0003-pre-freeze-contract-ratification.md`](../ADRs/0003-pre-freeze-contract-ratification.md).

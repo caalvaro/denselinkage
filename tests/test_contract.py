@@ -12,8 +12,9 @@ import inspect
 import pytest
 
 import denselinkage as dl
+from denselinkage import metrics
 from denselinkage.blocking import DenseBlocker, DenseBlockingIndex
-from denselinkage.cluster import ConnectedComponentsClusterer
+from denselinkage.clustering import ConnectedComponentsClusterer
 from denselinkage.core import models, ports, results
 from denselinkage.embedding import HashedNGramEmbedder, SentenceTransformerEmbedder
 from denselinkage.filtering import SimilarityThresholdFilter
@@ -24,7 +25,7 @@ from denselinkage.indexing import (
     NumpySearchableIndex,
 )
 from denselinkage.matching import LangChainMatcher, RetryPolicy, ThresholdMatcher
-from denselinkage.serialize import (
+from denselinkage.serializing import (
     FieldwiseSerializer,
     TemplateSerializer,
     WholeRowSerializer,
@@ -32,8 +33,8 @@ from denselinkage.serialize import (
 
 EXPECTED_PRELUDE = {
     "BlockingMetrics",
-    "Clustering",
     "ClusteringMetrics",
+    "ClusteringResult",
     "DenseLinker",
     "FieldwiseSerializer",
     "LabeledPairs",
@@ -63,10 +64,10 @@ def test_prelude_surface() -> None:
         models.Source,
         results.LabeledPairs,
         results.LinkageResult,
-        results.LinkageMetrics,
-        results.BlockingMetrics,
-        results.Clustering,
-        results.ClusteringMetrics,
+        results.ClusteringResult,
+        metrics.LinkageMetrics,
+        metrics.BlockingMetrics,
+        metrics.ClusteringMetrics,
         RetryPolicy,
     ],
 )

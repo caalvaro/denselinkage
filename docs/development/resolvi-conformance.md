@@ -41,7 +41,7 @@ ratify-before-freeze items.
 **Fork.** Resolvi: matching is optional ("at least one of matching/
 clustering"); d-blink skips matching entirely. `DenseLinker.matcher` is
 required.
-**Ruling (recommended): conscious decline — not a gap.** The package identity
+**Ruling (ratified — ADR-0003): conscious decline — not a gap.** The package identity
 is dense blocking **plus matching**; the degenerate "no real matcher" case is
 already served by `ThresholdMatcher` (dependency-free, gates on the carried
 similarity) without weakening the `matcher`-always-present invariant that keeps
@@ -60,7 +60,7 @@ blocker-optional). Decision must be explicit either way.
 algorithm cannot be injected through the contract. Resolvi: clustering is a
 swappable **Strategy** (agglomerative is incremental).
 **Ruling (recommended, ratify pre-freeze).** Add a `Clusterer` Protocol to
-`denselinkage.core.ports` (`cluster(result: LinkageResult) -> Clustering`); a
+`denselinkage.core.ports` (`cluster(result: LinkageResult) -> ClusteringResult`); a
 `ConnectedComponentsClusterer` reference adapter (in `cluster.py`) declares the
 port and joins the adapter-declares-its-port contract test, while the existing
 `connected_components` function is kept as its prelude convenience wrapper

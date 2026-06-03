@@ -15,9 +15,8 @@ extras), so this type-checks against the real core but does not run yet.
 import pandas as pd
 from langchain_openai import ChatOpenAI
 
-from denselinkage import DenseLinker, Source, TemplateSerializer
+from denselinkage import DenseLinker, LabeledPairs, Source, TemplateSerializer
 from denselinkage.blocking import DenseBlocker
-from denselinkage.core.results import LabeledPairs
 from denselinkage.embedding import SentenceTransformerEmbedder
 from denselinkage.indexing import FaissFlatIndex
 from denselinkage.matching import LangChainMatcher, RetryPolicy

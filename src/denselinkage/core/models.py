@@ -67,7 +67,7 @@ class Source:
     The Source -> ``Sequence[Record]`` materialization is the one
     orchestration boundary that is otherwise implicit; it is named: the
     internal ``denselinkage._reader.RecordReader`. It resolves ``serializer=None`` to
-    :func:`denselinkage.serialize.default_serializer` (a
+    :func:`denselinkage.serializing.default_serializer` (a
     ``WholeRowSerializer``), applies the serializer's ``column_mapping`` when
     present, and validates the frame — raising the
     ``denselinkage.core.errors`` taxonomy (``UnknownIdColumn`` if

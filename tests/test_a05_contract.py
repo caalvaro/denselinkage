@@ -13,12 +13,13 @@ import inspect
 
 from denselinkage import core, metrics
 from denselinkage._reader import RecordReader
-from denselinkage.cluster import ConnectedComponentsClusterer, connected_components
+from denselinkage.clustering import ConnectedComponentsClusterer, connected_components
 from denselinkage.core import errors, ports
 from denselinkage.core.errors import DenseLinkageError
 from denselinkage.core.models import CandidatePair
-from denselinkage.core.results import BlockingMetrics, ClusteringMetrics, LabeledPairs
+from denselinkage.core.results import LabeledPairs
 from denselinkage.filtering import SimilarityThresholdFilter
+from denselinkage.metrics import BlockingMetrics, ClusteringMetrics
 
 TAXONOMY = (
     "DenseLinkageError",

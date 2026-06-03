@@ -1,18 +1,4 @@
-"""Lazy-import helper for optional heavy adapters.
-
-The core installs with only numpy + pandas. Heavy adapters
-(``FaissFlatIndex``, ``SentenceTransformerEmbedder``, ``LangChainMatcher``,
-and ``DenseLinker.with_defaults``) MUST import their backend lazily *inside*
-methods and go through :func:`require`, so that ``import denselinkage`` never
-fails on a missing extra and a missing dependency produces an actionable
-message instead of a bare ``ModuleNotFoundError``.
-
-Pattern::
-
-    def search(self, ...):
-        faiss = require("faiss")          # raises with install hint if absent
-        ...
-"""
+"""``require`` — import an optional backend or raise with an install hint."""
 
 import importlib
 from types import ModuleType
@@ -41,6 +27,3 @@ def require(module: str) -> ModuleType:
             f"{module!r} is required for this feature. "
             f"Install it with: pip install 'denselinkage[{extra}]'"
         ) from exc
-
-
-__all__ = ["require"]
