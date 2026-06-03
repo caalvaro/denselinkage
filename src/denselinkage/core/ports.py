@@ -41,11 +41,27 @@ class Serializer(Protocol):
 
 @runtime_checkable
 class Embedder(Protocol):
-    @property
-    def model_id(self) -> str: ...
+    """Maps text to dense vectors. ``encode`` is the v1 workhorse; ``model_id``
+    and ``embedding_dim`` are reserved provenance / validation surface (see
+    their docstrings). They stay on the port even though the v1 link path does
+    not call them: adding a port member after the freeze is breaking, whereas
+    removing an unused one later is cheap, so the asymmetry favours keeping them
+    (ADR-0003)."""
 
     @property
-    def embedding_dim(self) -> int: ...
+    def model_id(self) -> str:
+        """Stable identifier of the embedding model (e.g. its name/checkpoint).
+        Reserved for **provenance**: the Phase-B Reference Store records it so a
+        persisted index can refuse a query embedded by a different model. Not
+        consumed by the v1 link path."""
+        ...
+
+    @property
+    def embedding_dim(self) -> int:
+        """Output width of :meth:`encode`. Reserved for **eager dimension
+        validation**; v1 instead detects width mismatches at search time via
+        ``DimensionMismatch``, so this is not yet consumed."""
+        ...
 
     def encode(
         self,

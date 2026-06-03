@@ -1,13 +1,19 @@
 """Hard-failure exception taxonomy.
 
-Two distinct failure models, deliberately separate:
+Three failure models, deliberately separate (ADR-0003):
 
 - **Soft, per-pair** matcher failures use ``MatchError`` in
   ``LinkageResult.errors`` — never exceptions, so one bad LLM call cannot
   abort a batch.
-- **Hard** failures (invalid input / incompatible components) raise the
-  exceptions below. All subclass :class:`DenseLinkageError`, so callers can
-  catch the family with one ``except``. Dependency-free.
+- **Hard, data/runtime** failures (invalid input / incompatible components)
+  raise the exceptions below. All subclass :class:`DenseLinkageError`, so
+  callers can catch the family with one ``except``. Dependency-free.
+- **API misuse / programmer error** (e.g. calling ``link`` / ``index`` /
+  ``dedupe`` with ``blocker=None``, or a ``Matcher`` returning the wrong number
+  of outcomes) raises a plain ``ValueError`` — deliberately *outside*
+  :class:`DenseLinkageError`. It signals a bug in the calling code, not a runtime
+  data condition, so an ``except DenseLinkageError`` guarding data handling must
+  not swallow it.
 """
 
 

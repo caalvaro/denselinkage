@@ -41,7 +41,7 @@ ratify-before-freeze items.
 **Fork.** Resolvi: matching is optional ("at least one of matching/
 clustering"); d-blink skips matching entirely. `DenseLinker.matcher` is
 required.
-**Ruling (recommended): conscious decline — not a gap.** The package identity
+**Ruling (ratified — ADR-0003): conscious decline — not a gap.** The package identity
 is dense blocking **plus matching**; the degenerate "no real matcher" case is
 already served by `ThresholdMatcher` (dependency-free, gates on the carried
 similarity) without weakening the `matcher`-always-present invariant that keeps

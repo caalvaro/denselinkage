@@ -148,3 +148,27 @@ Recorded in: `core/__init__.py` (`__all__` + docstring), `denselinkage/__init__.
 `tests/test_a05_contract.py` / `tests/test_phase_a_additions.py` (the reports now
 assert membership in `metrics`, not `core`). The `core/results.py` →
 `core/outputs.py` rename is deferred (cosmetic; would churn every import site).
+
+## D8 — Pre-freeze contract ratification (ADR-0003)
+**Ruling (ratified; ADR-0003).** Freeze readiness is governed by the
+**add/remove asymmetry**: post-freeze, new ports/types/methods and new optional
+fields are additive (safe), but adding a member to an existing port or changing a
+field type / signature is breaking — while removing an *unused* port member later
+is cheap. So only existing-port signatures, field types, and calling conventions
+must be correct *now*. Ratified calls:
+
+- **D4 declined** — `matcher` stays required (`ThresholdMatcher` covers the
+  degenerate "no real matcher" case); recorded as a decision, not a default.
+- **Two-tier errors** — `ValueError` = API misuse / programmer error
+  (`blocker=None`, wrong-length matcher return); `DenseLinkageError` =
+  data/runtime hard failure. Documented on `core/errors.py`.
+- **Keep + document speculative port surface** — `Embedder.model_id` /
+  `embedding_dim`, the conformance ports (`Filter`, `Clusterer`, `Trainer`), and
+  `SearchableIndex.extended` stay (the asymmetry punishes trimming); intended
+  consumers documented rather than removed.
+- **Frozen-object hashability** — standard Python behaviour; nothing hashes
+  them; documented-or-ignored, out of freeze scope.
+- **Freeze checklist** — the one remaining high-value task is an adversarial
+  signatures-and-field-types pass; then flip the gate.
+
+Full record: [`docs/ADRs/0003-pre-freeze-contract-ratification.md`](../ADRs/0003-pre-freeze-contract-ratification.md).
