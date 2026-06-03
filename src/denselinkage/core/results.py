@@ -103,12 +103,32 @@ class LinkageResult:
 
 @dataclass(frozen=True, slots=True)
 class ClusteringResult:
+    """Entity clusters as a record-id -> cluster-id map (sklearn-style labels).
+
+    Cluster ids are contiguous ``0..n_clusters-1``, assigned deterministically by
+    the producer (``connected_components``) so the labelling is reproducible.
+    """
+
     labels: Mapping[RecordId, int]
 
     @property
-    def n_clusters(self) -> int: ...
+    def n_clusters(self) -> int:
+        """Number of distinct clusters."""
+        return len(set(self.labels.values()))
 
-    def to_frame(self) -> "pd.DataFrame": ...
+    def to_frame(self) -> "pd.DataFrame":
+        """One row per record — ``record_id``, ``cluster_id`` — sorted by
+        ``(cluster_id, record_id)`` for a stable, readable ordering."""
+        import pandas as pd
+
+        columns = ["record_id", "cluster_id"]
+        rows: list[dict[str, str | int]] = [
+            {"record_id": record_id, "cluster_id": cluster_id}
+            for record_id, cluster_id in sorted(
+                self.labels.items(), key=lambda item: (item[1], item[0])
+            )
+        ]
+        return pd.DataFrame(rows, columns=columns)
 
 
 @dataclass(frozen=True, slots=True)

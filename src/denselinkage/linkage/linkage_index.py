@@ -1,9 +1,10 @@
 """``LinkageIndex`` — prepared linkage state built by ``DenseLinker.index``."""
 
 from denselinkage._reader import RecordReader
-from denselinkage.core.models import CandidatePair, MatchDecision, MatchError, Source
+from denselinkage.core.models import Source
 from denselinkage.core.ports import BlockingIndex, Matcher
 from denselinkage.core.results import LinkageResult
+from denselinkage.linkage._assembly import assemble_linkage_result
 
 
 class LinkageIndex:
@@ -26,18 +27,4 @@ class LinkageIndex:
         """
         records = RecordReader().read(source)
         pairs = self._blocking_index.query(records)
-        outcomes = self._matcher.match(pairs)
-        if len(outcomes) != len(pairs):
-            raise ValueError(
-                f"matcher returned {len(outcomes)} outcomes for {len(pairs)} "
-                "pairs; Matcher.match must return exactly one outcome per input "
-                "pair, aligned by position"
-            )
-        decisions: list[tuple[CandidatePair, MatchDecision]] = []
-        errors: list[tuple[CandidatePair, MatchError]] = []
-        for pair, outcome in zip(pairs, outcomes, strict=True):
-            if isinstance(outcome, MatchError):
-                errors.append((pair, outcome))
-            else:
-                decisions.append((pair, outcome))
-        return LinkageResult(decisions=tuple(decisions), errors=tuple(errors))
+        return assemble_linkage_result(pairs, self._matcher)
