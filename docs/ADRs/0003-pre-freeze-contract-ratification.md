@@ -1,6 +1,6 @@
 # ADR-0003: Pre-freeze contract ratification
 
-**Status:** Accepted (2026-06-02); one action item (the signature pass) open before the gate flips
+**Status:** Accepted (2026-06-02); all action items closed — A0.5 gate flipped 2026-06-03 (contract FROZEN, see `docs/development/freeze-gate.md`)
 **Date:** 2026-06-02
 **Deciders:** Alvaro (author); thesis advisor sign-off
 
@@ -126,8 +126,10 @@ free.
 2. [x] Document the two-tier error principle on `core/errors.py`.
 3. [x] Document the intended consumers on `Embedder.model_id` / `embedding_dim`
    (+ the asymmetry rationale on the `Embedder` port).
-4. [ ] **Run the signatures-and-field-types pass** (the freeze checklist) — the
-   last step before flipping the A0.5 gate.
+4. [x] **Run the signatures-and-field-types pass** (the freeze checklist) — done
+   2026-06-03; an adversarial read of every port signature, frozen field type,
+   and calling convention found no modify-if-late changes required. A0.5 gate
+   flipped; contract FROZEN (see `docs/development/freeze-gate.md`).
 5. [x] Log this as **D8** in `docs/development/decisions.md`.
 
 ## References / prior art
