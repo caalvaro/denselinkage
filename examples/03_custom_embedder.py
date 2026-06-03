@@ -11,8 +11,8 @@ Wired on the dependency-free stack: ``NumpyFlatIndex`` + ``ThresholdMatcher``,
 no GPU / FAISS / API key. The package also ships its own ``HashedNGramEmbedder``
 / ``FieldwiseSerializer``; here we write fresh ones to show the port is open.
 
-NOTE: Design mock — ``NumpyFlatIndex``/``ThresholdMatcher`` bodies are deferred,
-so this type-checks against the real core but does not run yet.
+Runs on the dependency-free stack (no extras): ``NumpyFlatIndex`` and
+``ThresholdMatcher`` are implemented, so this example executes end to end.
 """
 
 import zlib

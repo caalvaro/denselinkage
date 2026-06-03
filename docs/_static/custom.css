@@ -1,0 +1,6 @@
+/* denselinkage documentation — minor overrides on top of the Furo theme. */
+
+/* Wrap long autodoc signatures instead of introducing a horizontal scrollbar. */
+dt.sig {
+  white-space: normal;
+}

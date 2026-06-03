@@ -8,12 +8,13 @@ from denselinkage.core.ports import BlockingIndex, Embedder, SearchableIndex
 
 
 class DenseBlockingIndex(BlockingIndex):
-    """Immutable artifact built by ``DenseBlocker``: owns the reference
-    records' ``SearchableIndex`` and embedder, and generates ``CandidatePair``s
-    for a query record set. Each pair is oriented ``record_a`` = indexed
-    (left/reference) record, ``record_b`` = query record. ``top_k`` /
-    ``similarity_threshold`` default to the originating spec's values and may be
-    overridden per query."""
+    """Immutable artifact built by ``DenseBlocker`` for one reference set.
+
+    Owns the reference records' ``SearchableIndex`` and embedder, and generates
+    ``CandidatePair`` objects for a query record set. Each pair is oriented
+    ``record_a`` = indexed (left/reference) record, ``record_b`` = query record.
+    ``top_k`` / ``similarity_threshold`` default to the originating spec's values
+    and may be overridden per query."""
 
     def __init__(
         self,

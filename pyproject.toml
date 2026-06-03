@@ -55,6 +55,17 @@ dev = [
     "pytest-cov>=5",
     "pandas-stubs>=2.0",
 ]
+# Documentation toolchain (Sphinx site -> GitHub Pages). Docs-only, never
+# imported by the package. The API reference is autodoc-generated, and the
+# package's lazy-import discipline means the build needs no heavy extras.
+docs = [
+    "sphinx>=8",
+    "furo>=2024.8",
+    "myst-parser>=4",
+    "sphinx-copybutton>=0.5",
+    "sphinx-design>=0.6",
+    "sphinxcontrib-mermaid>=0.9",
+]
 
 [build-system]
 requires = ["uv_build>=0.9.24,<0.10.0"]
