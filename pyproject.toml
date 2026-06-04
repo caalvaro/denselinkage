@@ -114,3 +114,14 @@ markers = [
     "adapter: requires an optional heavy adapter (faiss / sentence-transformers / langchain)",
     "slow: long-running test",
 ]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+# Branch coverage is enforced. The dependency-free surface is fully exercised by
+# the `not adapter and not slow` selection the CI coverage job runs; revisit this
+# threshold when adapter-only bodies (faiss / sentence-transformers / langchain)
+# land, since their tests are `adapter`-marked and excluded from that run.
+fail_under = 100
+show_missing = true

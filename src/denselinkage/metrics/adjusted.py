@@ -16,7 +16,14 @@ class AdjustedMetrics:
     k: int
 
     @property
-    def recall_adjusted(self) -> float: ...
+    def recall_adjusted(self) -> float:
+        """Matcher recall scaled by the blocker's pair-completeness@k — the
+        recall ceiling the blocker imposes on the matcher."""
+        return self.matcher.recall * self.blocking_recall_at_k
 
     @property
-    def f1_adjusted(self) -> float: ...
+    def f1_adjusted(self) -> float:
+        """Harmonic mean of matcher precision and :attr:`recall_adjusted`."""
+        precision = self.matcher.precision
+        denom = precision + self.recall_adjusted
+        return 2 * precision * self.recall_adjusted / denom if denom else 0.0

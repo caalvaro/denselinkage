@@ -3,8 +3,8 @@
 
 from dataclasses import dataclass
 
-from denselinkage.core.models import RecordId
 from denselinkage.core.results import LabeledPairs, LinkageResult
+from denselinkage.metrics._pairing import pair_key
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,14 +37,6 @@ class LinkageMetrics:
         return 2 * self.precision * self.recall / denom if denom else 0.0
 
 
-def _pair_key(
-    left: RecordId, right: RecordId, *, directed: bool
-) -> tuple[RecordId, RecordId] | frozenset[RecordId]:
-    """D1 comparison key: ordered for ``link`` (directed), unordered for
-    ``dedupe`` (undirected, ``frozenset``)."""
-    return (left, right) if directed else frozenset((left, right))
-
-
 def linkage_metrics(
     result: LinkageResult, *, gold: LabeledPairs, directed: bool = True
 ) -> LinkageMetrics:
@@ -63,14 +55,14 @@ def linkage_metrics(
     The verb is not recoverable from ``result`` alone, so the caller supplies
     it — ``dedupe`` callers pass ``directed=False``.
     """
-    gold_keys = {_pair_key(a, b, directed=directed) for a, b in gold.pairs}
+    gold_keys = {pair_key(a, b, directed=directed) for a, b in gold.pairs}
     predicted = {
-        _pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
+        pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
         for pair, decision in result.decisions
         if decision.is_match
     }
     errored = {
-        _pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
+        pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
         for pair, _ in result.errors
     }
     return LinkageMetrics(

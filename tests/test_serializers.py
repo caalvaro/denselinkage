@@ -30,6 +30,12 @@ def test_template_column_mapping_overrides_the_template_variable() -> None:
     assert serializer.serialize(record) == "Acme"
 
 
+def test_template_column_mapping_skips_absent_source_column() -> None:
+    # A mapping entry whose source column is not in the row is silently skipped.
+    serializer = TemplateSerializer("Name: {name}", column_mapping={"absent": "x"})
+    assert serializer.serialize({"name": "Acme"}) == "Name: Acme"
+
+
 def test_template_missing_variable_raises_key_error() -> None:
     serializer = TemplateSerializer("{name} {absent}")
     with pytest.raises(KeyError):
