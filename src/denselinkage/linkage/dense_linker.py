@@ -4,9 +4,10 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from denselinkage._reader import RecordReader
-from denselinkage.core.models import CandidatePair, Source
+from denselinkage.core.models import CandidatePair, RecordId, Source
 from denselinkage.core.ports import Blocker, Matcher
 from denselinkage.core.results import LinkageResult
+from denselinkage.linkage._assembly import assemble_linkage_result
 from denselinkage.linkage.linkage_index import LinkageIndex
 
 
@@ -94,7 +95,16 @@ class DenseLinker:
         Raises ``ValueError`` if ``blocker`` is ``None``; otherwise the same
         ``denselinkage.core.errors`` taxonomy as ``index``.
         """
-        ...
+        if self.blocker is None:
+            raise ValueError(
+                "dedupe() requires a blocker; construct the linker with one "
+                "(DenseLinker(blocker=..., matcher=...) or "
+                "DenseLinker.with_defaults())"
+            )
+        records = RecordReader().read(source)
+        blocking_index = self.blocker.build(records)
+        pairs = _dedupe_candidate_pairs(blocking_index.query(records))
+        return assemble_linkage_result(pairs, self.matcher)
 
     def match_pairs(self, candidates: Sequence[CandidatePair]) -> LinkageResult:
         """Matcher-only path: score externally supplied candidate pairs (e.g.
@@ -110,4 +120,26 @@ class DenseLinker:
         backend matcher failures surface per-pair as ``MatchError``, never as
         exceptions.
         """
-        ...
+        return assemble_linkage_result(tuple(candidates), self.matcher)
+
+
+def _dedupe_candidate_pairs(pairs: Sequence[CandidatePair]) -> list[CandidatePair]:
+    """Drop self-pairs and symmetric duplicates for single-source dedupe.
+
+    A record blocked against itself yields an ``(a, a)`` self-pair (suppressed);
+    the same unordered pair can appear in both orientations ``(a, b)`` /
+    ``(b, a)`` (only the first is kept). Pair identity is the unordered id key,
+    matching the ``directed=False`` rule the dedupe metrics use.
+    """
+    kept: list[CandidatePair] = []
+    seen: set[frozenset[RecordId]] = set()
+    for pair in pairs:
+        left, right = pair.record_a.id, pair.record_b.id
+        if left == right:
+            continue
+        key = frozenset((left, right))
+        if key in seen:
+            continue
+        seen.add(key)
+        kept.append(pair)
+    return kept

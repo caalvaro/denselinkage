@@ -51,6 +51,61 @@ motivations.
 
 ## Frozen contract (re-declared after A0.5 verification)
 
-Once the A0.5 DoD checks are green (ruff incl. format, mypy `src+examples`,
-compileall examples, pytest, import-isolation), the public surface is frozen and
-A1 may begin.
+**Status: FROZEN — A0.5 gate passed 2026-06-03.** The public surface is locked;
+evolution is now constrained to **extend-never-modify**. A1 (the dependency-free
+beta, `1.0.0b1`) may begin.
+
+### Gate evidence
+All four oracles plus the A0.5 DoD checks are green:
+
+- ruff check + `ruff format --check` (src / tests / examples) ✓
+- `mypy --strict` (src + examples, 48 files) ✓
+- `compileall examples` ✓
+- pytest (`not adapter and not slow`) ✓
+- import-isolation / dependency-cut (`import denselinkage` pulls in no heavy
+  backend) ✓
+- oracle 4: the `with_defaults()` → `00_quickstart` vertical slice is implemented
+  and runs at P/R/F1 = 1.0.
+
+### Signatures-and-field-types pass (ADR-0003 freeze checklist)
+An adversarial read of every port signature, every frozen field type, and the
+public calling conventions found **no modify-if-late changes required**. Items
+confirmed *intentional* (not defects):
+
+- `clustering_metrics` takes no `directed=` (clusters are inherently unordered),
+  while `linkage_metrics` / `blocking_metrics` / `pair_completeness_at_k` do.
+- `DenseLinker` carries only `blocker` + `matcher`; filtering is the separate
+  `Filter` port and clustering is the post-hoc `connected_components` step, not
+  linker fields (wiring them in later is additive).
+- `Embedder.model_id` / `embedding_dim` retained (ADR-0003).
+
+### The frozen surface
+- **Ports** (`core.ports`): `Serializer`, `Embedder`, `VectorIndex`,
+  `SearchableIndex`, `Blocker`, `BlockingIndex`, `Filter`, `Matcher`,
+  `Clusterer`, `Trainer`.
+- **Models** (`core.models`): `Record`, `CandidatePair`, `MatchDecision`,
+  `MatchError`, `Source`, `RecordId`.
+- **Results** (`core.results`): `LabeledPairs`, `LinkageResult`,
+  `ClusteringResult`, `TrainingPairs` (field types + the `to_frame` column
+  schema).
+- **Errors** (`core.errors`): the `DenseLinkageError` taxonomy + the
+  `ValueError` (API-misuse) tier.
+- **Orchestration**: `DenseLinker`
+  (`with_defaults` / `index` / `link` / `dedupe` / `match_pairs`), `LinkageIndex`
+  (`query`).
+- **Metrics** public functions + report types: `linkage_metrics`,
+  `blocking_metrics`, `pair_completeness_at_k`, `clustering_metrics`;
+  `LinkageMetrics`, `BlockingMetrics`, `ClusteringMetrics`, `ThresholdSweep`,
+  `AdjustedMetrics`.
+
+### Open in the additive corridor (non-breaking, post-freeze)
+- `LinkageResult.from_candidate_frame` (Phase-B ergonomic `DataFrame ->
+  CandidatePair` constructor).
+- An optional `LinkageMetrics.from_counts` classmethod, for constructor parity
+  with `BlockingMetrics.from_pc_map` / `ClusteringMetrics.from_b3`.
+- `DenseLinker` gaining optional `filter=` / `clusterer=` fields if/when wired.
+- New ports, new optional fields (with defaults), new sibling types.
+
+Freezing the **contract** is distinct from implementing the **bodies**: many
+bodies are still `...` stubs; filling the dependency-free ones is A1 and does not
+touch the frozen shape.

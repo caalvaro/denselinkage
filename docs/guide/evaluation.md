@@ -46,8 +46,12 @@ otherwise no matcher can recover them:
 ```python
 from denselinkage.metrics import blocking_metrics, pair_completeness_at_k
 
-bm = blocking_metrics(candidates, gold=gold)            # -> BlockingMetrics
-pc = pair_completeness_at_k(candidates, gold=gold, k=5) # recall@k of the blocker
+# `candidates` is the blocker's output, e.g.
+# DenseBlocker(...).build(left_records).query(right_records); use a large top_k
+# so pair-completeness can be swept over several k.
+bm = blocking_metrics(candidates, gold=gold, ks=[1, 5, 10])  # -> BlockingMetrics
+print(bm.pc_at(5))
+pc = pair_completeness_at_k(candidates, gold=gold, k=5)       # recall@k of the blocker
 ```
 
 ## Clustering quality

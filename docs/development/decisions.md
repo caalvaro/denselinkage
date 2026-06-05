@@ -172,3 +172,27 @@ must be correct *now*. Ratified calls:
   signatures-and-field-types pass; then flip the gate.
 
 Full record: [`docs/ADRs/0003-pre-freeze-contract-ratification.md`](../ADRs/0003-pre-freeze-contract-ratification.md).
+
+## D9 — Dependency-free beta: A1 implementation (ADR-0004)
+**Ruling (ratified; ADR-0004).** A1 fills the frozen contract's bodies for the
+**dependency-free beta** (`1.0.0b1`). Key calls:
+
+- **Beta scope** — dependency-free only (numpy + pandas); the heavy extras
+  (faiss / sentence-transformers / langchain) are deferred.
+- **Heavy-adapter guards** — the four deferred adapters raise
+  `NotImplementedError("… planned for a future release")` rather than returning
+  `None`; guarded at `__init__` where present (the raise precedes any backend
+  import, so the dependency cut holds).
+- **Clustering universe** — `connected_components` clusters records in
+  `decisions ∪ errors`; `clustering_metrics` scores B³ over the records present
+  (Option A). The full-record-universe path is an additive Phase-B escape hatch.
+- **Shared internals** — `metrics/_pairing.py` (D1 key) and
+  `clustering/_union_find.py` (transitive closure) are DRY'd across the metrics
+  and clustering layers.
+- **Tuning/adjusted** — report accessors ship; their producers
+  (`tune_threshold`, `adjusted_metrics`) stay Phase B.
+- **Coverage** — branch coverage + `fail_under = 100` enforced.
+- **Examples** — `02` stays the semantic + LLM design mock; `04_dedupe.py` is the
+  runnable dependency-free dedup; CI smoke-runs `00` / `03` / `04`.
+
+Full record: [`docs/ADRs/0004-dependency-free-beta.md`](../ADRs/0004-dependency-free-beta.md).

@@ -14,8 +14,16 @@ class SimilarityThresholdFilter(Filter):
     or dropped when ``drop_unscored=True``.
     """
 
-    def __init__(
-        self, *, threshold: float = 0.0, drop_unscored: bool = False
-    ) -> None: ...
+    def __init__(self, *, threshold: float = 0.0, drop_unscored: bool = False) -> None:
+        self._threshold = threshold
+        self._drop_unscored = drop_unscored
 
-    def filter(self, pairs: Sequence[CandidatePair]) -> list[CandidatePair]: ...
+    def filter(self, pairs: Sequence[CandidatePair]) -> list[CandidatePair]:
+        kept: list[CandidatePair] = []
+        for pair in pairs:
+            if pair.similarity_score is None:
+                if not self._drop_unscored:
+                    kept.append(pair)
+            elif pair.similarity_score >= self._threshold:
+                kept.append(pair)
+        return kept

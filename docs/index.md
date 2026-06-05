@@ -14,14 +14,14 @@ result.to_frame()                           # left_id, right_id, similarity, mat
 linkage_metrics(result, gold=LabeledPairs.from_pairs([("A1", "B1")]))
 ```
 
-:::{admonition} Structure stage
+:::{admonition} Beta
 :class: note
 
-The public contract — types, ports, and signatures — is defined and frozen.
-The [quickstart](getting-started/quickstart) **runs today**; the rest of the
-surface is documented as the intended API (the spec the
-[`examples/`](https://github.com/caalvaro/denselinkage/tree/main/examples)
-demonstrate) and is being implemented incrementally behind it.
+The dependency-free core is implemented and **runs** — `link` / `dedupe` /
+`match_pairs`, connected-components clustering, and the linkage / blocking /
+clustering metrics, all on numpy + pandas. The heavy extras (FAISS,
+sentence-transformers, LangChain) are **experimental this release**: their
+adapters are declared but raise `NotImplementedError`.
 :::
 
 ::::{grid} 1 1 2 2

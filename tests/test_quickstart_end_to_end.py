@@ -52,6 +52,17 @@ def test_quickstart_link_is_perfect() -> None:
     assert metrics.n_errors == 0
 
 
+def test_with_defaults_accepts_component_overrides() -> None:
+    # with_defaults wires the default stack, but either half can be overridden.
+    blocker = DenseBlocker(
+        embedder=HashedNGramEmbedder(), vector_index=NumpyFlatIndex(), top_k=3
+    )
+    matcher = ThresholdMatcher(threshold=0.9)
+    linker = DenseLinker.with_defaults(blocker=blocker, matcher=matcher)
+    assert linker.blocker is blocker
+    assert linker.matcher is matcher
+
+
 def test_to_frame_schema_and_matches() -> None:
     left, right = _sources()
     frame = DenseLinker.with_defaults().link(left, right).to_frame()

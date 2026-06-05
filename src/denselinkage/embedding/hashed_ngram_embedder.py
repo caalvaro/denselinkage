@@ -47,6 +47,8 @@ class HashedNGramEmbedder(Embedder):
                 bucket = zlib.crc32(gram.encode("utf-8")) % self._n_features
                 out[i, bucket] += 1.0
             norm = float(np.linalg.norm(out[i]))
-            if norm > 0.0:  # L2-normalize so inner product == cosine
+            # L2-normalize so inner product == cosine. Whitespace-only text is
+            # skipped above, so a counted row always has norm > 0 (defensive guard).
+            if norm > 0.0:  # pragma: no branch
                 out[i] /= norm
         return out

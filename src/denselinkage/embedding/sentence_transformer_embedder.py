@@ -7,7 +7,18 @@ from denselinkage.core.ports import Embedder, Vectors
 
 
 class SentenceTransformerEmbedder(Embedder):
-    def __init__(self, model_name: str) -> None: ...
+    """Semantic embedder (extra: ``[sentence-transformers]``).
+
+    Planned for a future release; constructing it raises
+    ``NotImplementedError``. Use ``HashedNGramEmbedder`` on the dependency-free
+    stack until then.
+    """
+
+    def __init__(self, model_name: str) -> None:
+        raise NotImplementedError(
+            "SentenceTransformerEmbedder is planned for a future release; "
+            "use HashedNGramEmbedder on the dependency-free stack"
+        )
 
     @property
     def model_id(self) -> str: ...

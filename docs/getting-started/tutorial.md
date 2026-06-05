@@ -275,10 +275,10 @@ mega-clusters — the classic dedup failure mode. Watch B³ recall ≫ precision
 :::
 
 :::{note}
-**Structure stage.** The `link` + `linkage_metrics` path above runs today
-(it is the quickstart). The blocking-quality and B³ metrics are defined and
-type-checked as shown but are landing incrementally — see the
-[development roadmap](https://github.com/caalvaro/denselinkage/tree/main/docs/development).
+The entire dependency-free evaluation path shown here — `linkage_metrics`,
+`blocking_metrics` / `pair_completeness_at_k`, and B³ `clustering_metrics` —
+runs today. Only the semantic / FAISS / LLM components (example `01`) are still
+landing, behind their extras.
 :::
 
 ## The runnable example and the production target

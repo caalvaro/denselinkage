@@ -12,8 +12,13 @@
   constructor shape, kwarg-`gold` consistency, examples wired into CI
   (lint+format+type+compile), one Python-version story, conventions aligned.
   **Exit:** every DoD check green and pasted verbatim; contract re-frozen.
-- **A1+** — fill method bodies behind the frozen contract. **Gated:** do not
-  start A1 until A0.5 is complete and the contract is re-declared frozen.
+- **A1 — dependency-free beta (`1.0.0b1`)** *(done)* — fill the frozen
+  contract's bodies for the no-extras surface: `link` / `dedupe` / `match_pairs`,
+  connected-components clustering, and the linkage / blocking / clustering
+  metrics + filtering. The heavy extras (faiss / sentence-transformers /
+  langchain) are deferred — their adapters raise `NotImplementedError`. Branch
+  coverage + `fail_under = 100` enforced. See
+  [ADR-0004](../ADRs/0004-dependency-free-beta.md).
 - **Phase B** *(v1, dependency-light)* — `mine_hard_negatives`,
   `tune_threshold`, `adjusted_metrics`, `LabeledPairs.split`,
   `LinkageResult.from_candidate_frame` (the ergonomic frame→pairs constructor
