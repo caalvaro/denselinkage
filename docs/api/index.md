@@ -28,6 +28,7 @@ from denselinkage import DenseLinker, Source, TemplateSerializer
 | {class}`~denselinkage.serializing.FieldwiseSerializer` | reference serializer | [Components](components) |
 | {class}`~denselinkage.serializing.WholeRowSerializer` | reference serializer | [Components](components) |
 | {func}`~denselinkage.clustering.connected_components` | convenience function | [Components](components) |
+| {func}`~denselinkage.linkage.candidate_pairs_from_frame` | convenience function | [Orchestration](orchestration) |
 
 ## Capability submodules
 

@@ -89,6 +89,29 @@ class DenseLinker:
         """
         return self.index(left).query(right)
 
+    def block(
+        self,
+        left: Source,
+        right: Source,
+        *,
+        top_k: int | None = None,
+        similarity_threshold: float | None = None,
+    ) -> list[CandidatePair]:
+        """Blocking-only two-table affordance: the blocker's ``CandidatePair``
+        objects for ``left`` / ``right`` *without* matching. ``block(a, b)``
+        mirrors ``link(a, b) == index(a).query(b)`` (here
+        ``index(a).candidates(b)``); feed the result to ``blocking_metrics`` /
+        ``pair_completeness_at_k``.
+
+        ``top_k`` / ``similarity_threshold`` override the blocker's spec for this
+        call (e.g. a large ``top_k`` to sweep pair-completeness). Raises
+        ``ValueError`` if ``blocker`` is ``None`` (via :meth:`index`); otherwise
+        the same ``denselinkage.core.errors`` taxonomy as :meth:`link`.
+        """
+        return self.index(left).candidates(
+            right, top_k=top_k, similarity_threshold=similarity_threshold
+        )
+
     def dedupe(self, source: Source) -> LinkageResult:
         """Single-table dedupe (self-pairs suppressed).
 
@@ -112,13 +135,12 @@ class DenseLinker:
         Does not require ``blocker``. Result flows through the same
         ``LinkageResult`` / metrics path as ``link``.
 
-        The ergonomic ``DataFrame -> CandidatePair`` constructor
-        (``LinkageResult.from_candidate_frame``) is a **Phase-B** addition, so
-        this path is contract-complete now but only end-to-end usable once B
-        lands. Raises no Source-validation errors (it takes pre-built
-        ``CandidatePair``s, whose ``similarity_score`` may be ``None``);
-        backend matcher failures surface per-pair as ``MatchError``, never as
-        exceptions.
+        To build the input from a DataFrame of id-pairs, use
+        ``denselinkage.candidate_pairs_from_frame`` (an id-pair frame + the two
+        sources -> ``list[CandidatePair]``). Raises no Source-validation errors
+        here (it takes pre-built ``CandidatePair``s, whose ``similarity_score``
+        may be ``None``); backend matcher failures surface per-pair as
+        ``MatchError``, never as exceptions.
         """
         return assemble_linkage_result(tuple(candidates), self.matcher)
 

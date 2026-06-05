@@ -19,6 +19,8 @@ Functions
    blocking_metrics
    pair_completeness_at_k
    clustering_metrics
+   tune_threshold
+   adjusted_metrics
 
 Reports
 -------

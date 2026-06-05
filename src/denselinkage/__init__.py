@@ -12,7 +12,11 @@ from importlib.metadata import PackageNotFoundError, version
 from denselinkage.clustering import connected_components
 from denselinkage.core.models import Source
 from denselinkage.core.results import ClusteringResult, LabeledPairs, LinkageResult
-from denselinkage.linkage import DenseLinker, LinkageIndex
+from denselinkage.linkage import (
+    DenseLinker,
+    LinkageIndex,
+    candidate_pairs_from_frame,
+)
 from denselinkage.metrics import BlockingMetrics, ClusteringMetrics, LinkageMetrics
 from denselinkage.serializing import (
     FieldwiseSerializer,
@@ -38,5 +42,6 @@ __all__ = [
     "Source",
     "TemplateSerializer",
     "WholeRowSerializer",
+    "candidate_pairs_from_frame",
     "connected_components",
 ]

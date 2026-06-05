@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 
 from denselinkage.core.results import LabeledPairs, LinkageResult
-from denselinkage.metrics._pairing import pair_key
+from denselinkage.metrics._pairing import PairKey, pair_key
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,6 +37,27 @@ class LinkageMetrics:
         return 2 * self.precision * self.recall / denom if denom else 0.0
 
 
+def _metrics_from_keys(
+    *,
+    gold_keys: set[PairKey],
+    predicted: set[PairKey],
+    errored: set[PairKey],
+    n_gold: int,
+    n_errors: int,
+) -> LinkageMetrics:
+    """Assemble ``LinkageMetrics`` from comparison-key sets — the shared tp/fp/fn
+    formula behind both ``linkage_metrics`` and ``tune_threshold``. ``errored``
+    keys are excluded from false negatives (recall ignores pairs the matcher
+    could not decide); ``n_errors`` is the raw errored-pair count."""
+    return LinkageMetrics(
+        true_positive=len(gold_keys & predicted),
+        false_positive=len(predicted - gold_keys),
+        false_negative=len(gold_keys - predicted - errored),
+        n_gold=n_gold,
+        n_errors=n_errors,
+    )
+
+
 def linkage_metrics(
     result: LinkageResult, *, gold: LabeledPairs, directed: bool = True
 ) -> LinkageMetrics:
@@ -65,10 +86,10 @@ def linkage_metrics(
         pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
         for pair, _ in result.errors
     }
-    return LinkageMetrics(
-        true_positive=len(gold_keys & predicted),
-        false_positive=len(predicted - gold_keys),
-        false_negative=len(gold_keys - predicted - errored),
+    return _metrics_from_keys(
+        gold_keys=gold_keys,
+        predicted=predicted,
+        errored=errored,
         n_gold=len(gold.pairs),
         n_errors=len(result.errors),
     )

@@ -21,6 +21,38 @@ linker = DenseLinker(matcher=LangChainMatcher(llm=...))   # no blocker needed
 result = linker.match_pairs(pairs)                        # -> LinkageResult
 ```
 
+## From a DataFrame of id-pairs
+
+If your candidates live in a DataFrame — `(left_id, right_id)` columns plus an
+optional similarity — build the `CandidatePair`s with
+{func}`~denselinkage.linkage.candidate_pairs_from_frame`. It materializes each
+record's text from the two {class}`~denselinkage.core.models.Source` objects (via
+their serializers, exactly as `link` would), so content-aware matchers work:
+
+```python
+import pandas as pd
+from denselinkage import (
+    DenseLinker,
+    Source,
+    TemplateSerializer,
+    candidate_pairs_from_frame,
+)
+from denselinkage.matching import ThresholdMatcher
+
+left = Source(customers, id_column="cid", serializer=TemplateSerializer("{name}, {city}"))
+right = Source(vendors, id_column="vid", serializer=TemplateSerializer("{name}, {city}"))
+candidate_frame = pd.DataFrame({"l": ["A1"], "r": ["B1"], "score": [0.92]})
+
+pairs = candidate_pairs_from_frame(
+    candidate_frame, left=left, right=right,
+    left_id="l", right_id="r", similarity="score",
+)
+result = DenseLinker(matcher=ThresholdMatcher(threshold=0.5)).match_pairs(pairs)
+```
+
+A missing `similarity` column — or a `NaN` cell — leaves `similarity_score=None`,
+which is fine for a content-aware matcher (see below).
+
 ## Similarity is optional here
 
 A {class}`~denselinkage.core.models.CandidatePair` from dense blocking carries a

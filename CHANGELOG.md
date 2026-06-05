@@ -4,6 +4,28 @@ All notable changes to denselinkage are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims to
 follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Candidate-pair affordances (Phase B, batch B1) — all additive to the frozen
+  1.0 contract:
+  - `DenseLinker.block(left, right)` / `LinkageIndex.candidates(source)` expose
+    the blocker's candidate pairs **without** matching — the ergonomic input to
+    `blocking_metrics` / `pair_completeness_at_k`. Both accept `top_k` /
+    `similarity_threshold` overrides so a pair-completeness sweep reuses one
+    built index instead of rebuilding it.
+  - `candidate_pairs_from_frame(frame, *, left, right, left_id, right_id,
+    similarity=None)` builds the `match_pairs` input from a DataFrame of
+    candidate id-pairs plus the two sources (record text is materialized via the
+    sources' serializers). Exported from the package root.
+- Metric producers (Phase B, batch B2) — additive:
+  - `tune_threshold(candidates, *, gold, thresholds=None, directed=True)` sweeps
+    the decision threshold and returns the full P/R/F1 curve as a
+    `ThresholdSweep` (default grid = the candidates' distinct scores).
+  - `adjusted_metrics(result, candidates, *, gold, k, directed=True)` decomposes
+    end-to-end recall into matcher × blocker components as an `AdjustedMetrics`
+    (the matcher's recall measured conditionally on what blocking surfaced).
+
 ## [1.0.0b1] — unreleased
 
 First beta of the frozen 1.0 contract. The **dependency-free core** is
