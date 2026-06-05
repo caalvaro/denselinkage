@@ -1,6 +1,6 @@
 [project]
 name = "denselinkage"
-version = "0.1.0"
+version = "1.0.0b1"
 description = "Record linkage with dense blocking using text embeddings and LLM matching"
 readme = "README.md"
 authors = [
@@ -11,9 +11,8 @@ license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["record-linkage", "entity-resolution", "embeddings", "blocking", "llm"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -68,7 +67,7 @@ docs = [
 ]
 
 [build-system]
-requires = ["uv_build>=0.9.24,<0.10.0"]
+requires = ["uv_build>=0.9.24,<0.12"]
 build-backend = "uv_build"
 
 [tool.ruff]
