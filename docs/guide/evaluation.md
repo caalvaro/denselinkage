@@ -14,6 +14,14 @@ from denselinkage import LabeledPairs
 gold = LabeledPairs.from_pairs([("A1", "B1"), ("A2", "B2")])
 ```
 
+To tune on one slice and evaluate on another, hold out a test split. It is
+seeded for reproducibility and split **by pair** (a record may appear in both
+halves — fine for tuning a scalar threshold):
+
+```python
+train, test = gold.split(test_size=0.2, seed=0)   # -> (LabeledPairs, LabeledPairs)
+```
+
 ## Linkage quality
 
 {func}`~denselinkage.metrics.linkage_metrics` scores decided pairs against gold:

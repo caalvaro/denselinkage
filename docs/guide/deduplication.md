@@ -22,6 +22,18 @@ clusters = connected_components(result)   # -> ClusteringResult
 clusters.to_frame()
 ```
 
+:::{tip}
+A record that produced no candidate pair is absent from `result`, so it is
+missing from the clustering — and `clustering_metrics` would then score only the
+records that *did* appear, silently inflating B³ recall. Pass the full id set so
+unmatched records count as singletons and B³ is complete:
+
+```python
+ids = src.frame[src.id_column].astype(str)
+clusters = connected_components(result, all_record_ids=ids)
+```
+:::
+
 :::{warning}
 `connected_components` is **transitive**: if A matches B and B matches C, all
 three land in one cluster even if A and C were never matched directly. With a

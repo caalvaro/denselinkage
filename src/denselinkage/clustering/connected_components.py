@@ -1,11 +1,15 @@
 """``connected_components`` — the prelude convenience clustering function."""
 
+from collections.abc import Iterable
+
 from denselinkage.clustering._union_find import label_components
 from denselinkage.core.models import RecordId
 from denselinkage.core.results import ClusteringResult, LinkageResult
 
 
-def connected_components(result: LinkageResult) -> ClusteringResult:
+def connected_components(
+    result: LinkageResult, *, all_record_ids: Iterable[RecordId] | None = None
+) -> ClusteringResult:
     """Connected-components clustering: transitively close the matched pairs in
     ``result`` and label each record with its component id. Convenience form of
     :class:`ConnectedComponentsClusterer`; kept in the prelude.
@@ -19,11 +23,19 @@ def connected_components(result: LinkageResult) -> ClusteringResult:
     deterministically by each component's smallest record id.
 
     A record that produced *no* candidate pair at all (e.g. ``dedupe`` with a
-    small ``top_k`` whose only neighbour was itself) does not appear in ``result``
-    and so cannot be clustered here; carrying the full record universe into
-    clustering is a Phase-B addition.
+    small ``top_k`` whose only neighbour was itself) does not appear in
+    ``result``. Pass ``all_record_ids`` to seed the clustering universe with the
+    full id set: every listed record is labelled — an unmatched one becomes its
+    own singleton — so ``clustering_metrics`` reports a **complete** B³ over all
+    records instead of one inflated by the dropped records. Ids are stringified
+    to match record ids; ``None`` (the default) keeps the universe to the records
+    seen in ``result``.
     """
-    nodes: set[RecordId] = set()
+    nodes: set[RecordId] = (
+        {str(record_id) for record_id in all_record_ids}
+        if all_record_ids is not None
+        else set()
+    )
     edges: list[tuple[RecordId, RecordId]] = []
     for pair, decision in result.decisions:
         nodes.add(pair.record_a.id)

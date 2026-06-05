@@ -25,6 +25,13 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `adjusted_metrics(result, candidates, *, gold, k, directed=True)` decomposes
     end-to-end recall into matcher × blocker components as an `AdjustedMetrics`
     (the matcher's recall measured conditionally on what blocking surfaced).
+- Gold & clustering utilities (Phase B, batch B3) — additive:
+  - `LabeledPairs.split(*, test_size, seed=None)` partitions gold into
+    `(train, test)` (pair-level, seeded) for tune-then-evaluate workflows.
+  - `connected_components(result, *, all_record_ids=None)` seeds the clustering
+    universe with the full id set, so unmatched records become singletons and
+    `clustering_metrics` reports a complete B³ instead of one inflated by
+    dropped records.
 
 ## [1.0.0b1] — unreleased
 
