@@ -8,8 +8,14 @@ from denselinkage.indexing.faiss_searchable_index import FaissSearchableIndex
 
 
 class FaissFlatIndex(VectorIndex):
-    """FAISS-backed index spec (extra: ``[faiss]``)."""
+    """FAISS-backed index spec (extra: ``[faiss]``).
 
-    def build(
-        self, vectors: Vectors, ids: Sequence[RecordId]
-    ) -> FaissSearchableIndex: ...
+    Planned for a future release; ``build`` raises ``NotImplementedError``. Use
+    ``NumpyFlatIndex`` on the dependency-free stack until then.
+    """
+
+    def build(self, vectors: Vectors, ids: Sequence[RecordId]) -> FaissSearchableIndex:
+        raise NotImplementedError(
+            "FaissFlatIndex is planned for a future release; "
+            "use NumpyFlatIndex on the dependency-free stack"
+        )

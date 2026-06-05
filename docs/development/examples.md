@@ -5,13 +5,18 @@
 
 ## examples/04
 
-`examples/04_second_pass_blocking.py` was deleted (orphan `.pyc` removed in
-this pass). **Decision:** *removed from Phase-A exit criteria.* A
-hard-negative second-pass example that fakes blockers in v1 would ship a
-mock of the package's own motivating method against a "frozen" contract;
-instead it is a **Phase-C** deliverable, restored as a real (non-faked)
-example once `mine_hard_negatives` + trainers exist. The plan no longer
-treats it as a Phase-A labelled-simulation deliverable.
+`examples/04_dedupe.py` is the **runnable, dependency-free deduplication**
+example — the lexical stack (`HashedNGramEmbedder` + `NumpyFlatIndex` +
+`ThresholdMatcher` via `with_defaults`) running `dedupe` →
+`connected_components` → B³ `clustering_metrics`. It is the runnable counterpart
+to `02` (the semantic + LLM design mock) and is executed in CI (the
+"Run dependency-free examples" step alongside `00` and `03`).
+
+The earlier hard-negative second-pass example (`04_second_pass_blocking.py`,
+deleted) is a **Phase-C** deliverable — it would otherwise ship a mock of the
+package's own motivating method against the frozen contract — and will take a
+later example number, restored as a real (non-faked) example once
+`mine_hard_negatives` + trainers exist.
 
 ## Review findings & roadmap
 

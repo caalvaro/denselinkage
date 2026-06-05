@@ -5,12 +5,13 @@
 
 Record linkage with dense blocking using text embeddings and LLM matching.
 
-> **Status — structure stage.** The public types, ports and signatures are
-> defined; method bodies are `...` placeholders. The snippet below is the
-> intended API (the spec the `examples/` demonstrate), not yet runnable.
-> Implementation lands incrementally against this frozen contract.
+> **Status — beta.** The dependency-free core is implemented and **runs**:
+> `link` / `dedupe` / `match_pairs`, connected-components clustering, and the
+> linkage / blocking / clustering metrics — all on numpy + pandas. The heavy
+> extras (FAISS, sentence-transformers, LangChain) are **experimental this
+> release**: their adapters are declared but raise `NotImplementedError`.
 
-## Intended API
+## Usage
 
 ```python
 from denselinkage import DenseLinker, Source, TemplateSerializer
@@ -42,6 +43,10 @@ pip install "denselinkage[langchain]"          # + LLM matcher
 pip install "denselinkage[all]"
 ```
 
+> The `[faiss]`, `[sentence-transformers]`, and `[langchain]` extras are reserved
+> but **experimental** this release — their adapters raise `NotImplementedError`;
+> the dependency-free core runs without them.
+
 ## Development
 
 Requires [uv](https://docs.astral.sh/uv/).
@@ -53,6 +58,10 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pyt
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details. CI runs lint, format,
 strict mypy, and tests on Python 3.10–3.13.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

@@ -4,10 +4,17 @@
 import pandas as pd
 import pytest
 
-from denselinkage import DenseLinker, Source, connected_components
+from denselinkage import (
+    DenseLinker,
+    LabeledPairs,
+    Source,
+    TemplateSerializer,
+    connected_components,
+)
 from denselinkage.core.models import CandidatePair, MatchDecision, MatchError, Record
 from denselinkage.linkage._assembly import assemble_linkage_result
 from denselinkage.matching import ThresholdMatcher
+from denselinkage.metrics import clustering_metrics
 
 
 class _CountBreakingMatcher:
@@ -118,3 +125,21 @@ def test_threshold_matcher_boundary_is_inclusive() -> None:
     [decision] = ThresholdMatcher(threshold=0.5).match([pair])
     assert isinstance(decision, MatchDecision)
     assert decision.is_match is True
+
+
+def test_dedupe_to_clustering_metrics_end_to_end() -> None:
+    # The full dependency-free dedup pipeline (example 04): dedupe ->
+    # connected_components -> B3 clustering_metrics, on the lexical stack. This
+    # pins the result the CI example smoke-run only crash-checks.
+    df = pd.DataFrame(
+        {
+            "id": ["1", "2", "3"],
+            "name": ["Apple Inc", "Apple Incorporated", "Microsoft Corp"],
+            "city": ["Cupertino", "Cupertino", "Redmond"],
+        }
+    )
+    src = Source(df, id_column="id", serializer=TemplateSerializer("{name} — {city}"))
+    clusters = connected_components(DenseLinker.with_defaults().dedupe(src))
+    cm = clustering_metrics(clusters, gold=LabeledPairs.from_pairs([("1", "2")]))
+    assert (cm.b3_precision, cm.b3_recall, cm.b3_f1) == (1.0, 1.0, 1.0)
+    assert (cm.n_clusters, cm.n_gold_clusters) == (2, 2)

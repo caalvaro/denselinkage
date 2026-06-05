@@ -33,6 +33,15 @@ jobs:
         run: mypy src/ examples/
       - name: Compile examples
         run: python -m compileall examples
+      - name: Run dependency-free examples
+        # Smoke-run (crash detection) on this job's interpreter only; result
+        # correctness is asserted by the unit tests across the 3.10-3.13 matrix.
+        # 01/02 are heavy-adapter design mocks (ImportError / NotImplementedError);
+        # the rest run end to end on numpy + pandas alone.
+        run: |
+          python examples/00_quickstart.py
+          python examples/03_custom_embedder.py
+          python examples/04_dedupe.py
 
   test:
     name: Test (Python ${{ matrix.python-version }})

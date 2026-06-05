@@ -37,13 +37,16 @@ handle direction (see the `directed` flag in [Evaluation](evaluation)).
 
 ## Full example
 
-```{literalinclude} ../../examples/02_deduplication.py
+Runnable on the dependency-free stack (`dedupe → connected_components → B³`):
+
+```{literalinclude} ../../examples/04_dedupe.py
 :language: python
-:caption: examples/02_deduplication.py
+:caption: examples/04_dedupe.py
 ```
 
 :::{note}
-This example uses heavy adapters behind the `[all]` extra; it type-checks
-against the real core and demonstrates the intended flow while those adapter
-bodies land.
+For the production semantic + LLM shape, see
+[`examples/02_deduplication.py`](https://github.com/caalvaro/denselinkage/tree/main/examples/02_deduplication.py)
+— its FAISS / sentence-transformers / LangChain adapters are experimental this
+release (they raise `NotImplementedError`).
 :::
