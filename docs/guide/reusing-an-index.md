@@ -31,3 +31,32 @@ This is the **spec → artifact** law that runs through the whole library; see
 `top_k` and `similarity_threshold` are query-time parameters with sensible
 defaults from the blocker spec, so a threshold/`top_k` sweep reuses one built
 index instead of rebuilding it — the expensive embedding work happens once.
+
+## Persisting a built index
+
+Building the index embeds the whole reference set — the expensive step. Save the
+built {class}`~denselinkage.linkage.LinkageIndex` and reload it later to query new
+data with **no re-embedding**:
+
+```python
+idx = linker.index(left)
+idx.save("master_index")            # writes a vectors.npy + meta.json bundle
+
+from denselinkage import LinkageIndex
+from denselinkage.embedding import HashedNGramEmbedder
+from denselinkage.matching import ThresholdMatcher
+
+reloaded = LinkageIndex.load(
+    "master_index",
+    embedder=HashedNGramEmbedder(n_features=1024, ngram=3),  # must match the saved model
+    matcher=ThresholdMatcher(threshold=0.5),
+)
+reloaded.query(right)               # reuses the stored embeddings of `left`
+```
+
+The store records the embedder's `model_id` and `embedding_dim` as **provenance**:
+if the embedder you pass to `load` doesn't match, it raises
+{class}`~denselinkage.core.errors.IncompatibleStore` — a persisted index cannot be
+queried with a different embedding model. The matcher is not persisted (supply any
+one at load). Persistence currently covers the dependency-free reference stack;
+other backends raise `NotImplementedError`.

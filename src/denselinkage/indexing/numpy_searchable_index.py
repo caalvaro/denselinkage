@@ -18,6 +18,16 @@ class NumpySearchableIndex(SearchableIndex):
         self._vectors = np.asarray(vectors, dtype=np.float32)
         self._ids: list[RecordId] = list(ids)
 
+    @property
+    def vectors(self) -> Vectors:
+        """The indexed vectors (float32, ``n_records x embedding_dim``)."""
+        return self._vectors
+
+    @property
+    def ids(self) -> list[RecordId]:
+        """Record ids aligned positionally with :attr:`vectors`."""
+        return self._ids
+
     def search(
         self, queries: Vectors, *, top_k: int
     ) -> list[list[tuple[RecordId, float]]]:

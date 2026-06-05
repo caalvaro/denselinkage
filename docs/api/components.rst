@@ -86,3 +86,13 @@ Clustering
 
    ConnectedComponentsClusterer
    connected_components
+
+Mining
+------
+
+.. currentmodule:: denselinkage.mining
+.. autosummary::
+   :toctree: generated
+   :nosignatures:
+
+   mine_hard_negatives

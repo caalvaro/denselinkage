@@ -31,6 +31,31 @@ class DenseBlockingIndex(BlockingIndex):
         self._top_k = top_k
         self._similarity_threshold = similarity_threshold
 
+    @property
+    def searchable(self) -> SearchableIndex:
+        """The built nearest-neighbour index over the reference vectors."""
+        return self._searchable
+
+    @property
+    def embedder(self) -> Embedder:
+        """The embedder that encodes queries (and encoded the reference set)."""
+        return self._embedder
+
+    @property
+    def records(self) -> dict[RecordId, Record]:
+        """The indexed reference records, keyed by id."""
+        return self._records_by_id
+
+    @property
+    def top_k(self) -> int:
+        """Default neighbours per query (overridable per :meth:`query`)."""
+        return self._top_k
+
+    @property
+    def similarity_threshold(self) -> float:
+        """Default minimum similarity for a candidate (overridable per query)."""
+        return self._similarity_threshold
+
     def query(
         self,
         records: Sequence[Record],

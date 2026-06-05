@@ -43,11 +43,18 @@ class InvalidTopK(DenseLinkageError):
     """A blocker ``top_k`` is not a positive integer."""
 
 
+class IncompatibleStore(DenseLinkageError):
+    """A persisted index cannot be reloaded as requested: the re-supplied
+    embedder's ``model_id`` / ``embedding_dim`` does not match the stored
+    provenance, or the store's ``format`` version is unsupported."""
+
+
 __all__ = [
     "DenseLinkageError",
     "DimensionMismatch",
     "DuplicateRecordId",
     "EmptySource",
+    "IncompatibleStore",
     "InvalidTopK",
     "UnknownIdColumn",
 ]

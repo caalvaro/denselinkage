@@ -1,8 +1,10 @@
 """``LinkageIndex`` — prepared linkage state built by ``DenseLinker.index``."""
 
+from pathlib import Path
+
 from denselinkage._reader import RecordReader
 from denselinkage.core.models import CandidatePair, Source
-from denselinkage.core.ports import BlockingIndex, Matcher
+from denselinkage.core.ports import BlockingIndex, Embedder, Matcher
 from denselinkage.core.results import LinkageResult
 from denselinkage.linkage._assembly import assemble_linkage_result
 
@@ -49,3 +51,29 @@ class LinkageIndex:
         ``denselinkage.core.errors.DenseLinkageError``.
         """
         return assemble_linkage_result(self.candidates(source), self._matcher)
+
+    def save(self, path: str | Path) -> None:
+        """Persist this prepared index to ``path`` (a directory) so the reference
+        set can be reused later without re-embedding. Supported for the
+        dependency-free reference stack (``DenseBlocker`` over ``NumpyFlatIndex``);
+        other backends raise ``NotImplementedError``. The matcher is **not**
+        persisted — supply one (and the matching embedder) to :meth:`load`.
+        """
+        from denselinkage._store import save_reference_index
+
+        save_reference_index(self._blocking_index, path)
+
+    @classmethod
+    def load(
+        cls, path: str | Path, *, embedder: Embedder, matcher: Matcher
+    ) -> "LinkageIndex":
+        """Reload an index saved by :meth:`save`, re-supplying the live
+        ``embedder`` and ``matcher``. The ``embedder`` must match the stored
+        provenance (``model_id`` / ``embedding_dim``) or
+        ``denselinkage.core.errors.IncompatibleStore`` is raised — a persisted
+        index cannot be queried with a different embedding model.
+        """
+        from denselinkage._store import load_reference_index
+
+        blocking_index = load_reference_index(path, embedder=embedder)
+        return cls(blocking_index=blocking_index, matcher=matcher)

@@ -32,6 +32,20 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     universe with the full id set, so unmatched records become singletons and
     `clustering_metrics` reports a complete B³ instead of one inflated by
     dropped records.
+- Reference Store (Phase B, batch B4) — additive:
+  - `LinkageIndex.save(path)` / `LinkageIndex.load(path, *, embedder, matcher)`
+    persist and reload a built index (the dependency-free reference stack) as a
+    portable `vectors.npy` + `meta.json` bundle, so a reference set is embedded
+    once and reused. The stored embedder `model_id` / `embedding_dim` are
+    validated against the re-supplied embedder (`IncompatibleStore` on mismatch),
+    activating the reserved `Embedder.model_id` provenance surface. Adds read
+    accessors to `NumpySearchableIndex` (`vectors`, `ids`) and
+    `DenseBlockingIndex` (`searchable`, `embedder`, `records`, `top_k`,
+    `similarity_threshold`), plus the `IncompatibleStore` error.
+- Hard-negative mining (Phase B, batch B5) — additive:
+  - `denselinkage.mining.mine_hard_negatives(candidates, *, gold, n=None,
+    directed=True)` returns the highest-similarity non-matches — contrastive
+    material for the v2 trainers.
 
 ## [1.0.0b1] — unreleased
 
