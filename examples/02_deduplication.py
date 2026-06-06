@@ -11,10 +11,11 @@ example also shows the honest dedup tail: B3 cluster quality via
 ``clustering_metrics`` against the same ``LabeledPairs`` gold, and triaging the
 matcher's per-pair ``MatchError``s from ``result.errors``.
 
-NOTE: Design mock — the heavy adapters it uses (``SentenceTransformerEmbedder``,
-``FaissFlatIndex``, ``LangChainMatcher``) are experimental this release and raise
-``NotImplementedError``, so this type-checks against the real core but does not
-run yet. For a runnable dependency-free dedup, see ``examples/04_dedupe.py``.
+NOTE: Runs with the heavy extras installed (``pip install "denselinkage[all]"``)
+and an ``OPENAI_API_KEY`` — it uses ``SentenceTransformerEmbedder``,
+``FaissFlatIndex``, and a ``LangChainMatcher`` over a live LLM. It is type-checked
+and compiled in CI but not executed there. For a runnable dependency-free dedup,
+see ``examples/04_dedupe.py``.
 """
 
 import logging
