@@ -2,6 +2,8 @@
 query-time threshold override, and artifact reuse. InvalidTopK is covered in
 ``test_quickstart_end_to_end``."""
 
+import pytest
+
 from denselinkage.blocking import DenseBlocker
 from denselinkage.core.models import Record
 from denselinkage.embedding import HashedNGramEmbedder
@@ -41,3 +43,11 @@ def test_built_index_is_reusable_across_query_sets() -> None:
     assert (first[0].record_a.id, first[0].record_b.id) == ("L1", "R1")
     assert (second[0].record_a.id, second[0].record_b.id) == ("L1", "R2")
     assert first[0].similarity_score == second[0].similarity_score
+
+
+def test_records_accessor_is_a_read_only_view() -> None:
+    # The built artifact is immutable; its record map cannot be mutated.
+    index = _blocker().build([Record("L1", "acme inc")])
+    assert index.records["L1"].text == "acme inc"
+    with pytest.raises(TypeError):  # MappingProxyType forbids item assignment
+        index.records["L2"] = Record("L2", "globex")

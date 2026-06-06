@@ -1,6 +1,7 @@
 """``DenseBlockingIndex`` — the artifact built by ``DenseBlocker``."""
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from types import MappingProxyType
 
 from denselinkage.core.errors import InvalidTopK
 from denselinkage.core.models import CandidatePair, Record, RecordId
@@ -42,9 +43,9 @@ class DenseBlockingIndex(BlockingIndex):
         return self._embedder
 
     @property
-    def records(self) -> dict[RecordId, Record]:
-        """The indexed reference records, keyed by id."""
-        return self._records_by_id
+    def records(self) -> Mapping[RecordId, Record]:
+        """The indexed reference records, keyed by id (read-only view)."""
+        return MappingProxyType(self._records_by_id)
 
     @property
     def top_k(self) -> int:

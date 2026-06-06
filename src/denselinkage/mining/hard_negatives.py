@@ -28,18 +28,16 @@ def mine_hard_negatives(
     if n is not None and n < 0:
         raise ValueError(f"n must be non-negative, got {n}")
     gold_keys = {pair_key(left, right, directed=directed) for left, right in gold.pairs}
-    negatives = [
-        pair
-        for pair in candidates
-        if pair.similarity_score is not None
-        and pair_key(pair.record_a.id, pair.record_b.id, directed=directed)
-        not in gold_keys
-    ]
-    negatives.sort(
-        key=lambda pair: (
-            -(pair.similarity_score if pair.similarity_score is not None else 0.0),
-            pair.record_a.id,
-            pair.record_b.id,
-        )
+    scored_negatives: list[tuple[float, CandidatePair]] = []
+    for pair in candidates:
+        score = pair.similarity_score
+        if score is None:
+            continue
+        if pair_key(pair.record_a.id, pair.record_b.id, directed=directed) in gold_keys:
+            continue
+        scored_negatives.append((score, pair))
+    scored_negatives.sort(
+        key=lambda item: (-item[0], item[1].record_a.id, item[1].record_b.id)
     )
-    return negatives if n is None else negatives[:n]
+    chosen = scored_negatives if n is None else scored_negatives[:n]
+    return [pair for _, pair in chosen]

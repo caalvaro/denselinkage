@@ -4,6 +4,7 @@ round-trip, provenance validation, and the reference-stack-only scope."""
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -109,6 +110,36 @@ def test_load_rejects_unsupported_format(tmp_path: Path) -> None:
     meta["format"] = 999
     meta_file.write_text(json.dumps(meta))
     with pytest.raises(IncompatibleStore, match="format"):
+        LinkageIndex.load(
+            tmp_path / "store", embedder=_embedder(), matcher=ThresholdMatcher()
+        )
+
+
+def test_load_rejects_non_dict_meta(tmp_path: Path) -> None:
+    DenseLinker.with_defaults().index(_left()).save(tmp_path / "store")
+    (tmp_path / "store" / "meta.json").write_text("[]")  # valid JSON, not an object
+    with pytest.raises(IncompatibleStore, match="JSON object"):
+        LinkageIndex.load(
+            tmp_path / "store", embedder=_embedder(), matcher=ThresholdMatcher()
+        )
+
+
+def test_load_rejects_missing_meta_key(tmp_path: Path) -> None:
+    DenseLinker.with_defaults().index(_left()).save(tmp_path / "store")
+    meta_file = tmp_path / "store" / "meta.json"
+    meta = json.loads(meta_file.read_text())
+    del meta["top_k"]
+    meta_file.write_text(json.dumps(meta))
+    with pytest.raises(IncompatibleStore, match="missing keys"):
+        LinkageIndex.load(
+            tmp_path / "store", embedder=_embedder(), matcher=ThresholdMatcher()
+        )
+
+
+def test_load_rejects_vectors_shape_mismatch(tmp_path: Path) -> None:
+    DenseLinker.with_defaults().index(_left()).save(tmp_path / "store")
+    np.save(tmp_path / "store" / "vectors.npy", np.zeros((2, 7), dtype=np.float32))
+    with pytest.raises(IncompatibleStore, match="shape"):
         LinkageIndex.load(
             tmp_path / "store", embedder=_embedder(), matcher=ThresholdMatcher()
         )

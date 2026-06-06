@@ -5,6 +5,7 @@ nearest-neighbour). DimensionMismatch is covered in
 from collections.abc import Sequence
 
 import numpy as np
+import pytest
 
 from denselinkage.core.models import RecordId
 from denselinkage.indexing import NumpyFlatIndex
@@ -43,3 +44,16 @@ def test_search_is_deterministic_across_calls() -> None:
 def test_search_on_empty_index_returns_empty_per_query() -> None:
     index = _index([], [])
     assert index.search(_query([1.0, 0.0]), top_k=3) == [[]]
+
+
+def test_vectors_accessor_is_a_read_only_view() -> None:
+    # The built artifact is immutable; its vectors cannot be mutated by a caller.
+    index = _index([[1.0, 0.0], [0.0, 1.0]], ["a", "b"])
+    with pytest.raises(ValueError):  # assignment to a read-only array
+        index.vectors[0, 0] = 9.0
+
+
+def test_ids_accessor_is_immutable() -> None:
+    index = _index([[1.0, 0.0]], ["a"])
+    assert index.ids == ("a",)
+    assert not isinstance(index.ids, list)  # a tuple, not the internal list

@@ -32,11 +32,24 @@ _UNSUPPORTED = (
     "the reference store persists the dependency-free numpy stack "
     "(DenseBlocker over NumpyFlatIndex); cannot persist a {name}"
 )
+_REQUIRED_KEYS = frozenset(
+    {
+        "format",
+        "model_id",
+        "embedding_dim",
+        "top_k",
+        "similarity_threshold",
+        "ids",
+        "records",
+    }
+)
 
 
 def save_reference_index(blocking: BlockingIndex, path: str | Path) -> None:
     """Persist ``blocking`` (the dependency-free reference stack) to ``path``.
 
+    ``path`` is a directory dedicated to this store; ``save`` writes
+    ``vectors.npy`` and ``meta.json`` into it (overwriting those two on re-save).
     Raises ``NotImplementedError`` if ``blocking`` is not a ``DenseBlockingIndex``
     over a ``NumpySearchableIndex`` (e.g. a FAISS-backed index — persistence for
     that ships with the FAISS adapter).
@@ -69,7 +82,7 @@ def save_reference_index(blocking: BlockingIndex, path: str | Path) -> None:
 def load_reference_index(path: str | Path, *, embedder: Embedder) -> DenseBlockingIndex:
     """Reload a blocking index from ``path``, re-supplying the live ``embedder``.
 
-    Raises ``IncompatibleStore`` if the store's ``format`` is unsupported or the
+    Raises ``IncompatibleStore`` if the store is malformed or unsupported, or the
     re-supplied ``embedder``'s ``model_id`` / ``embedding_dim`` does not match the
     stored provenance.
     """
@@ -77,9 +90,14 @@ def load_reference_index(path: str | Path, *, embedder: Embedder) -> DenseBlocki
     with (directory / _META_FILE).open(encoding="utf-8") as handle:
         meta = json.load(handle)
 
-    if meta.get("format") != _FORMAT:
+    if not isinstance(meta, dict):
+        raise IncompatibleStore("store meta.json is not a JSON object")
+    missing = _REQUIRED_KEYS - meta.keys()
+    if missing:
+        raise IncompatibleStore(f"store meta.json is missing keys: {sorted(missing)}")
+    if meta["format"] != _FORMAT:
         raise IncompatibleStore(
-            f"unsupported store format {meta.get('format')!r} (expected {_FORMAT})"
+            f"unsupported store format {meta['format']!r} (expected {_FORMAT})"
         )
     if embedder.model_id != meta["model_id"]:
         raise IncompatibleStore(
@@ -93,6 +111,11 @@ def load_reference_index(path: str | Path, *, embedder: Embedder) -> DenseBlocki
         )
 
     vectors = np.load(directory / _VECTORS_FILE)
+    expected_shape = (len(meta["ids"]), meta["embedding_dim"])
+    if vectors.shape != expected_shape:
+        raise IncompatibleStore(
+            f"stored vectors have shape {vectors.shape}, expected {expected_shape}"
+        )
     records_by_id = {
         str(entry["id"]): Record(
             id=str(entry["id"]), text=entry["text"], fields=entry["fields"]
