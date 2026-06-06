@@ -10,6 +10,7 @@ Per ADR-0002, evaluation *report* types (``LinkageMetrics``, ``BlockingMetrics``
 ``TrainingPairs``).
 """
 
+import random
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -60,6 +61,31 @@ class LabeledPairs:
                 (str(left), str(right))
                 for left, right in zip(frame[left_id], frame[right_id], strict=True)
             )
+        )
+
+    def split(
+        self, *, test_size: float, seed: int | None = None
+    ) -> tuple["LabeledPairs", "LabeledPairs"]:
+        """Partition the gold pairs into ``(train, test)``.
+
+        ``test_size`` is the fraction in ``[0.0, 1.0]`` routed to ``test``
+        (``round(test_size * n)`` pairs); the rest go to ``train``. Pairs are
+        sorted before a seeded shuffle, so the split is reproducible given
+        ``seed`` (``None`` = nondeterministic). Raises ``ValueError`` if
+        ``test_size`` is outside ``[0.0, 1.0]``.
+
+        The split is **pair-level**: a record/entity may appear in both halves,
+        which is fine for tuning a scalar decision threshold. For entity-disjoint
+        evaluation (e.g. of a trained matcher) split by gold cluster instead.
+        """
+        if not 0.0 <= test_size <= 1.0:
+            raise ValueError(f"test_size must be in [0.0, 1.0], got {test_size}")
+        ordered = sorted(self.pairs)
+        random.Random(seed).shuffle(ordered)
+        n_test = round(test_size * len(ordered))
+        return (
+            LabeledPairs.from_pairs(ordered[n_test:]),
+            LabeledPairs.from_pairs(ordered[:n_test]),
         )
 
 

@@ -7,7 +7,7 @@ the public names here. Per ADR-0002 these evaluation *report* types live with
 the metrics layer that computes them, not in ``denselinkage.core``.
 """
 
-from denselinkage.metrics.adjusted import AdjustedMetrics
+from denselinkage.metrics.adjusted import AdjustedMetrics, adjusted_metrics
 from denselinkage.metrics.blocking import (
     BlockingMetrics,
     blocking_metrics,
@@ -15,7 +15,7 @@ from denselinkage.metrics.blocking import (
 )
 from denselinkage.metrics.clustering import ClusteringMetrics, clustering_metrics
 from denselinkage.metrics.linkage import LinkageMetrics, linkage_metrics
-from denselinkage.metrics.tuning import ThresholdSweep
+from denselinkage.metrics.tuning import ThresholdSweep, tune_threshold
 
 __all__ = [
     "AdjustedMetrics",
@@ -23,8 +23,10 @@ __all__ = [
     "ClusteringMetrics",
     "LinkageMetrics",
     "ThresholdSweep",
+    "adjusted_metrics",
     "blocking_metrics",
     "clustering_metrics",
     "linkage_metrics",
     "pair_completeness_at_k",
+    "tune_threshold",
 ]

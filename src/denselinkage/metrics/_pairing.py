@@ -2,10 +2,10 @@
 
 from denselinkage.core.models import RecordId
 
+PairKey = tuple[RecordId, RecordId] | frozenset[RecordId]
 
-def pair_key(
-    left: RecordId, right: RecordId, *, directed: bool
-) -> tuple[RecordId, RecordId] | frozenset[RecordId]:
+
+def pair_key(left: RecordId, right: RecordId, *, directed: bool) -> PairKey:
     """D1 comparison key: ordered for ``link`` (directed), unordered for
     ``dedupe`` (undirected, ``frozenset``)."""
     return (left, right) if directed else frozenset((left, right))

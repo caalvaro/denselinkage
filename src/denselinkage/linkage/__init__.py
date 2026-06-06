@@ -7,10 +7,12 @@ seam; the hard failures below come from there. Soft per-pair matcher
 failures are ``MatchError`` in ``LinkageResult.errors``, never exceptions.
 
 This package is a façade: implementations live in sibling modules
-(``dense_linker``, ``linkage_index``); import the public names here.
+(``dense_linker``, ``linkage_index``, ``candidate_frame``); import the public
+names here.
 """
 
+from denselinkage.linkage.candidate_frame import candidate_pairs_from_frame
 from denselinkage.linkage.dense_linker import DenseLinker
 from denselinkage.linkage.linkage_index import LinkageIndex
 
-__all__ = ["DenseLinker", "LinkageIndex"]
+__all__ = ["DenseLinker", "LinkageIndex", "candidate_pairs_from_frame"]

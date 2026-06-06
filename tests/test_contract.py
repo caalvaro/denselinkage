@@ -44,6 +44,7 @@ EXPECTED_PRELUDE = {
     "Source",
     "TemplateSerializer",
     "WholeRowSerializer",
+    "candidate_pairs_from_frame",
     "connected_components",
 }
 

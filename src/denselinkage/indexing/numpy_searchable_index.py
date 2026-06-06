@@ -18,6 +18,19 @@ class NumpySearchableIndex(SearchableIndex):
         self._vectors = np.asarray(vectors, dtype=np.float32)
         self._ids: list[RecordId] = list(ids)
 
+    @property
+    def vectors(self) -> Vectors:
+        """The indexed vectors (float32, ``n_records x embedding_dim``), as a
+        read-only view — this artifact is immutable."""
+        view: Vectors = self._vectors.view()
+        view.flags.writeable = False
+        return view
+
+    @property
+    def ids(self) -> Sequence[RecordId]:
+        """Record ids aligned positionally with :attr:`vectors` (read-only)."""
+        return tuple(self._ids)
+
     def search(
         self, queries: Vectors, *, top_k: int
     ) -> list[list[tuple[RecordId, float]]]:

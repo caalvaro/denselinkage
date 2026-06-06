@@ -4,6 +4,53 @@ All notable changes to denselinkage are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims to
 follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0b2] — 2026-06-05
+
+Second beta — the Phase-B dependency-light features, all **additive** to the
+frozen 1.0 contract (extend-never-modify); the dependency-free core remains
+numpy + pandas only.
+
+### Added
+- Candidate-pair affordances (Phase B, batch B1) — all additive to the frozen
+  1.0 contract:
+  - `DenseLinker.block(left, right)` / `LinkageIndex.candidates(source)` expose
+    the blocker's candidate pairs **without** matching — the ergonomic input to
+    `blocking_metrics` / `pair_completeness_at_k`. Both accept `top_k` /
+    `similarity_threshold` overrides so a pair-completeness sweep reuses one
+    built index instead of rebuilding it.
+  - `candidate_pairs_from_frame(frame, *, left, right, left_id, right_id,
+    similarity=None)` builds the `match_pairs` input from a DataFrame of
+    candidate id-pairs plus the two sources (record text is materialized via the
+    sources' serializers). Exported from the package root.
+- Metric producers (Phase B, batch B2) — additive:
+  - `tune_threshold(candidates, *, gold, thresholds=None, directed=True)` sweeps
+    the decision threshold and returns the full P/R/F1 curve as a
+    `ThresholdSweep` (default grid = the candidates' distinct scores).
+  - `adjusted_metrics(result, candidates, *, gold, k, directed=True)` decomposes
+    end-to-end recall into matcher × blocker components as an `AdjustedMetrics`
+    (the matcher's recall measured conditionally on what blocking surfaced).
+- Gold & clustering utilities (Phase B, batch B3) — additive:
+  - `LabeledPairs.split(*, test_size, seed=None)` partitions gold into
+    `(train, test)` (pair-level, seeded) for tune-then-evaluate workflows.
+  - `connected_components(result, *, all_record_ids=None)` seeds the clustering
+    universe with the full id set, so unmatched records become singletons and
+    `clustering_metrics` reports a complete B³ instead of one inflated by
+    dropped records.
+- Reference Store (Phase B, batch B4) — additive:
+  - `LinkageIndex.save(path)` / `LinkageIndex.load(path, *, embedder, matcher)`
+    persist and reload a built index (the dependency-free reference stack) as a
+    portable `vectors.npy` + `meta.json` bundle, so a reference set is embedded
+    once and reused. The stored embedder `model_id` / `embedding_dim` are
+    validated against the re-supplied embedder (`IncompatibleStore` on mismatch),
+    activating the reserved `Embedder.model_id` provenance surface. Adds read
+    accessors to `NumpySearchableIndex` (`vectors`, `ids`) and
+    `DenseBlockingIndex` (`searchable`, `embedder`, `records`, `top_k`,
+    `similarity_threshold`), plus the `IncompatibleStore` error.
+- Hard-negative mining (Phase B, batch B5) — additive:
+  - `denselinkage.mining.mine_hard_negatives(candidates, *, gold, n=None,
+    directed=True)` returns the highest-similarity non-matches — contrastive
+    material for the v2 trainers.
+
 ## [1.0.0b1] — unreleased
 
 First beta of the frozen 1.0 contract. The **dependency-free core** is
@@ -39,4 +86,5 @@ implemented and runs on numpy + pandas; the heavy extras are experimental.
   (`tune_threshold`, `adjusted_metrics`) and the v2 `Trainer` adapters follow in
   later releases; see `docs/development/roadmap.md`.
 
+[1.0.0b2]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b2
 [1.0.0b1]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b1

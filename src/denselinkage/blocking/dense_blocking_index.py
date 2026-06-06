@@ -1,6 +1,7 @@
 """``DenseBlockingIndex`` — the artifact built by ``DenseBlocker``."""
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
+from types import MappingProxyType
 
 from denselinkage.core.errors import InvalidTopK
 from denselinkage.core.models import CandidatePair, Record, RecordId
@@ -30,6 +31,31 @@ class DenseBlockingIndex(BlockingIndex):
         self._records_by_id = records_by_id
         self._top_k = top_k
         self._similarity_threshold = similarity_threshold
+
+    @property
+    def searchable(self) -> SearchableIndex:
+        """The built nearest-neighbour index over the reference vectors."""
+        return self._searchable
+
+    @property
+    def embedder(self) -> Embedder:
+        """The embedder that encodes queries (and encoded the reference set)."""
+        return self._embedder
+
+    @property
+    def records(self) -> Mapping[RecordId, Record]:
+        """The indexed reference records, keyed by id (read-only view)."""
+        return MappingProxyType(self._records_by_id)
+
+    @property
+    def top_k(self) -> int:
+        """Default neighbours per query (overridable per :meth:`query`)."""
+        return self._top_k
+
+    @property
+    def similarity_threshold(self) -> float:
+        """Default minimum similarity for a candidate (overridable per query)."""
+        return self._similarity_threshold
 
     def query(
         self,

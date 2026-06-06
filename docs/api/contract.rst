@@ -76,3 +76,4 @@ deliberately outside this family.
    DuplicateRecordId
    DimensionMismatch
    InvalidTopK
+   IncompatibleStore
