@@ -4,7 +4,11 @@ All notable changes to denselinkage are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims to
 follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0b2] — 2026-06-05
+
+Second beta — the Phase-B dependency-light features, all **additive** to the
+frozen 1.0 contract (extend-never-modify); the dependency-free core remains
+numpy + pandas only.
 
 ### Added
 - Candidate-pair affordances (Phase B, batch B1) — all additive to the frozen
@@ -82,4 +86,5 @@ implemented and runs on numpy + pandas; the heavy extras are experimental.
   (`tune_threshold`, `adjusted_metrics`) and the v2 `Trainer` adapters follow in
   later releases; see `docs/development/roadmap.md`.
 
+[1.0.0b2]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b2
 [1.0.0b1]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b1
