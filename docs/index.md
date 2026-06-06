@@ -1,8 +1,14 @@
 # denselinkage
 
-Record linkage with **dense blocking** — text embeddings to generate candidate
-pairs, then a matcher (threshold or LLM) to decide them. One call, no
-`fit`/`predict`, no mutation.
+**Record linkage and deduplication — dense blocking, optional LLM matching, and
+evaluation built in.**
+
+Find the records that refer to the same real-world entity, across **two datasets**
+(linkage) or within **one** (deduplication). denselinkage shrinks the all-pairs
+comparison with embedding-based **blocking**, decides each candidate with a
+pluggable **matcher** — a similarity threshold or an LLM — then clusters and scores
+the result. The core runs on a **dependency-free** numpy + pandas stack; FAISS,
+sentence-transformers, and LangChain are opt-in extras you add when you need them.
 
 ```python
 from denselinkage import DenseLinker, LabeledPairs, Source
@@ -14,15 +20,20 @@ result.to_frame()                           # left_id, right_id, similarity, mat
 linkage_metrics(result, gold=LabeledPairs.from_pairs([("A1", "B1")]))
 ```
 
-:::{admonition} denselinkage 1.0
-:class: note
+## Highlights
 
-The dependency-free core is implemented and **runs** — `link` / `dedupe` /
-`match_pairs`, connected-components clustering, and the linkage / blocking /
-clustering metrics, all on numpy + pandas. The heavy extras (FAISS,
-sentence-transformers, LangChain) are **implemented** too — install the matching
-extra to use `FaissFlatIndex`, `SentenceTransformerEmbedder`, or `LangChainMatcher`.
-:::
+- **Dependency-free core** — `pip install denselinkage` is just numpy + pandas; the
+  heavy backends are opt-in and a CI job proves they never leak into the core.
+- **Swap any stage** — the embedder, vector index, and matcher are independent
+  ports: lexical → semantic, brute-force → FAISS, threshold → LLM, no pipeline
+  rewrite.
+- **End to end** — block → match → cluster → evaluate, with linkage, blocking, and
+  clustering (B³) **metrics included**.
+- **Immutable & typed** — single `link` / `dedupe` / `match_pairs` calls, a frozen
+  1.0 contract, strict `mypy`, and 100% branch coverage.
+
+New here? The [tutorial](getting-started/tutorial) links two tables stage by stage;
+the [Semantic + LLM guide](guide/semantic-llm) covers the production stack.
 
 ::::{grid} 1 1 2 2
 :gutter: 3
@@ -38,7 +49,7 @@ Install, then link two tables in under five minutes.
 :link: guide/linking
 :link-type: doc
 
-Task recipes: linking, deduplication, custom components, evaluation.
+Task recipes: linking, deduplication, the semantic + LLM stack, and evaluation.
 :::
 
 :::{grid-item-card} {octicon}`code` API reference

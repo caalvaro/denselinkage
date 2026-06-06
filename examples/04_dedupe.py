@@ -4,7 +4,7 @@ The same dedup workflow as ``02``, but wired on the lexical reference stack
 (``HashedNGramEmbedder`` + ``NumpyFlatIndex`` + ``ThresholdMatcher`` via
 ``DenseLinker.with_defaults``), so it runs with no extras: dedupe -> cluster ->
 B3 quality, all on numpy + pandas. ``02`` shows the production semantic + LLM
-shape (a design mock); this is the runnable counterpart.
+shape (needs the ``[all]`` extras + a live LLM); this is the runnable counterpart.
 """
 
 import pandas as pd
