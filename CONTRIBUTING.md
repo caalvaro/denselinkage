@@ -4,10 +4,16 @@ Thanks for your interest in `denselinkage`.
 
 ## Project stage
 
-The package is at the **structure stage**: `src/denselinkage/` defines the
-public types, ports (`typing.Protocol`s) and signatures; method/function
-bodies are `...` placeholders. The `examples/` are the design spec for the
-intended API. Implementation lands incrementally against this frozen contract.
+`denselinkage` is in **beta** against a **frozen** public contract (the A0.5
+freeze gate — see [`docs/development/freeze-gate.md`](docs/development/freeze-gate.md)).
+The dependency-free core (`link` / `dedupe` / `match_pairs`, connected-components
+clustering, the linkage / blocking / clustering metrics, and filtering) **and**
+the four heavy adapters (`SentenceTransformerEmbedder`,
+`FaissFlatIndex` / `FaissSearchableIndex`, `LangChainMatcher`) are implemented and
+tested at 100% branch coverage. Evolution is **extend, never modify**: add an
+optional field with a default, a sibling type, or a new classmethod — never change
+a frozen signature. See [`docs/development/decisions.md`](docs/development/decisions.md)
+and the [ADRs](docs/ADRs/).
 
 ## Setup
 
@@ -52,7 +58,7 @@ All of the above run in CI (`.github/workflows/ci.yml`) on Python
   components whose class name already carries the qualifier use `threshold`
   (`ThresholdMatcher`, `SimilarityThresholdFilter`).
 
-## Optional extras (for implementing/running adapters)
+## Optional extras (for running the heavy adapters)
 
 ```bash
 uv sync --dev --extra all      # faiss-cpu, sentence-transformers, langchain

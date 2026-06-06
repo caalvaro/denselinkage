@@ -277,8 +277,9 @@ mega-clusters — the classic dedup failure mode. Watch B³ recall ≫ precision
 :::{note}
 The entire dependency-free evaluation path shown here — `linkage_metrics`,
 `blocking_metrics` / `pair_completeness_at_k`, and B³ `clustering_metrics` —
-runs today. Only the semantic / FAISS / LLM components (example `01`) are still
-landing, behind their extras.
+runs today on numpy + pandas. The semantic / FAISS / LLM components (example
+`01`) are implemented too, behind their extras (`[all]`) and a live LLM — see
+[Semantic + LLM matching](../guide/semantic-llm).
 :::
 
 ## The runnable example and the production target

@@ -1,6 +1,6 @@
 [project]
 name = "denselinkage"
-version = "1.0.0b2"
+version = "1.0.0"
 description = "Record linkage with dense blocking using text embeddings and LLM matching"
 readme = "README.md"
 authors = [
@@ -11,7 +11,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["record-linkage", "entity-resolution", "embeddings", "blocking", "llm"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -29,6 +29,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/caalvaro/denselinkage"
+Documentation = "https://caalvaro.github.io/denselinkage/"
 Repository = "https://github.com/caalvaro/denselinkage"
 Issues = "https://github.com/caalvaro/denselinkage/issues"
 
@@ -85,9 +86,9 @@ known-first-party = ["denselinkage"]
 python_version = "3.10"
 files = ["src"]
 strict = true
-# Structure stage: bodies are `...` placeholders by design, so the strict
-# `empty-body` check is intentionally off until implementations land. Every
-# other strict check stays on (signatures/types are the contract).
+# The `Protocol` port methods in `core/ports.py` are `...` by design, so the
+# strict `empty-body` check is intentionally off. Every other strict check stays
+# on (signatures/types are the contract).
 disable_error_code = ["empty-body"]
 # numpy ships py.typed; pandas types come from pandas-stubs (dev). Optional
 # heavy adapters that lack stubs are tolerated — both the package and its
@@ -118,9 +119,17 @@ markers = [
 branch = true
 
 [tool.coverage.report]
-# Branch coverage is enforced. The dependency-free surface is fully exercised by
-# the `not adapter and not slow` selection the CI coverage job runs; revisit this
-# threshold when adapter-only bodies (faiss / sentence-transformers / langchain)
-# land, since their tests are `adapter`-marked and excluded from that run.
+# Branch coverage is enforced on the dependency-free surface, which the
+# `not adapter and not slow` CI selection fully exercises. The heavy-adapter
+# modules are `omit`ted here: their backend-touching bodies run only under the
+# `adapter`-marked tests (excluded from that selection), so the dedicated
+# `adapter-tests` CI job installs the extras and gates their coverage instead.
+# See ADR-0005 (the ADR-0004 D-4.7 revisit).
 fail_under = 100
 show_missing = true
+omit = [
+    "*/denselinkage/embedding/sentence_transformer_embedder.py",
+    "*/denselinkage/indexing/faiss_flat_index.py",
+    "*/denselinkage/indexing/faiss_searchable_index.py",
+    "*/denselinkage/matching/langchain_matcher.py",
+]

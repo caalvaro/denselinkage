@@ -1,15 +1,19 @@
 # denselinkage
 
 [![CI](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml/badge.svg)](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/denselinkage.svg)](https://pypi.org/project/denselinkage/)
+[![Python versions](https://img.shields.io/pypi/pyversions/denselinkage.svg)](https://pypi.org/project/denselinkage/)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://caalvaro.github.io/denselinkage/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Record linkage with dense blocking using text embeddings and LLM matching.
 
-> **Status — beta.** The dependency-free core is implemented and **runs**:
+> **Status — stable (1.0).** The dependency-free core is implemented and **runs**:
 > `link` / `dedupe` / `match_pairs`, connected-components clustering, and the
 > linkage / blocking / clustering metrics — all on numpy + pandas. The heavy
-> extras (FAISS, sentence-transformers, LangChain) are **experimental this
-> release**: their adapters are declared but raise `NotImplementedError`.
+> extras (FAISS, sentence-transformers, LangChain) are **implemented** too —
+> install the matching extra to use `FaissFlatIndex`,
+> `SentenceTransformerEmbedder`, or `LangChainMatcher`.
 
 ## Usage
 
@@ -43,9 +47,9 @@ pip install "denselinkage[langchain]"          # + LLM matcher
 pip install "denselinkage[all]"
 ```
 
-> The `[faiss]`, `[sentence-transformers]`, and `[langchain]` extras are reserved
-> but **experimental** this release — their adapters raise `NotImplementedError`;
-> the dependency-free core runs without them.
+> The `[faiss]`, `[sentence-transformers]`, and `[langchain]` extras enable the
+> heavy adapters (`FaissFlatIndex`, `SentenceTransformerEmbedder`,
+> `LangChainMatcher`); the dependency-free core runs without them.
 
 ## Development
 

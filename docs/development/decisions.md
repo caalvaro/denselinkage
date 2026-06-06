@@ -196,3 +196,29 @@ Full record: [`docs/ADRs/0003-pre-freeze-contract-ratification.md`](../ADRs/0003
   runnable dependency-free dedup; CI smoke-runs `00` / `03` / `04`.
 
 Full record: [`docs/ADRs/0004-dependency-free-beta.md`](../ADRs/0004-dependency-free-beta.md).
+
+## D10 — Heavy adapters: A2 implementation (ADR-0005)
+**Ruling (ratified; ADR-0005).** A2 fills the four deferred adapter bodies so the
+headline dense-semantic + LLM stack runs; additive to the frozen contract. Key
+calls:
+
+- **Replace the guards** — `SentenceTransformerEmbedder`, `FaissFlatIndex` /
+  `FaissSearchableIndex`, and `LangChainMatcher` are implemented behind their
+  optional extras; the `NotImplementedError` guards (D9) are gone.
+- **Lazy-import discipline** — each backend is imported *inside* the method via
+  `_optional.require`; `import denselinkage` still pulls in no backend (the
+  `core-only` dependency-cut job is unchanged).
+- **Cosine parity** — ST encodes L2-normalized; FAISS uses `IndexFlatIP`, so the
+  score is cosine on both backends and `similarity_threshold` keeps its meaning
+  across hashed↔ST and numpy↔FAISS (pinned by a FAISS↔numpy differential test).
+- **`extended` stays deferred** — implementing FAISS is not implementing
+  incremental indexing; `FaissSearchableIndex.extended` raises like the numpy
+  artifact.
+- **Coverage** — the dependency-free gate keeps `fail_under = 100` with the
+  adapter modules `omit`ted; a dedicated `adapter-tests` CI job gates the adapter
+  modules at 100% (LangChain via a fake LLM — no API key). The D9 "revisit"
+  (D-4.7) is closed.
+- **Examples** — `01` / `02` are no longer design mocks: they run with the heavy
+  extras + an `OPENAI_API_KEY` (type-checked + compiled in CI, not executed there).
+
+Full record: [`docs/ADRs/0005-heavy-adapters.md`](../ADRs/0005-heavy-adapters.md).

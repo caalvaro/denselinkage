@@ -14,14 +14,14 @@ result.to_frame()                           # left_id, right_id, similarity, mat
 linkage_metrics(result, gold=LabeledPairs.from_pairs([("A1", "B1")]))
 ```
 
-:::{admonition} Beta
+:::{admonition} denselinkage 1.0
 :class: note
 
 The dependency-free core is implemented and **runs** — `link` / `dedupe` /
 `match_pairs`, connected-components clustering, and the linkage / blocking /
 clustering metrics, all on numpy + pandas. The heavy extras (FAISS,
-sentence-transformers, LangChain) are **experimental this release**: their
-adapters are declared but raise `NotImplementedError`.
+sentence-transformers, LangChain) are **implemented** too — install the matching
+extra to use `FaissFlatIndex`, `SentenceTransformerEmbedder`, or `LangChainMatcher`.
 :::
 
 ::::{grid} 1 1 2 2
@@ -74,6 +74,7 @@ getting-started/concepts
 guide/linking
 guide/deduplication
 guide/match-pairs
+guide/semantic-llm
 guide/custom-components
 guide/reusing-an-index
 guide/evaluation

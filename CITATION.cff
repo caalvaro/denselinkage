@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use denselinkage in your research, please cite it."
+title: denselinkage
+abstract: "Record linkage with dense blocking using text embeddings and LLM matching."
+type: software
+authors:
+  - given-names: Álvaro de Carvalho Alves
+    email: alvarocarvalho@live.com
+repository-code: "https://github.com/caalvaro/denselinkage"
+url: "https://caalvaro.github.io/denselinkage/"
+license: MIT
+version: 1.0.0
+keywords:
+  - record-linkage
+  - entity-resolution
+  - embeddings
+  - blocking
+  - llm

@@ -33,7 +33,8 @@ implemented for the no-extras surface, which **runs** on numpy + pandas
 (`link` / `dedupe` / `match_pairs`, connected-components clustering, and the
 linkage / blocking / clustering metrics + filtering), under branch coverage with
 `fail_under = 100`. The heavy extras (faiss / sentence-transformers / langchain)
-are deferred — their adapters are declared but raise `NotImplementedError`.
+have since landed behind their optional extras (ADR-0005), gated by a dedicated
+adapter-coverage CI job.
 Evolution stays *extend, never modify* against the frozen contract (add an
 optional field with a default, a sibling type, or a new classmethod). See
 [ADR-0004](../ADRs/0004-dependency-free-beta.md).
