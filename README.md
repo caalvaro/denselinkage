@@ -1,9 +1,9 @@
 # denselinkage
 
-[![CI](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml/badge.svg)](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/denselinkage.svg)](https://pypi.org/project/denselinkage/)
-[![Python versions](https://img.shields.io/pypi/pyversions/denselinkage.svg)](https://pypi.org/project/denselinkage/)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue.svg)](https://caalvaro.github.io/denselinkage/)
+[![CI](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml/badge.svg)](https://github.com/caalvaro/denselinkage/actions/workflows/ci.yml)
+[![Python versions](https://img.shields.io/pypi/pyversions/denselinkage.svg)](https://pypi.org/project/denselinkage/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Record linkage and deduplication for Python — dense blocking, optional LLM matching, and evaluation built in.**
