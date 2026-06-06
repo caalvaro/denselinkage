@@ -55,10 +55,11 @@ result.to_frame()                   # left_id, right_id, similarity, match, conf
 ```
 
 :::{note}
-This example uses heavy adapters (`SentenceTransformerEmbedder`,
-`FaissFlatIndex`, `LangChainMatcher`) behind the `[all]` extra. It type-checks
-against the real core and shows the intended assembly; those adapter bodies are
-landing incrementally.
+This example uses the heavy adapters (`SentenceTransformerEmbedder`,
+`FaissFlatIndex`, `LangChainMatcher`) behind the `[all]` extra and a live LLM, so
+it needs those extras and an `OPENAI_API_KEY` to run. It is type-checked and
+compiled in CI but not executed there. See [Semantic + LLM matching](semantic-llm)
+for a walk-through of the knobs.
 :::
 
 ## See also

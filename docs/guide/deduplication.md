@@ -59,6 +59,6 @@ Runnable on the dependency-free stack (`dedupe → connected_components → B³`
 :::{note}
 For the production semantic + LLM shape, see
 [`examples/02_deduplication.py`](https://github.com/caalvaro/denselinkage/tree/main/examples/02_deduplication.py)
-— its FAISS / sentence-transformers / LangChain adapters are experimental this
-release (they raise `NotImplementedError`).
+— it uses the FAISS / sentence-transformers / LangChain adapters, so it needs
+those extras (`pip install "denselinkage[all]"`) and an `OPENAI_API_KEY` to run.
 :::

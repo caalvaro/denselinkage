@@ -16,9 +16,15 @@
   contract's bodies for the no-extras surface: `link` / `dedupe` / `match_pairs`,
   connected-components clustering, and the linkage / blocking / clustering
   metrics + filtering. The heavy extras (faiss / sentence-transformers /
-  langchain) are deferred — their adapters raise `NotImplementedError`. Branch
-  coverage + `fail_under = 100` enforced. See
-  [ADR-0004](../ADRs/0004-dependency-free-beta.md).
+  langchain) are deferred to A2 (below). Branch coverage + `fail_under = 100`
+  enforced. See [ADR-0004](../ADRs/0004-dependency-free-beta.md).
+- **A2 — heavy adapters** *(done)* — fill the four deferred adapter bodies
+  (`SentenceTransformerEmbedder`, `FaissFlatIndex` / `FaissSearchableIndex`,
+  `LangChainMatcher`) behind their optional extras, so the headline dense-semantic
+  + LLM stack runs. Additive and lazy-imported (the dependency cut holds);
+  incremental `extended` stays deferred. A dedicated adapter-coverage CI job gates
+  the adapter modules at 100% (the dependency-free gate `omit`s them). See
+  [ADR-0005](../ADRs/0005-heavy-adapters.md).
 - **Phase B** *(v1, dependency-light)* — `mine_hard_negatives`,
   `tune_threshold`, `adjusted_metrics`, `LabeledPairs.split`,
   `LinkageResult.from_candidate_frame` (the ergonomic frame→pairs constructor

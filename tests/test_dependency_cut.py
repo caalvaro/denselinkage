@@ -6,6 +6,7 @@ later bodies cannot silently break it.
 
 import importlib
 import importlib.util
+import subprocess
 import sys
 
 import pytest
@@ -39,10 +40,23 @@ CORE_MODULES = (
 
 
 def test_core_imports_pull_no_heavy_backend() -> None:
+    # Import every core module in-process (keeps them covered) — none may pull a
+    # heavy backend. The authoritative assertion then runs in a *fresh*
+    # interpreter, so it is immune to backends other tests in this session (e.g.
+    # the adapter suite) have since imported into this process.
     for mod in CORE_MODULES:
         importlib.import_module(mod)
-    leaked = set(HEAVY) & set(sys.modules)
-    assert not leaked, f"heavy backend leaked on import: {sorted(leaked)}"
+    child = (
+        "import importlib, sys\n"
+        f"for mod in {list(CORE_MODULES)!r}:\n"
+        "    importlib.import_module(mod)\n"
+        f"leaked = sorted({set(HEAVY)!r} & set(sys.modules))\n"
+        "assert not leaked, f'heavy backend leaked on import: {leaked}'\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", child], capture_output=True, text=True
+    )
+    assert result.returncode == 0, result.stderr
 
 
 def test_optional_helper_unknown_module_is_actionable() -> None:

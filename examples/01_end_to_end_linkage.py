@@ -8,11 +8,11 @@ The prompt carries ONLY the semantic question: the matcher owns output
 structure and returns typed ``MatchDecision``s, so a brittle "Answer YES or
 NO" instruction is neither needed nor wanted.
 
-NOTE: Design mock — the heavy adapters it uses (``SentenceTransformerEmbedder``,
-``FaissFlatIndex``, ``LangChainMatcher``) are experimental this release and raise
-``NotImplementedError``, so this type-checks against the real core but does not
-run yet. For a runnable end-to-end on the dependency-free stack, see ``00`` /
-``04``.
+NOTE: Runs with the heavy extras installed (``pip install "denselinkage[all]"``)
+and an ``OPENAI_API_KEY`` — it uses ``SentenceTransformerEmbedder``,
+``FaissFlatIndex``, and a ``LangChainMatcher`` over a live LLM. It is type-checked
+and compiled in CI but not executed there (needs the extras + a key). For a
+runnable end-to-end on the dependency-free stack, see ``00`` / ``04``.
 """
 
 import pandas as pd

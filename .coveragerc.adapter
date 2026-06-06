@@ -1,0 +1,17 @@
+# Coverage gate for the dedicated `adapter-tests` CI job (ADR-0005). The
+# heavy-adapter modules are `omit`ted from the dependency-free pyproject gate
+# (they touch a backend only the adapter-marked tests install). `source`
+# instruments the whole package, but `[report] include` scopes the report and
+# the 100% `fail_under` to *only* the four adapter modules.
+[run]
+branch = true
+source = denselinkage
+
+[report]
+include =
+    */denselinkage/embedding/sentence_transformer_embedder.py
+    */denselinkage/indexing/faiss_flat_index.py
+    */denselinkage/indexing/faiss_searchable_index.py
+    */denselinkage/matching/langchain_matcher.py
+show_missing = true
+fail_under = 100

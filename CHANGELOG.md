@@ -4,6 +4,42 @@ All notable changes to denselinkage are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims to
 follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] — 2026-06-06
+
+First **stable** release: the heavy adapters land, so the headline dense
+*semantic* blocking + LLM matching stack now runs — completing the frozen 1.0
+contract. **Additive** to that contract (extend-never-modify); the dependency-free
+core is unchanged and still installs on numpy + pandas alone.
+
+### Added
+- Heavy adapters (A2) — the four deferred adapters are implemented (replacing
+  their `NotImplementedError` guards), each behind its optional extra and
+  lazy-imported so `import denselinkage` still pulls in no backend:
+  - `SentenceTransformerEmbedder` (`[sentence-transformers]`) — semantic
+    embeddings; `encode` returns L2-normalized float32 vectors, so inner product
+    equals cosine and the reference stack's `similarity_threshold` keeps its
+    meaning.
+  - `FaissFlatIndex` / `FaissSearchableIndex` (`[faiss]`) — exact inner-product
+    (`IndexFlatIP`) nearest-neighbour search; a drop-in for `NumpyFlatIndex`
+    behind the `VectorIndex` port (a differential test pins them to the numpy
+    neighbours). Incremental `extended` stays deferred (parity with the numpy
+    artifact).
+  - `LangChainMatcher` (`[langchain]`) — LLM matching via structured output; the
+    prompt carries only the semantic question, and per-pair failures retry per
+    `RetryPolicy`, becoming a position-aligned `MatchError` on exhaustion (never
+    an exception into the batch).
+
+### Changed
+- Coverage policy (ADR-0005, the ADR-0004 D-4.7 revisit): the dependency-free
+  surface keeps `fail_under = 100` (the adapter modules are `omit`ted); a
+  dedicated `adapter-tests` CI job installs the extras and gates the adapter
+  modules at 100% (LangChain tested with a fake LLM — no API key).
+
+### Still deferred
+- FAISS persistence in the Reference Store (the store still rejects non-numpy
+  stacks); the dense-vs-lexical benchmark (a separate evaluation workstream); the
+  v2 `[train]` trainers.
+
 ## [1.0.0b2] — 2026-06-05
 
 Second beta — the Phase-B dependency-light features, all **additive** to the
@@ -86,5 +122,6 @@ implemented and runs on numpy + pandas; the heavy extras are experimental.
   (`tune_threshold`, `adjusted_metrics`) and the v2 `Trainer` adapters follow in
   later releases; see `docs/development/roadmap.md`.
 
+[1.0.0]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0
 [1.0.0b2]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b2
 [1.0.0b1]: https://github.com/caalvaro/denselinkage/releases/tag/v1.0.0b1
