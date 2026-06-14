@@ -89,6 +89,7 @@ guide/semantic-llm
 guide/custom-components
 guide/reusing-an-index
 guide/evaluation
+guide/failure-accounting
 guide/choosing-components
 ```
 

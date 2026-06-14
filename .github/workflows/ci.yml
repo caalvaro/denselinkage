@@ -43,6 +43,7 @@ jobs:
           python examples/00_quickstart.py
           python examples/03_custom_embedder.py
           python examples/04_dedupe.py
+          python examples/05_failure_accounting.py
 
   test:
     name: Test (Python ${{ matrix.python-version }})

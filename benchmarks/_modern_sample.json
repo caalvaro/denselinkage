@@ -1,0 +1,1614 @@
+{
+ "blocking_pc": {
+  "1": 0.9698,
+  "5": 0.9914,
+  "10": 0.9941,
+  "20": 0.9968
+ },
+ "n_candidates": 45880,
+ "n_a": 2616,
+ "n_b": 2294,
+ "n_gold": 2220,
+ "sample": [
+  {
+   "a_id": "A1200",
+   "a_text": "an anonymous electronic commerce scheme with an off-line authority and untrusted agents josep domingo-ferrer , jordi herrera-joancomart\u00ed sigmod record 1998",
+   "b_id": "B115",
+   "b_text": "an anonymous electronic commerce scheme with an off-line authority and untrusted agents josep domingo-ferrer , jordi herrera-joancomart &#237; acm sigmod record 1998",
+   "sim": 0.980474591255188,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1244",
+   "a_text": "design and implementation of rmp - a virtual electronic market place wolfgang klas , susanne boll , bernard battaglin sigmod record 1998",
+   "b_id": "B10",
+   "b_text": "design and implementation of rmp : a virtual electronic market place susanne boll , wolfgang klas , bernard battaglin acm sigmod record 1998",
+   "sim": 0.9711770415306091,
+   "is_gold": true
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A915",
+   "a_text": "design and management of data warehouses : report on the dmdw '99 workshop martin staudt , yannis vassiliou , manfred a. jeusfeld , stella gatziu sigmod record 1999",
+   "b_id": "B2210",
+   "b_text": "report on the 5th international workshop on the design and management of data warehouses ( dmdw ' 03 ) hans j. lenz , panos vassiliadis , manfred jeusfeld , martin staudt acm sigmod record 2003",
+   "sim": 0.9704933166503906,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1964",
+   "a_text": "the samos active dbms prototype klaus r. dittrich , stella gatziu , andreas geppert sigmod conference 1995",
+   "b_id": "B1525",
+   "b_text": "the samos active dbms prototype stella gatziu , andreas geppert , klaus r. dittrich international conference on management of data 1995",
+   "sim": 0.8648639917373657,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1366",
+   "a_text": "real-time index concurrency control s. seshadri , jayant r. haritsa sigmod record 1996",
+   "b_id": "B374",
+   "b_text": "real-time index concurrency control jayant r. haritsa , s. seshadri acm sigmod record 1996",
+   "sim": 0.9865959882736206,
+   "is_gold": true
+  },
+  {
+   "a_id": "A347",
+   "a_text": "dynamic memory adjustment for external mergesort weiye zhang , per-\u00e5ke larson vldb 1997",
+   "b_id": "B954",
+   "b_text": "dynamic memory adjustment for external mergesort weiye zhang , per - &#197; ke larson very large data bases 1997",
+   "sim": 0.9320778846740723,
+   "is_gold": true
+  },
+  {
+   "a_id": "A76",
+   "a_text": "algebraic query optimisation for database programming languages carol small , alexandra poulovassilis vldb j. 1996",
+   "b_id": "B2247",
+   "b_text": "investigation of algebraic query optimisation techniques for database programming languages alexandra poulovassilis , carol small very large data bases 1994",
+   "sim": 0.9309157729148865,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2119",
+   "a_text": "garbage collection in object oriented databases using transactional cyclic reference counting s. sudarshan , prasan roy , abraham silberschatz , s. seshadri , srinivas ashwin vldb 1997",
+   "b_id": "B1182",
+   "b_text": "garbage collection in object-oriented databases using transactional cyclic reference counting p. roy , s. seshadri , a. silberschatz , s. sudarshan , s. ashwin the vldb journal -- the international journal on very large data bases 1998",
+   "sim": 0.9706732034683228,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9524617791175842,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2514",
+   "a_text": "xquery formal semantics : state and challenges peter fankhauser sigmod record 2001",
+   "b_id": "B566",
+   "b_text": "xquery formal semantics state and challenges peter fankhauser acm sigmod record 2001",
+   "sim": 0.9676328897476196,
+   "is_gold": true
+  },
+  {
+   "a_id": "A136",
+   "a_text": "career-enhancing services at sigmod online alexandros labrinidis , alberto o. mendelzon sigmod record 2001",
+   "b_id": "B550",
+   "b_text": "career-enhancing services at sigmod online alexandros labrinidis , alberto o. mendelzon acm sigmod record 2001",
+   "sim": 0.9883321523666382,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9404131174087524,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1883",
+   "a_text": "xcache : a semantic caching system for xml queries elke a. rundensteiner , song wang , li chen sigmod conference 2002",
+   "b_id": "B715",
+   "b_text": "xcache : a semantic caching system for xml queries li chen , elke a. rundensteiner , song wang international conference on management of data 2002",
+   "sim": 0.9690104722976685,
+   "is_gold": true
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1723",
+   "a_text": "leo - db2 's learning optimizer volker markl , mokhtar kandil , guy m. lohman , michael stillger vldb 2001",
+   "b_id": "B1336",
+   "b_text": "leo - db2 's learning optimizer michael stillger , guy m. lohman , volker markl , mokhtar kandil very large data bases 2001",
+   "sim": 0.8541077375411987,
+   "is_gold": true
+  },
+  {
+   "a_id": "A685",
+   "a_text": "much ado about shared-nothing michael g. norman , peter thanisch , thomas zurek sigmod record 1996",
+   "b_id": "B1876",
+   "b_text": "much ado about shared-nothing michael g. norman , thomas zurek , peter thanisch acm sigmod record 1996",
+   "sim": 0.9786683320999146,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1762",
+   "a_text": "microsoft.com : a high-scale data management and transaction processing solution sherri kennamer sigmod conference 1998",
+   "b_id": "B158",
+   "b_text": "microsoft.com : a high-scale data management and transaction processing solution sherri kennamer international conference on management of data 1998",
+   "sim": 0.9486405253410339,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1115",
+   "a_text": "towards automated performance tuning for complex workloads michael j. carey , manish mehta , miron livny , kurt p. brown vldb 1994",
+   "b_id": "B1425",
+   "b_text": "towards automated performance tuning for complex workloads kurt p. brown , manish mehta , michael j. carey , miron livny very large data bases 1994",
+   "sim": 0.8946035504341125,
+   "is_gold": true
+  },
+  {
+   "a_id": "A90",
+   "a_text": "fast and accurate text classification via multiple linear discriminant projections mahesh v. soundalgekar , soumen chakrabarti , shourya roy vldb 2002",
+   "b_id": "B2262",
+   "b_text": "fast and accurate text classification via multiple linear discriminant projections soumen chakrabarti , shourya roy , mahesh v. soundalgekar the vldb journal -- the international journal on very large data bases 2003",
+   "sim": 0.9550046920776367,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2114",
+   "a_text": "efficiently publishing relational data as xml documents berthold reinwald , jayavel shanmugasundaram , michael j. carey , eugene j. shekita , hamid pirahesh , bruce g. lindsay , rimon barr vldb 2000",
+   "b_id": "B2107",
+   "b_text": "efficiently publishing relational data as xml documents jayavel shanmugasundaram , eugene shekita , rimon barr , michael carey , bruce lindsay , hamid pirahesh , berthold reinwald the vldb journal -- the international journal on very large data bases 2001",
+   "sim": 0.9413610696792603,
+   "is_gold": false
+  },
+  {
+   "a_id": "A153",
+   "a_text": "including group-by in query optimization surajit chaudhuri , kyuseok shim vldb 1994",
+   "b_id": "B2211",
+   "b_text": "including group-by in query optimization surajit chaudhuri , kyuseok shim very large data bases 1994",
+   "sim": 0.8477796316146851,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2613",
+   "a_text": "locally adaptive dimensionality reduction for indexing large time series databases kaushik chakrabarti , eamonn j. keogh , michael j. pazzani , sharad mehrotra acm trans . database syst . 2002",
+   "b_id": "B303",
+   "b_text": "locally adaptive dimensionality reduction for indexing large time series databases eamonn keogh , kaushik chakrabarti , michael pazzani , sharad mehrotra international conference on management of data 2001",
+   "sim": 0.9656533002853394,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9396197199821472,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2255",
+   "a_text": "a formal perspective on the view selection problem rada chirkova , dan suciu , alon y. halevy vldb j. 2002",
+   "b_id": "B1332",
+   "b_text": "a formal perspective on the view selection problem rada chirkova , alon y. halevy , dan suciu very large data bases 2001",
+   "sim": 0.9334454536437988,
+   "is_gold": false
+  },
+  {
+   "a_id": "A718",
+   "a_text": "approximate query processing using wavelets rajeev rastogi , minos n. garofalakis , kyuseok shim , kaushik chakrabarti vldb j. 2001",
+   "b_id": "B889",
+   "b_text": "approximate query processing using wavelets kaushik chakrabarti , minos n. garofalakis , rajeev rastogi , kyuseok shim very large data bases 2000",
+   "sim": 0.939177930355072,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1577",
+   "a_text": "safe query languages for constraint databases peter z. revesz acm trans . database syst . 1998",
+   "b_id": "B232",
+   "b_text": "safe query languages for constraint databases peter z. revesz acm transactions on database systems ( tods ) 1998",
+   "sim": 0.9250109195709229,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9404131174087524,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1170",
+   "a_text": "roadrunner : automatic data extraction from data-intensive web sites giansalvatore mecca , valter crescenzi , paolo merialdo sigmod conference 2002",
+   "b_id": "B2195",
+   "b_text": "roadrunner : towards automatic data extraction from large web sites valter crescenzi , giansalvatore mecca , paolo merialdo very large data bases 2001",
+   "sim": 0.9462572336196899,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1058",
+   "a_text": "in-memory data management for consumer transactions the times-ten approach times-ten team sigmod conference 1999",
+   "b_id": "B43",
+   "b_text": "in-memory data management for consumer transactions the timesten approach corporate timesten team international conference on management of data 1999",
+   "sim": 0.8300076723098755,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9396197199821472,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1051",
+   "a_text": "clustering categorical data : an approach based on dynamical systems prabhakar raghavan , david gibson , jon m. kleinberg vldb 1998",
+   "b_id": "B1227",
+   "b_text": "clustering categorical data : an approach based on dynamical systems david gibson , jon kleinberg , prabhakar raghavan the vldb journal -- the international journal on very large data bases 2000",
+   "sim": 0.9600164890289307,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1919",
+   "a_text": "internet traffic warehouse claudio petrone , marco mesiti , munir cochinwala , patrizia santa , chung-min chen , sunil samtani , marc pucci sigmod conference 2000",
+   "b_id": "B399",
+   "b_text": "internet traffic warehouse chung-min chen , munir cochinwala , claudio petrone , marc pucci , sunil samtani , patrizia santa international conference on management of data 2000",
+   "sim": 0.8593294620513916,
+   "is_gold": true
+  },
+  {
+   "a_id": "A260",
+   "a_text": "irisnet : internet-scale resource-intensive sensor services amol deshpande , suman kumar nath , phillip b. gibbons , srinivasan seshan sigmod conference 2003",
+   "b_id": "B2020",
+   "b_text": "irisnet : internet-scale resource-intensive sensor services amol deshpande , suman nath , phillip b. gibbons , srinivasan seshan international conference on management of data 2003",
+   "sim": 0.9210261106491089,
+   "is_gold": true
+  },
+  {
+   "a_id": "A433",
+   "a_text": "research activities in database management and information retrieval at the university of illinois at chicago a. prasad sistla , isabel f. cruz , ashfaq a. khokhar , clement t. yu , bing liu , ouri wolfson sigmod record 2002",
+   "b_id": "B565",
+   "b_text": "research activities in database management and information retrieval at university of illinois at chicago isabel cruz , ashfaq khokhar , bing liu , prasad sistla , ouri wolfson , clement yu acm sigmod record 2002",
+   "sim": 0.9858660101890564,
+   "is_gold": true
+  },
+  {
+   "a_id": "A130",
+   "a_text": "database tuning : principles , experiments , and troubleshooting techniques philippe bonnet , dennis shasha vldb 2002",
+   "b_id": "B763",
+   "b_text": "database tuning : principles , experiments , and troubleshooting techniques ( part i ) dennis shasha , philippe bonnet international conference on management of data 2002",
+   "sim": 0.9247012138366699,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1661",
+   "a_text": "modularization techniques for active rules design stefano ceri , elena baralis , stefano paraboschi acm trans . database syst . 1996",
+   "b_id": "B1940",
+   "b_text": "modularization techniques for active rules design elena baralis , stefano ceri , stefano paraboschi acm transactions on database systems ( tods ) 1996",
+   "sim": 0.88710618019104,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2523",
+   "a_text": "integrating the ub-tree into a database system kernel robert fenk , rudolf bayer , volker markl , martin zirkel , frank ramsak , klaus elhardt vldb 2000",
+   "b_id": "B1376",
+   "b_text": "integrating the ub-tree into a database system kernel frank ramsak , volker markl , robert fenk , martin zirkel , klaus elhardt , rudolf bayer very large data bases 2000",
+   "sim": 0.945236086845398,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1469",
+   "a_text": "report on the fourth international conference on flexible query answering systems gabriella pasi , amihai motro , patrick bosc sigmod record 2001",
+   "b_id": "B2154",
+   "b_text": "report on fqas 2002 : fifth international conference on flexible query answering systems amihai motro , troels andreasen acm sigmod record 2003",
+   "sim": 0.9630920886993408,
+   "is_gold": false
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A91",
+   "a_text": "business process coordination : state of the art , trends , and open issues meichun hsu , rivka ladin , umeshwar dayal vldb 2001",
+   "b_id": "B1328",
+   "b_text": "business process coordination : state of the art , trends , and open issues umeshwar dayal , meichun hsu , rivka ladin very large data bases 2001",
+   "sim": 0.9168073534965515,
+   "is_gold": true
+  },
+  {
+   "a_id": "A10",
+   "a_text": "dual-buffering strategies in object bases alfons kemper , donald kossmann vldb 1994",
+   "b_id": "B2289",
+   "b_text": "dual-buffering strategies in object bases alfons kemper , donald kossmann very large data bases 1994",
+   "sim": 0.928358793258667,
+   "is_gold": true
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2418",
+   "a_text": "picodbms : scaling down database techniques for the smartcard patrick valduriez , philippe pucheral , christophe bobineau , luc bouganim vldb j. 2001",
+   "b_id": "B1240",
+   "b_text": "picodmbs : scaling down database techniques for the smartcard christophe bobineau , luc bouganim , philippe pucheral , patrick valduriez very large data bases 2000",
+   "sim": 0.9367194175720215,
+   "is_gold": false
+  },
+  {
+   "a_id": "A317",
+   "a_text": "garbage collection in object-oriented databases using transactional cyclic reference counting s. sudarshan , prasan roy , abraham silberschatz , srinivas ashwin , s. seshadri vldb j. 1998",
+   "b_id": "B1032",
+   "b_text": "garbage collection in object oriented databases using transactional cyclic reference counting srinivas ashwin , prasan roy , s. seshadri , abraham silberschatz , s. sudarshan very large data bases 1997",
+   "sim": 0.9804816246032715,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2413",
+   "a_text": "an overview of repository technology philip a. bernstein , umeshwar dayal vldb 1994",
+   "b_id": "B2267",
+   "b_text": "an overview of repository technology philip a. bernstein , umeshwar dayal very large data bases 1994",
+   "sim": 0.8602380156517029,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A132",
+   "a_text": "application of oodb and sgml techniques in text database : an electronic dictionary system jian zhang sigmod record 1995",
+   "b_id": "B1660",
+   "b_text": "application of oodb and sgml techniques in text database : an electronic dictionary system jian zhang acm sigmod record 1995",
+   "sim": 0.9951647520065308,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1348",
+   "a_text": "approximate medians and other quantiles in one pass and with limited memory bruce g. lindsay , gurmeet singh manku , sridhar rajagopalan sigmod conference 1998",
+   "b_id": "B186",
+   "b_text": "approximate medians and other quantiles in one pass and with limited memory gurmeet singh manku , sridhar rajagopalan , bruce g. lindsay international conference on management of data 1998",
+   "sim": 0.8993146419525146,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1211",
+   "a_text": "stream processing of xpath queries with predicates ashish kumar gupta , dan suciu sigmod conference 2003",
+   "b_id": "B2040",
+   "b_text": "stream processing of xpath queries with predicates ashish kumar gupta , dan suciu international conference on management of data 2003",
+   "sim": 0.9413630366325378,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2293",
+   "a_text": "query previews for networked information systems : a case study with nasa environmental data khoa doan , catherine plaisant , ben shneiderman , tom bruns sigmod record 1997",
+   "b_id": "B1927",
+   "b_text": "query previews for networked information systems : a case study with nasa environmental data khoa doan , catherine plaisant , ben shneiderman , tom bruns acm sigmod record 1997",
+   "sim": 0.9973136782646179,
+   "is_gold": true
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A313",
+   "a_text": "the bucky object-relational benchmark ( experience paper ) jeffrey f. naughton , michael j. carey , dhaval shah , johannes gehrke , mohammad asgarian , david j. dewitt , paul brown sigmod conference 1997",
+   "b_id": "B1816",
+   "b_text": "the bucky object-relational benchmark michael j. carey , david j. dewitt , jeffrey f. naughton , mohammad asgarian , paul brown , johannes e. gehrke , dhaval n. shah international conference on management of data 1997",
+   "sim": 0.9042713642120361,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1727",
+   "a_text": "ptool : a light weight persistent object manager david hanley , robert l. grossman , xiao qin sigmod conference 1995",
+   "b_id": "B1937",
+   "b_text": "ptool : a light weight persistent object manager r. l. grossman , d. hanley , x. qin international conference on management of data 1995",
+   "sim": 0.8905439376831055,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1710",
+   "a_text": "author index ? vldb 2000",
+   "b_id": "B2136",
+   "b_text": "author index  very large data bases 2000",
+   "sim": 0.7184959650039673,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1377",
+   "a_text": "introduction to constraint databases - book review bart kuijpers sigmod record 2002",
+   "b_id": "B518",
+   "b_text": "introduction to constraint databases bart kuijpers acm sigmod record 2002",
+   "sim": 0.9440894722938538,
+   "is_gold": true
+  },
+  {
+   "a_id": "A311",
+   "a_text": "treasurer 's message joachim hammer sigmod record 2001",
+   "b_id": "B542",
+   "b_text": "treasurer 's message joachim hammer acm sigmod record 2002",
+   "sim": 0.9354932308197021,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1863",
+   "a_text": "idea : interactive data exploration and analysis lynn o. wilson , peter g. selfridge , divesh srivastava sigmod conference 1996",
+   "b_id": "B1952",
+   "b_text": "idea : interactive data exploration and analysis peter g. selfridge , divesh srivastava , lynn o. wilson international conference on management of data 1996",
+   "sim": 0.8495545387268066,
+   "is_gold": true
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A934",
+   "a_text": "reminiscences on influential papers richard t. snodgrass sigmod record 1998",
+   "b_id": "B226",
+   "b_text": "reminiscences on influential papers richard snodgrass acm sigmod record 1998",
+   "sim": 0.9596711993217468,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A277",
+   "a_text": "will database researchers have any role in data security ? ( panel abstract ) arnon rosenthal sigmod conference 2001",
+   "b_id": "B363",
+   "b_text": "will database researchers have any role in data security ? ( panel session ) arnon rosenthal , klaus dittrich , jim donahue , bill maimone international conference on management of data 2001",
+   "sim": 0.9240913987159729,
+   "is_gold": true
+  },
+  {
+   "a_id": "A597",
+   "a_text": "mineset ( tm ) : a system for high-end data mining and visualization ? vldb 1996",
+   "b_id": "B1146",
+   "b_text": "mineset ( tm ) : a system for high-end data mining and visualization  very large data bases 1996",
+   "sim": 0.9477052688598633,
+   "is_gold": true
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1437",
+   "a_text": "learning table access cardinalities with leo volker markl , guy m. lohman sigmod conference 2002",
+   "b_id": "B721",
+   "b_text": "learning table access cardinalities with leo volker markl , guy lohman international conference on management of data 2002",
+   "sim": 0.886435866355896,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1365",
+   "a_text": "report on first international workshop on real-time database systems sang hyuk son , kwei-jay lin , azer bestavros sigmod record 1996",
+   "b_id": "B1873",
+   "b_text": "report on first international workshop on real-time database systems azer bestavros , kwei-jay lin , sang son acm sigmod record 1996",
+   "sim": 0.9831247329711914,
+   "is_gold": true
+  },
+  {
+   "a_id": "A915",
+   "a_text": "design and management of data warehouses : report on the dmdw '99 workshop martin staudt , yannis vassiliou , manfred a. jeusfeld , stella gatziu sigmod record 1999",
+   "b_id": "B409",
+   "b_text": "concept based design of data warehouses : the dwq demonstrators m. jarke , c. quix , d. calvanese , m. lenzerini , e. franconi , s. ligoudistianos , p. vassiliadis , y. vassiliou international conference on management of data 2000",
+   "sim": 0.9282064437866211,
+   "is_gold": false
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1970",
+   "a_text": "the network as a global database : challenges of interoperability , proactivity , interactiveness , legacy arne koschel , ralf kramer , ralf nikolai , peter c. lockemann , mechtild wallrath , ulrike k\u00f6lsch , hans-dirk walter vldb 1997",
+   "b_id": "B1080",
+   "b_text": "the network as a global database : challenges of interoperability , proactivity , interactiveness , legacy peter c. lockemann , ulrike k &#246; lsch , arne koschel , ralf kramer , ralf nikolai , mechtild wallrath , hans-dirk walter very large data bases 1997",
+   "sim": 0.9611873030662537,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1114",
+   "a_text": "database tuning : principles , experiments , and troubleshooting techniques ( part ii ) dennis shasha , philippe bonnet sigmod conference 2002",
+   "b_id": "B763",
+   "b_text": "database tuning : principles , experiments , and troubleshooting techniques ( part i ) dennis shasha , philippe bonnet international conference on management of data 2002",
+   "sim": 0.9340090751647949,
+   "is_gold": false
+  },
+  {
+   "a_id": "A907",
+   "a_text": "reminiscences on influential papers richard t. snodgrass sigmod record 1999",
+   "b_id": "B334",
+   "b_text": "reminiscences in influential papers richard snodgrass acm sigmod record 1998",
+   "sim": 0.9449141025543213,
+   "is_gold": false
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1778",
+   "a_text": "disjunctive datalog heikki mannila , thomas eiter , georg gottlob acm trans . database syst . 1997",
+   "b_id": "B1856",
+   "b_text": "disjunctive datalog thomas eiter , georg gottlob , heikki mannila acm transactions on database systems ( tods ) 1997",
+   "sim": 0.8465527296066284,
+   "is_gold": true
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9469617605209351,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9469617605209351,
+   "is_gold": false
+  },
+  {
+   "a_id": "A344",
+   "a_text": "energy-performance trade-offs for spatial access methods on memory-resident data mahmut t. kandemir , ning an , mary jane irwin , anand sivasubramaniam , sudhanva gurumurthi , narayanan vijaykrishnan vldb j. 2002",
+   "b_id": "B2187",
+   "b_text": "analyzing energy behavior of spatial access methods for memory-resident data ning an , anand sivasubramaniam , narayanan vijaykrishnan , mahmut t. kandemir , mary jane irwin , sudhanva gurumurthi very large data bases 2001",
+   "sim": 0.9346461296081543,
+   "is_gold": false
+  },
+  {
+   "a_id": "A599",
+   "a_text": "the drill down benchmark peter a. boncz , tim r\u00fchl , fred kwakkel vldb 1998",
+   "b_id": "B987",
+   "b_text": "the drill down benchmark peter a. boncz , tim r &#252; hl , fred kwakkel very large data bases 1998",
+   "sim": 0.7489094734191895,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2391",
+   "a_text": "reminiscences on influential papers kenneth a. ross , beng chin ooi , frank neven sigmod record 2003",
+   "b_id": "B927",
+   "b_text": "reminiscences on influential papers kenneth a. ross acm sigmod record 2003",
+   "sim": 0.9239675998687744,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9396197199821472,
+   "is_gold": false
+  },
+  {
+   "a_id": "A190",
+   "a_text": "ensuring relaxed atomicity for flexible transactions in multidatabase systems bharat k. bhargava , aidong zhang , marian h. nodine , omran a. bukhres sigmod conference 1994",
+   "b_id": "B1743",
+   "b_text": "ensuring relaxed atomicity for flexible transactions in multidatabase systems aidong zhang , marian nodine , bharat bhargava , omran bukhres international conference on management of data 1994",
+   "sim": 0.9610122442245483,
+   "is_gold": true
+  },
+  {
+   "a_id": "A390",
+   "a_text": "the nimble integration engine daniel s. weld , alon y. halevy , denise draper sigmod conference 2001",
+   "b_id": "B264",
+   "b_text": "the nimble integration engine denise draper , alon y. halevy , daniel s. weld international conference on management of data 2001",
+   "sim": 0.8036497235298157,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2129",
+   "a_text": "promises and realities of active database systems eric simon , angelika kotz dittrich vldb 1995",
+   "b_id": "B1114",
+   "b_text": "promises and realities of active database systems eric simon , angelika kotz dittrich very large data bases 1995",
+   "sim": 0.9018916487693787,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1325",
+   "a_text": "towards an infrastructure for temporal databases : report of an invitational arpa/nsf workshop ramez elmasri , richard t. snodgrass , babis theodoulidis , inderpal singh mumick , arie segev , m. tamer \u00f6zsu , umeshwar dayal , niki pissinou , barbara pernici sigmod record 1994",
+   "b_id": "B1702",
+   "b_text": "towards an infrastructure for temporal databases : report of an invitational arpa/nsf workshop niki pissinou , richard thomas snodgrass , ramez elmasri , inderpal s. mumick , tamer &#214; zsu , barbara pernici , arie segev , babis theodoulidis , umeshwar dayal acm sigmod record 1994",
+   "sim": 0.9887967705726624,
+   "is_gold": true
+  },
+  {
+   "a_id": "A302",
+   "a_text": "spatio-temporal retrieval with rasdaman peter baumann , norbert widmann , roland ritsch , paula furtado , andreas dehmel vldb 1999",
+   "b_id": "B820",
+   "b_text": "spatio-temporal retrieval with rasdaman peter baumann , andreas dehmel , paula furtado , roland ritsch , norbert widmann very large data bases 1999",
+   "sim": 0.9237809181213379,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1380",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9348706007003784,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2230",
+   "a_text": "a top-down approach for two level serializability n. l. belkhodja , mourad ouzzani , m. a. atroun vldb 1994",
+   "b_id": "B2265",
+   "b_text": "a top-down approach for two level serializability m. ouzzani , m. a. atroun , n. l. belkhodja very large data bases 1994",
+   "sim": 0.88789963722229,
+   "is_gold": true
+  },
+  {
+   "a_id": "A479",
+   "a_text": "the gmap : a versatile tool for physical data independence yannis e. ioannidis , marvin h. solomon , odysseas g. tsatalos vldb j. 1996",
+   "b_id": "B2263",
+   "b_text": "the gmap : a versatile tool for physical data independence odysseas g. tsatalos , marvin h. solomon , yannis e. ioannidis very large data bases 1994",
+   "sim": 0.955546498298645,
+   "is_gold": false
+  },
+  {
+   "a_id": "A524",
+   "a_text": "the lham log-structured history data access method gerhard weikum , patrick e. o'neil , peter muth , achim pick vldb j. 2000",
+   "b_id": "B969",
+   "b_text": "design , implementation , and performance of the lham log-structured history data access method peter muth , patrick e. o'neil , achim pick , gerhard weikum very large data bases 1998",
+   "sim": 0.9473055601119995,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1880",
+   "a_text": "devise : integrated querying and visual exploration of large datasets ( demo abstract ) jussi myllymaki , shilpa lawande , donko donjerkovic , raghu ramakrishnan , guangshun chen , kevin s. beyer , miron livny , r. kent wenger sigmod conference 1997",
+   "b_id": "B1814",
+   "b_text": "devise : integrated querying and visual exploration of large datasets m. livny , r. ramakrishnan , k. beyer , g. chen , d. donjerkovic , s. lawande , j. myllymaki , k. wenger international conference on management of data 1997",
+   "sim": 0.932498037815094,
+   "is_gold": false
+  },
+  {
+   "a_id": "A907",
+   "a_text": "reminiscences on influential papers richard t. snodgrass sigmod record 1999",
+   "b_id": "B226",
+   "b_text": "reminiscences on influential papers richard snodgrass acm sigmod record 1998",
+   "sim": 0.9562278985977173,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2583",
+   "a_text": "book review column karl aberer sigmod record 2001",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9396197199821472,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1066",
+   "a_text": "report on the 5th international workshop on the design and management of data warehouses ( dmdw ' 03 ) manfred a. jeusfeld , hans-joachim lenz , panos vassiliadis , martin staudt sigmod record 2003",
+   "b_id": "B482",
+   "b_text": "design and management of data warehouses report on the dmdw '99 workshop stella gatziu , manfred jeusfeld , martin staudt , yannis vassiliou acm sigmod record 1999",
+   "sim": 0.948969841003418,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1648",
+   "a_text": "quickstore : a high performance mapped object store seth j. white , david j. dewitt vldb j. 1995",
+   "b_id": "B1645",
+   "b_text": "quickstore : a high performance mapped object store seth j. white , david j. dewitt international conference on management of data 1994",
+   "sim": 0.9393951296806335,
+   "is_gold": false
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A352",
+   "a_text": "reducing the braking distance of an sql query engine donald kossmann , michael j. carey vldb 1998",
+   "b_id": "B988",
+   "b_text": "reducing the braking distance of an sql query engine michael j. carey , donald kossmann very large data bases 1998",
+   "sim": 0.8949120044708252,
+   "is_gold": true
+  },
+  {
+   "a_id": "A500",
+   "a_text": "a super scalar sort algorithm for risc processors ramesh c. agarwal sigmod conference 1996",
+   "b_id": "B1974",
+   "b_text": "a super scalar sort algorithm for risc processors ramesh c. agarwal international conference on management of data 1996",
+   "sim": 0.9202432632446289,
+   "is_gold": true
+  },
+  {
+   "a_id": "A691",
+   "a_text": "the p operator : discovering and ranking associations on the semantic web kemafor anyanwu , amit p. sheth sigmod record 2002",
+   "b_id": "B622",
+   "b_text": "the &#961; operator : discovering and ranking associations on the semantic web kemafor anyanwu , amit sheth acm sigmod record 2002",
+   "sim": 0.9570596814155579,
+   "is_gold": true
+  },
+  {
+   "a_id": "A301",
+   "a_text": "providing better support for a class of decision support queries antonio badia , dirk van gucht , sudhir rao sigmod conference 1996",
+   "b_id": "B1968",
+   "b_text": "providing better support for a class of decision support queries sudhir g. rao , antonio badia , dirk van gucht international conference on management of data 1996",
+   "sim": 0.8292168378829956,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1738",
+   "a_text": "vxmlr : a visual xml-relational database system aoying zhou , wenyun ji , shihui zheng , hongjun lu , yuqi liang , zengping tian , long zhang vldb 2001",
+   "b_id": "B1318",
+   "b_text": "vxmlr : a visual xml-relational database system aoying zhou , hongjun lu , shihui zheng , yuqi liang , long zhang , wenyun ji , zengping tian very large data bases 2001",
+   "sim": 0.9686763882637024,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1317",
+   "a_text": "efficient algorithms for mining outliers from large data sets kyuseok shim , sridhar ramaswamy , rajeev rastogi sigmod conference 2000",
+   "b_id": "B444",
+   "b_text": "efficient algorithms for mining outliers from large data sets sridhar ramaswamy , rajeev rastogi , kyuseok shim international conference on management of data 2000",
+   "sim": 0.948516845703125,
+   "is_gold": true
+  },
+  {
+   "a_id": "A413",
+   "a_text": "zoo : a desktop experiment management environment miron livny , yannis e. ioannidis , nagavamsi ponnekanti , shivani gupta vldb 1996",
+   "b_id": "B1858",
+   "b_text": "zoo : a desktop experiment management environment yannis e. ioannidis , miron livny , anastassia ailamaki , anand narayanan , andrew therber international conference on management of data 1997",
+   "sim": 0.9359596967697144,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9348706007003784,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2391",
+   "a_text": "reminiscences on influential papers kenneth a. ross , beng chin ooi , frank neven sigmod record 2003",
+   "b_id": "B551",
+   "b_text": "reminiscences on influential papers kenneth a. ross acm sigmod record 2001",
+   "sim": 0.9243776202201843,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2290",
+   "a_text": "florida international university high performance database research center leonard loureiro , yi deng , carlos ordonez 0002 , mario sanchez , cyril u. orji , wei sun , artyom shaposhnikov , naphtali rishe , michael alexopoulos , david barton sigmod record 1995",
+   "b_id": "B1555",
+   "b_text": "florida international university high performance database research center naphtali rishe , wei sun , david barton , yi deng , cyril orji , michael alexopoulos , leonardo loureiro , carlos ordonez , mario sanchez , artyom shaposhnikov acm sigmod record 1995",
+   "sim": 0.9829801321029663,
+   "is_gold": true
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9469617605209351,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2009",
+   "a_text": "one-dimensional and multi-dimensional substring selectivity estimation raymond t. ng , divesh srivastava , h. v. jagadish , olga kapitskaia vldb j. 2000",
+   "b_id": "B809",
+   "b_text": "multi-dimensional substring selectivity estimation h. v. jagadish , olga kapitskaia , raymond t. ng , divesh srivastava very large data bases 1999",
+   "sim": 0.9324137568473816,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2250",
+   "a_text": "xpath processing in a nutshell reinhard pichler , christoph koch , georg gottlob sigmod record 2003",
+   "b_id": "B901",
+   "b_text": "xpath processing in a nutshell georg gottlob , christoph koch , reinhard pichler acm sigmod record 2003",
+   "sim": 0.9642046689987183,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1064",
+   "a_text": "progressive approximate aggregate queries with a multi-resolution tree structure iosif lazaridis , sharad mehrotra sigmod conference 2001",
+   "b_id": "B315",
+   "b_text": "progressive approximate aggregate queries with a multi-resolution tree structure iosif lazaridis , sharad mehrotra international conference on management of data 2001",
+   "sim": 0.9318975210189819,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1557",
+   "a_text": "power efficient data gathering and aggregation in wireless sensor networks ibrahim korpeoglu , h\u00fcseyin \u00f6zg\u00fcr tan sigmod record 2003",
+   "b_id": "B2226",
+   "b_text": "power efficient data gathering and aggregation in wireless sensor networks h &#252; seyin &#214; zg &#252; r tan , ibrahim k &#246; rpeo &#487; lu acm sigmod record 2003",
+   "sim": 0.9251152873039246,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2125",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2462",
+   "a_text": "efficiently publishing relational data as xml documents bruce g. lindsay , hamid pirahesh , berthold reinwald , michael j. carey , rimon barr , jayavel shanmugasundaram , eugene j. shekita vldb j. 2001",
+   "b_id": "B879",
+   "b_text": "efficiently publishing relational data as xml documents jayavel shanmugasundaram , eugene j. shekita , rimon barr , michael j. carey , bruce g. lindsay , hamid pirahesh , berthold reinwald very large data bases 2000",
+   "sim": 0.968687117099762,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1558",
+   "a_text": "treasurer 's message joachim hammer sigmod record 2003",
+   "b_id": "B542",
+   "b_text": "treasurer 's message joachim hammer acm sigmod record 2002",
+   "sim": 0.930620551109314,
+   "is_gold": false
+  },
+  {
+   "a_id": "A210",
+   "a_text": "report on fqas 2002 : fifth international conference on flexible query answering systems amihai motro , troels andreasen sigmod record 2003",
+   "b_id": "B465",
+   "b_text": "report on the fourth international conference on flexible query answering systems ( fqas 2000 ) patrick bosc , amihai motro , gabriella pasi acm sigmod record 2001",
+   "sim": 0.9760640263557434,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2451",
+   "a_text": "fast incremental maintenance of approximate histograms viswanath poosala , phillip b. gibbons , yossi matias acm trans . database syst . 2002",
+   "b_id": "B1084",
+   "b_text": "fast incremental maintenance of approximate histograms phillip b. gibbons , yossi matias , viswanath poosala very large data bases 1997",
+   "sim": 0.9218795895576477,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A837",
+   "a_text": "a general solution of the n-dimensional b-tree problem michael freeston sigmod conference 1995",
+   "b_id": "B1584",
+   "b_text": "a general solution of the n-dimensional b-tree problem michael freeston international conference on management of data 1995",
+   "sim": 0.8442896604537964,
+   "is_gold": true
+  },
+  {
+   "a_id": "A364",
+   "a_text": "optimizing database architecture for the new bottleneck : memory access peter a. boncz , stefan manegold , martin l. kersten vldb j. 2000",
+   "b_id": "B798",
+   "b_text": "database architecture optimized for the new bottleneck : memory access peter a. boncz , stefan manegold , martin l. kersten very large data bases 1999",
+   "sim": 0.9417706727981567,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2525",
+   "a_text": "estimating page fetches for index scans with finite lru buffers arun n. swami , k. bernhard schiefer sigmod conference 1994",
+   "b_id": "B615",
+   "b_text": "estimating page fetches for index scans with finite lru buffers arun swami , k. bernhard schiefer the vldb journal -- the international journal on very large data bases 1995",
+   "sim": 0.9555884599685669,
+   "is_gold": false
+  },
+  {
+   "a_id": "A156",
+   "a_text": "report on the 8th international workshop on knowledge representation meets databases ( krdb ) dan suciu , maurizio lenzerini , daniele nardi , werner nutt sigmod record 2001",
+   "b_id": "B238",
+   "b_text": "report on the 5th international workshop on knowledge representation meets databases ( krdb ' 98 ) alex borgida , vinay k. chaudhri , martin staudt acm sigmod record 1998",
+   "sim": 0.9677035212516785,
+   "is_gold": false
+  },
+  {
+   "a_id": "A916",
+   "a_text": "information sharing across private databases ramakrishnan srikant , rakesh agrawal , alexandre v. evfimievski sigmod conference 2003",
+   "b_id": "B2083",
+   "b_text": "information sharing across private databases rakesh agrawal , alexandre evfimievski , ramakrishnan srikant international conference on management of data 2003",
+   "sim": 0.8826677799224854,
+   "is_gold": true
+  },
+  {
+   "a_id": "A234",
+   "a_text": "fast algorithms for mining association rules in large databases ramakrishnan srikant , rakesh agrawal vldb 1994",
+   "b_id": "B1471",
+   "b_text": "an efficient algorithm for mining association rules in large databases ashoka savasere , edward omiecinski , shamkant b. navathe very large data bases 1995",
+   "sim": 0.9256668090820312,
+   "is_gold": false
+  },
+  {
+   "a_id": "A576",
+   "a_text": "efficient evaluation of queries in a mediator for websources tolga urhan , laura bright , vladimir zadorozhny , maria-esther vidal , louiqa raschid sigmod conference 2002",
+   "b_id": "B644",
+   "b_text": "efficient evaluation of queries in a mediator for websources vladimir zadorozhny , louiqa raschid , maria esther vidal , tolga urhan , laura bright international conference on management of data 2002",
+   "sim": 0.9355556964874268,
+   "is_gold": true
+  },
+  {
+   "a_id": "A969",
+   "a_text": "ensuring consistency in multidatabases by preserving two-level serializability sharad mehrotra acm trans . database syst . 1998",
+   "b_id": "B133",
+   "b_text": "ensuring consistency in multidatabases by preserving two-level serializability sharad mehrotra , rajeev rastogi , henry f. korth , abraham silberschatz acm transactions on database systems ( tods ) 1998",
+   "sim": 0.91690993309021,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1794",
+   "a_text": "peerdb : peering into personal databases chu yee liau , aoying zhou , wee siong ng , ming zhang , bo ling , chin hong goh , yanfeng shu , kian-lee tan , yingguang li , xiaoyu wang , beng chin ooi sigmod conference 2003",
+   "b_id": "B2013",
+   "b_text": "peerdb : peering into personal databases beng chin ooi , kian-lee tan , aoying zhou , chin hong goh , yingguang li , chu yee liau , bo ling , wee siong ng , yanfeng shu , xiaoyu wang , ming zhang international conference on management of data 2003",
+   "sim": 0.9084596633911133,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1649",
+   "a_text": "xmill : an efficient compressor for xml data hartmut liefke , dan suciu sigmod conference 2000",
+   "b_id": "B494",
+   "b_text": "an extensible compressor for xml data hartmut liefke , dan suciu acm sigmod record 2000",
+   "sim": 0.9427400827407837,
+   "is_gold": false
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A254",
+   "a_text": "combining fuzzy information : an overview ronald fagin sigmod record 2002",
+   "b_id": "B529",
+   "b_text": "combining fuzzy information : an overview ronald fagin acm sigmod record 2002",
+   "sim": 0.9578330516815186,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1767",
+   "a_text": "query by humming - in action with its technology revealed yunyue zhu , xiaojian zhao , dennis shasha sigmod conference 2003",
+   "b_id": "B2028",
+   "b_text": "query by humming : in action with its technology revealed yunyue zhu , dennis shasha , xiaojian zhao international conference on management of data 2003",
+   "sim": 0.6818366646766663,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2535",
+   "a_text": "microsoft site server ( commerce edition ) bassel ojjeh sigmod conference 1999",
+   "b_id": "B40",
+   "b_text": "microsoft site server ( commerce ed . ) : talk-slides available at the conference bassel ojjeh international conference on management of data 1999",
+   "sim": 0.7682558298110962,
+   "is_gold": true
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B513",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A705",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A60",
+   "a_text": "the value of merge-join and hash-join in sql server goetz graefe vldb 1999",
+   "b_id": "B832",
+   "b_text": "the value of merge-join and hash-join in sql server goetz graefe very large data bases 1999",
+   "sim": 0.921682596206665,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1330",
+   "a_text": "issues in data stream management lukasz golab , m. tamer \u00f6zsu sigmod record 2003",
+   "b_id": "B2117",
+   "b_text": "issues in data stream management lukasz golab , m. tamer &#214; zsu acm sigmod record 2003",
+   "sim": 0.95115065574646,
+   "is_gold": true
+  },
+  {
+   "a_id": "A965",
+   "a_text": "an extended entity-relationship model for geographic applications nectaria tryfona , thanasis hadzilacos sigmod record 1997",
+   "b_id": "B1861",
+   "b_text": "an extended entity-relationship model for geographic applications thanasis hadzilacos , nectaria tryfona acm sigmod record 1997",
+   "sim": 0.9795079827308655,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2470",
+   "a_text": "editorial richard t. snodgrass acm trans . database syst . 2001",
+   "b_id": "B342",
+   "b_text": "editorial richard snodgrass acm transactions on database systems ( tods ) 2001",
+   "sim": 0.6371475458145142,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1408",
+   "a_text": "towards event-driven modelling for database design maguelonne teisseire , pascal poncelet , rosine cicchetti vldb 1994",
+   "b_id": "B2217",
+   "b_text": "towards event-driven modelling for database design maguelonne teisseire , pascal poncelet , rosine cicchetti very large data bases 1994",
+   "sim": 0.9598268866539001,
+   "is_gold": true
+  },
+  {
+   "a_id": "A306",
+   "a_text": "paradise : a database system for gis applications paradise team sigmod conference 1995",
+   "b_id": "B1522",
+   "b_text": "paradise : a database system for gis applications corporate the paradise team international conference on management of data 1995",
+   "sim": 0.8782463073730469,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1658",
+   "a_text": "re-tree : an efficient index structure for regular expressions rajeev rastogi , minos n. garofalakis , chee yong chan vldb 2002",
+   "b_id": "B2286",
+   "b_text": "re-tree : an efficient index structure for regular expressions chee-yong chan , minos garofalakis , rajeev rastogi the vldb journal -- the international journal on very large data bases 2003",
+   "sim": 0.9237648248672485,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1694",
+   "a_text": "epsilon grid order : an algorithm for the similarity join on massive high-dimensional data florian krebs , christian b\u00f6hm , bernhard braunm\u00fcller , hans-peter kriegel sigmod conference 2001",
+   "b_id": "B313",
+   "b_text": "epsilon grid order : an algorithm for the similarity join on massive high-dimensional data christian b &#246; hm , bernhard braunm &#252; ller , florian krebs , hans-peter kriegel international conference on management of data 2001",
+   "sim": 0.9648832082748413,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2248",
+   "a_text": "research issues for data communication in mobile ad-hoc network database systems leslie d. fife , le gruenwald sigmod record 2003",
+   "b_id": "B2126",
+   "b_text": "research issues for data communication in mobile ad-hoc network database systems leslie d. fife , le gruenwald acm sigmod record 2003",
+   "sim": 0.9922630786895752,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B904",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.932776689529419,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1502",
+   "a_text": "a comparison of selectivity estimators for range queries on metric attributes bernhard seeger , bj\u00f6rn blohsfeld , dieter korus sigmod conference 1999",
+   "b_id": "B206",
+   "b_text": "a comparison of selectivity estimators for range queries on metric attributes bj &#246; rn blohsfeld , dieter korus , bernhard seeger international conference on management of data 1999",
+   "sim": 0.9708408117294312,
+   "is_gold": true
+  },
+  {
+   "a_id": "A876",
+   "a_text": "research and products : are they relevant to each other ? ( panel ) herb edelstein sigmod conference 1995",
+   "b_id": "B1549",
+   "b_text": "research and products-are they relevant to each other ? ( panel session ) herb edelstein international conference on management of data 1995",
+   "sim": 0.8741385340690613,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1912",
+   "a_text": "serfing the web : web site management made easy kajal t. claypool , elke a. rundensteiner , hong su , keiji oenoki , li chen sigmod conference 2000",
+   "b_id": "B415",
+   "b_text": "serfing the web : web site management made easy elke a. rundensteiner , kajal t. claypool , li chen , hong su , keiji oenoki international conference on management of data 2000",
+   "sim": 0.8847973346710205,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1210",
+   "a_text": "the power of languages for the manipulation of complex values serge abiteboul , catriel beeri vldb j. 1995",
+   "b_id": "B635",
+   "b_text": "the power of languages for the manipulation of complex values serge abiteboul , catriel beeri the vldb journal -- the international journal on very large data bases 1995",
+   "sim": 0.8814496397972107,
+   "is_gold": true
+  },
+  {
+   "a_id": "A394",
+   "a_text": "efficient materialization and use of views in data warehouses m\u00e1rcio farias de souza , marcus costa sampaio sigmod record 1999",
+   "b_id": "B98",
+   "b_text": "efficient materialization and use of views in data warehouses m &#225; rcio farias de souza , marcus costa sampaio acm sigmod record 1999",
+   "sim": 0.9902175664901733,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1295",
+   "a_text": "a complete temporal relational algebra debabrata dey , veda c. storey , terence m. barron vldb j. 1996",
+   "b_id": "B1206",
+   "b_text": "a complete temporal relational algebra debabrata dey , terence m. barron , veda c. storey the vldb journal -- the international journal on very large data bases 1996",
+   "sim": 0.9057275056838989,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1801",
+   "a_text": "evolving teradata decision support for massively parallel processing with unix carrie ballinger sigmod conference 1994",
+   "b_id": "B1626",
+   "b_text": "evolving teradata decision support for massively parallel processing with unix carrie ballinger international conference on management of data 1994",
+   "sim": 0.920843780040741,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2492",
+   "a_text": "cache coherency in oracle parallel server boris klots vldb 1996",
+   "b_id": "B1124",
+   "b_text": "cache coherency in oracle parallel server boris klots very large data bases 1996",
+   "sim": 0.8968069553375244,
+   "is_gold": true
+  },
+  {
+   "a_id": "A19",
+   "a_text": "lineage tracing for general data warehouse transformations yingwei cui , jennifer widom vldb 2001",
+   "b_id": "B2119",
+   "b_text": "lineage tracing for general data warehouse transformations y. cui , j. widom the vldb journal -- the international journal on very large data bases 2003",
+   "sim": 0.9483400583267212,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1748",
+   "a_text": "composite events for active databases : semantics , contexts and detection s.-k . kim , eman anwar , sharma chakravarthy , v. krishnaprasad vldb 1994",
+   "b_id": "B1430",
+   "b_text": "composite events for active databases : semantics , contexts and detection sharma chakravarthy , v. krishnaprasad , eman anwar , s.-k . kim very large data bases 1994",
+   "sim": 0.9728332161903381,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B744",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A63",
+   "a_text": "multi-dimensional substring selectivity estimation divesh srivastava , olga kapitskaia , raymond t. ng , h. v. jagadish vldb 1999",
+   "b_id": "B1271",
+   "b_text": "one-dimensional and multi-dimensional substring selectivity estimation h. v. jagadish , olga kapitskaia , raymond t. ng , divesh srivastava the vldb journal -- the international journal on very large data bases 2000",
+   "sim": 0.9405887126922607,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1475",
+   "a_text": "sit-in : a real-life spatio-temporal information system stefano de francisci , rossella molinaro , orietta gargano , mario paolucci , leonardo tininini , giuseppe sindoni , paola patteri , amedea ambrosetti , pina ticca , cristina bedeschi vldb 2001",
+   "b_id": "B1416",
+   "b_text": "sit-in : a real-life spatio-temporal information system giuseppe sindoni , leonardo tininini , amedea ambrosetti , cristina bedeschi , stefano de francisci , orietta gargano , rossella molinaro , mario paolucci , paola patteri , pina ticca very large data bases 2001",
+   "sim": 0.946795642375946,
+   "is_gold": true
+  },
+  {
+   "a_id": "A269",
+   "a_text": "integration of spatial join algorithms for processing multiple inputs nikos mamoulis , dimitris papadias sigmod conference 1999",
+   "b_id": "B219",
+   "b_text": "integration of spatial join algorithms for processing multiple inputs nikos mamoulis , dimitris papadias international conference on management of data 1999",
+   "sim": 0.9228948354721069,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2474",
+   "a_text": "on the semantics of `` now '' in databases christian s. jensen , tom\u00e1s isakowitz , richard t. snodgrass , curtis e. dyreson , james clifford acm trans . database syst . 1997",
+   "b_id": "B1924",
+   "b_text": "on the semantics of now in databases james clifford , curtis dyreson , tom &#225; s isakowitz , christian s. jensen , richard thomas snodgrass acm transactions on database systems ( tods ) 1997",
+   "sim": 0.8099644184112549,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1021",
+   "a_text": "the algres testbed of chimera : an active object-oriented database system giuseppe psaila , stefano ceri , stefano paraboschi , piero fraternali sigmod conference 1995",
+   "b_id": "B1534",
+   "b_text": "the algres testbed of chimera : an active object-oriented database system stefano ceri , piero fraternali , stefano paraboschi , giuseppe psaila international conference on management of data 1995",
+   "sim": 0.9565978646278381,
+   "is_gold": true
+  },
+  {
+   "a_id": "A130",
+   "a_text": "database tuning : principles , experiments , and troubleshooting techniques philippe bonnet , dennis shasha vldb 2002",
+   "b_id": "B756",
+   "b_text": "database tuning : principles , experiments , and troubleshooting techniques ( part ii ) dennis shasha , philippe bonnet international conference on management of data 2002",
+   "sim": 0.9221479892730713,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1153",
+   "a_text": "database architecture optimized for the new bottleneck : memory access stefan manegold , peter a. boncz , martin l. kersten vldb 1999",
+   "b_id": "B1268",
+   "b_text": "optimizing database architecture for the new bottleneck : memory access stefan manegold , peter a. boncz , martin l. kersten the vldb journal -- the international journal on very large data bases 2000",
+   "sim": 0.9252710342407227,
+   "is_gold": false
+  },
+  {
+   "a_id": "A942",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B598",
+   "b_text": "book review column karl aberer acm sigmod record 2001",
+   "sim": 0.9469617605209351,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2321",
+   "a_text": "dictionary-based order-preserving string compression gennady antoshenkov vldb j. 1997",
+   "b_id": "B1175",
+   "b_text": "dictionary-based order-preserving string compression gennady antoshenkov the vldb journal -- the international journal on very large data bases 1997",
+   "sim": 0.9100127816200256,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1309",
+   "a_text": "the gmap : a versatile tool for physical data independence marvin h. solomon , yannis e. ioannidis , odysseas g. tsatalos vldb 1994",
+   "b_id": "B1208",
+   "b_text": "the gmap : a versatile tool for physical data independence odysseas g. tsatalos , marvin h. solomon , yannis e. ioannidis the vldb journal -- the international journal on very large data bases 1996",
+   "sim": 0.9255974888801575,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2594",
+   "a_text": "treasurer 's message joachim hammer sigmod record 2000",
+   "b_id": "B542",
+   "b_text": "treasurer 's message joachim hammer acm sigmod record 2002",
+   "sim": 0.9253808259963989,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1214",
+   "a_text": "an overview of the emerging third-generation sql standard ( tutorial ) nelson mendon\u00e7a mattos , jim melton sigmod conference 1995",
+   "b_id": "B1536",
+   "b_text": "an overview of the emerging third-generation sql standard jim melton , nelson mendoca mattos international conference on management of data 1995",
+   "sim": 0.8372703194618225,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A839",
+   "a_text": "secure buffering in firm real-time database systems binto george , jayant r. haritsa vldb 1998",
+   "b_id": "B1225",
+   "b_text": "secure buffering in firm real-time database systems binto george , jayant r. haritsa the vldb journal -- the international journal on very large data bases 2000",
+   "sim": 0.9600980281829834,
+   "is_gold": false
+  },
+  {
+   "a_id": "A769",
+   "a_text": "process automation as the foundation for e-business fabio casati , ming-chien shan vldb 2000",
+   "b_id": "B864",
+   "b_text": "process automation as the foundation for e-business fabio casati , ming-chien shan very large data bases 2000",
+   "sim": 0.8915287256240845,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2391",
+   "a_text": "reminiscences on influential papers kenneth a. ross , beng chin ooi , frank neven sigmod record 2003",
+   "b_id": "B564",
+   "b_text": "reminiscences on influential papers kenneth a. ross acm sigmod record 2000",
+   "sim": 0.9222822189331055,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1700",
+   "a_text": "managing memory for real-time queries miron livny , michael j. carey , hweehwa pang sigmod conference 1994",
+   "b_id": "B1725",
+   "b_text": "managing memory for real-time queries hwee hwa pang , michael j. carey , miron livny international conference on management of data 1994",
+   "sim": 0.9243555068969727,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1899",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B669",
+   "b_text": "book review column karl aberer acm sigmod record 2002",
+   "sim": 0.9509834051132202,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2570",
+   "a_text": "semantic integration in heterogeneous databases using neural networks chris clifton , wen-syan li vldb 1994",
+   "b_id": "B2227",
+   "b_text": "semantic integration in heterogeneous databases using neural networks wen-syan li , chris clifton very large data bases 1994",
+   "sim": 0.965111494064331,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2512",
+   "a_text": "phoenix : making applications robust david b. lomet , roger s. barga sigmod conference 1999",
+   "b_id": "B30",
+   "b_text": "phoenix : making applications robust roger barga , david b. lomet international conference on management of data 1999",
+   "sim": 0.6760606169700623,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1218",
+   "a_text": "clustering categorical data : an approach based on dynamical systems david gibson , jon m. kleinberg , prabhakar raghavan vldb j. 2000",
+   "b_id": "B1019",
+   "b_text": "clustering categorical data : an approach based on dynamical systems david gibson , jon m. kleinberg , prabhakar raghavan very large data bases 1998",
+   "sim": 0.9797415733337402,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1520",
+   "a_text": "qbi : query by icons antonio massari , panos k. chrysanthis , lorenzo saladini , stefano pavani sigmod conference 1995",
+   "b_id": "B1530",
+   "b_text": "qbi : query by icons antonio massari , stefano pavani , lorenzo saladini , panos k. chrysanthis international conference on management of data 1995",
+   "sim": 0.7599520087242126,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1128",
+   "a_text": "towards a theory of cost management for digital libraries and electronic commerce a. prasad sistla , robert h. sloan , yelena yesha , ouri wolfson acm trans . database syst . 1998",
+   "b_id": "B134",
+   "b_text": "towards a theory of cost management for digital libraries and electronic commerce a. prasad sistla , ouri wolfson , yelena yesha , robert sloan acm transactions on database systems ( tods ) 1998",
+   "sim": 0.9291853904724121,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2434",
+   "a_text": "estimating page fetches for index scans with finite lru buffers k. bernhard schiefer , arun n. swami vldb j. 1995",
+   "b_id": "B1721",
+   "b_text": "estimating page fetches for index scans with finite lru buffers arun swami , k. bernhard schiefer international conference on management of data 1994",
+   "sim": 0.9669816493988037,
+   "is_gold": false
+  },
+  {
+   "a_id": "A524",
+   "a_text": "the lham log-structured history data access method gerhard weikum , patrick e. o'neil , peter muth , achim pick vldb j. 2000",
+   "b_id": "B1224",
+   "b_text": "the lham log-structured history data access method peter muth , patrick o'neil , achim pick , gerhard weikum the vldb journal -- the international journal on very large data bases 2000",
+   "sim": 0.9226986765861511,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1879",
+   "a_text": "locally adaptive dimensionality reduction for indexing large time series databases kaushik chakrabarti , sharad mehrotra , eamonn j. keogh , michael j. pazzani sigmod conference 2001",
+   "b_id": "B535",
+   "b_text": "locally adaptive dimensionality reduction for indexing large time series databases kaushik chakrabarti , eamonn keogh , sharad mehrotra , michael pazzani acm transactions on database systems ( tods ) 2002",
+   "sim": 0.947600245475769,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2464",
+   "a_text": "enabling dynamic content caching for database-driven web sites qiong luo , divyakant agrawal , wen-syan li , wang-pin hsiung , k. sel\u00e7uk candan sigmod conference 2001",
+   "b_id": "B269",
+   "b_text": "enabling dynamic content caching for database-driven web sites k. sel &#231; uk candan , wen-syan li , qiong luo , wang-pin hsiung , divyakant agrawal international conference on management of data 2001",
+   "sim": 0.964511513710022,
+   "is_gold": true
+  },
+  {
+   "a_id": "A955",
+   "a_text": "fundamental techniques for order optimization eugene j. shekita , david e. simmen , timothy malkemus sigmod conference 1996",
+   "b_id": "B1957",
+   "b_text": "fundamental techniques for order optimization david simmen , eugene shekita , timothy malkemus international conference on management of data 1996",
+   "sim": 0.855445146560669,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1377",
+   "a_text": "introduction to constraint databases - book review bart kuijpers sigmod record 2002",
+   "b_id": "B458",
+   "b_text": "constraint databases : a tutorial introduction jan van den bussche acm sigmod record 2000",
+   "sim": 0.9248946905136108,
+   "is_gold": false
+  },
+  {
+   "a_id": "A206",
+   "a_text": "metu interoperable database system sema mancuhan , ismailcem budak arpinar , fatma ozcan , pinar koksal , asuman dogac , g\u00f6khan \u00f6zhan , cevdet dengi , ugur halici , cem evrendilek , sena nural , ebru kilic sigmod conference 1996",
+   "b_id": "B1565",
+   "b_text": "metu interoperable database system a. dogac , c. dengi , e. kilic , g. ozhan , f. ozcan , s. nural , c. evrendilek , u. halici , b. arpinar , p. koksal , n. kesim , s. mancuhan acm sigmod record 1995",
+   "sim": 0.9398319721221924,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2391",
+   "a_text": "reminiscences on influential papers kenneth a. ross , beng chin ooi , frank neven sigmod record 2003",
+   "b_id": "B547",
+   "b_text": "reminiscences on influential papers kenneth a. ross acm sigmod record 2001",
+   "sim": 0.9243776202201843,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1085",
+   "a_text": "agora : living with xml and relational daniela florescu , donald kossmann , dan olteanu , ioana manolescu , florian xhumari vldb 2000",
+   "b_id": "B892",
+   "b_text": "agora : living with xml and relational ioana manolescu , daniela florescu , donald kossmann , florian xhumari , dan olteanu very large data bases 2000",
+   "sim": 0.8586094975471497,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1452",
+   "a_text": "book review column karl aberer sigmod record 2003",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9524617791175842,
+   "is_gold": false
+  },
+  {
+   "a_id": "A386",
+   "a_text": "book review column karl aberer sigmod record 2002",
+   "b_id": "B2202",
+   "b_text": "book review column karl aberer acm sigmod record 2003",
+   "sim": 0.9456400871276855,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2076",
+   "a_text": "mapping data in peer-to-peer systems : semantics and algorithmic issues ren\u00e9e j. miller , anastasios kementsietsidis , marcelo arenas sigmod conference 2003",
+   "b_id": "B2032",
+   "b_text": "mapping data in peer-to-peer systems : semantics and algorithmic issues anastasios kementsietsidis , marcelo arenas , ren &#233; e j. miller international conference on management of data 2003",
+   "sim": 0.9552155137062073,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2037",
+   "a_text": "sql query optimization : reordering for a general class of queries piyush goel , balakrishna r. iyer sigmod conference 1996",
+   "b_id": "B1954",
+   "b_text": "sql query optimization : reordering for a general class of queries piyush goel , bala iyer international conference on management of data 1996",
+   "sim": 0.9322479963302612,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1963",
+   "a_text": "xpath processing in a nutshell georg gottlob , christoph koch , reinhard pichler sigmod record 2003",
+   "b_id": "B2123",
+   "b_text": "xpath processing in a nutshell georg gottlob , christoph koch , reinhard pichler acm sigmod record 2003",
+   "sim": 0.9694712162017822,
+   "is_gold": false
+  },
+  {
+   "a_id": "A1243",
+   "a_text": "lineage tracing for general data warehouse transformations jennifer widom , yingwei cui vldb j. 2003",
+   "b_id": "B1409",
+   "b_text": "lineage tracing for general data warehouse transformations yingwei cui , jennifer widom very large data bases 2001",
+   "sim": 0.9622471332550049,
+   "is_gold": false
+  },
+  {
+   "a_id": "A274",
+   "a_text": "report on the 17th brazilian symposium on database systems ( sbbd 2002 ) nina edelweiss , ana carolina salgado sigmod record 2003",
+   "b_id": "B124",
+   "b_text": "report on the 13th brazilian symposium on database systems ( sbbd ' 98 ) mario a. nascimento , claudia bauzer medeiros acm sigmod record 1999",
+   "sim": 0.9695390462875366,
+   "is_gold": false
+  },
+  {
+   "a_id": "A2549",
+   "a_text": "exposing undergraduate students to database system internals anastassia ailamaki , joseph m. hellerstein sigmod record 2003",
+   "b_id": "B2256",
+   "b_text": "exposing undergraduate students to database system internals anastassia ailamaki , joseph m. hellerstein acm sigmod record 2003",
+   "sim": 0.9922976493835449,
+   "is_gold": true
+  },
+  {
+   "a_id": "A1053",
+   "a_text": "cost-based optimization of decision support queries using transient views shivakumar venkataraman , subbu n. subramanian sigmod conference 1998",
+   "b_id": "B1797",
+   "b_text": "cost-based optimization of decision support queries using transient-views subbu n. subramanian , shivakumar venkataraman international conference on management of data 1998",
+   "sim": 0.9246225953102112,
+   "is_gold": true
+  },
+  {
+   "a_id": "A2051",
+   "a_text": "exploratory mining and pruning optimizations of constrained association rules alex pang , jiawei han , raymond t. ng , laks v. s. lakshmanan sigmod conference 1998",
+   "b_id": "B1790",
+   "b_text": "exploratory mining and pruning optimizations of constrained associations rules raymond t. ng , laks v. s. lakshmanan , jiawei han , alex pang international conference on management of data 1998",
+   "sim": 0.9159733057022095,
+   "is_gold": true
+  }
+ ]
+}

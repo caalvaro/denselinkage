@@ -34,6 +34,11 @@ print(m.precision, m.recall, m.f1)
 print(m.n_errors)                          # undecided pairs, excluded from P/R
 ```
 
+Pairs the matcher could not decide (a `MatchError`) are kept out of precision and
+recall and reported as `n_errors`, not scored as non-matches. Why that matters
+for a fair F1 — and what it looks like as the failure rate grows — is worked
+through in [Failure accounting](failure-accounting).
+
 ### Direction matters for dedup
 
 `link` pairs are directed (left vs right is meaningful); dedup pairs are not.

@@ -221,7 +221,9 @@ for the full picture.
 - [API reference](https://caalvaro.github.io/denselinkage/api/index.html).
 
 Runnable scripts live in [`examples/`](examples/) — `00_quickstart.py` is the
-shortest path; `01`/`02` show the full semantic + LLM assembly.
+shortest path; `01`/`02` show the full semantic + LLM assembly; and
+`05_failure_accounting.py` shows the typed failure contract — why a matcher
+failure is excluded from the metric rather than scored as a silent non-match.
 
 ## Development
 
