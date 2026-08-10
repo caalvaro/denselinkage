@@ -83,7 +83,11 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 known-first-party = ["denselinkage"]
 
 [tool.mypy]
-python_version = "3.10"
+# Type-check against the newest supported interpreter, which is also the one the
+# lint job runs. numpy >= 2.5 ships PEP 695 `type` aliases in its stubs, and
+# those cannot be parsed under a pre-3.12 target; runtime support for the whole
+# `requires-python` range is proved by the 3.10-3.13 test matrix instead.
+python_version = "3.12"
 files = ["src"]
 strict = true
 # The `Protocol` port methods in `core/ports.py` are `...` by design, so the
