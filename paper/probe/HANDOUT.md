@@ -15,8 +15,6 @@ trick questions.
   `.../indexing/`, or `examples/03_custom_embedder.py` / `examples/05_*.py`.
   (Reading `core/ports.py` / `core/models.py` docstrings is fine — that *is* the
   contract.)
-- Don't use an AI coding assistant for this one — we already measured that; here
-  we want a human implementer.
 - Single-shot is not required: iterate against the checker as much as you like.
 
 ## Setup (2 minutes)
