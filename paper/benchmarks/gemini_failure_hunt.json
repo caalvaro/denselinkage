@@ -1,0 +1,10 @@
+{
+ "chat_model": "gemini-2.5-flash-lite",
+ "emb_model": "models/gemini-embedding-001",
+ "n_sampled": 4000,
+ "decided": 4000,
+ "embed_failures": 0,
+ "match_errors": 0,
+ "reason_buckets": {},
+ "errors": []
+}

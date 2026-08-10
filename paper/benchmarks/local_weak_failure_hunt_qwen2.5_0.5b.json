@@ -1,0 +1,20 @@
+{
+ "model": "qwen2.5:0.5b",
+ "n_sampled": 1000,
+ "decided": 1000,
+ "match_errors": 0,
+ "failure_rate": 0.0,
+ "coverage": 1.0,
+ "reason_buckets": {},
+ "gold_in_sample": 172,
+ "accounting_no_injection": {
+  "f1_excluded": 0.2923,
+  "f1_silent": 0.2923,
+  "delta_f1": 0.0,
+  "recall_excluded": 0.9535,
+  "recall_silent": 0.9535,
+  "precision_excluded": 0.1726,
+  "n_errors": 0
+ },
+ "examples": []
+}

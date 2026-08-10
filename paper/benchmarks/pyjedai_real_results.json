@@ -1,0 +1,35 @@
+{
+ "model": "qwen2.5:7b",
+ "blocking_top_k": 5,
+ "candidate_pairs": 11470,
+ "predicted_positive": 2753,
+ "match_seconds": 2455.2,
+ "sec_per_pair": 0.214,
+ "independent_score": {
+  "precision": 0.7904,
+  "recall": 0.9802,
+  "f1": 0.8751,
+  "tp": 2176,
+  "predicted_positive": 2753,
+  "gold_total": 2220,
+  "gold_unmapped": 0
+ },
+ "pyjedai_scores": {
+  "Precision %": 79.04104613149292,
+  "Recall %": 98.01801801801801,
+  "F1 %": 87.51256786647899,
+  "True Positives": 2176,
+  "False Positives": 577,
+  "True Negatives": 5998840,
+  "False Negatives": 44
+ },
+ "difficulty_log": [
+  "|A|=2616 |B|=2294 gold=2220 model=qwen2.5:7b topk=5",
+  "Data object built",
+  "blocking done in 0.1s; graph edges=11470",
+  "OllamaMatching constructed; running process() (creates a server-side model, matches pairs SEQUENTIALLY, deletes it)",
+  "matched 2753 predicted-positive pairs in 2455.2s (0.21s/pair)",
+  "independent score (end-to-end vs all gold): {'precision': 0.7904, 'recall': 0.9802, 'f1': 0.8751, 'tp': 2176, 'predicted_positive': 2753, 'gold_total': 2220, 'gold_unmapped': 0}",
+  "pyJedAI evaluation: {'Precision %': 79.04104613149292, 'Recall %': 98.01801801801801, 'F1 %': 87.51256786647899, 'True Positives': 2176, 'False Positives': 577, 'True Negatives': 5998840, 'False Negatives': 44}"
+ ]
+}

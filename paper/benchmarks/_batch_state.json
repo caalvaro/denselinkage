@@ -1,0 +1,11 @@
+{
+ "model": "gpt-5-nano",
+ "n": 5219,
+ "strat_neg": 3000,
+ "struct": {
+  "batch_id": "batch_6a3043ed02e0819097071188b4efea6c"
+ },
+ "free": {
+  "batch_id": "batch_6a30477836cc81909728cecf1a3951c2"
+ }
+}

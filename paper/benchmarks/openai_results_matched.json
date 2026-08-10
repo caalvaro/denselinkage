@@ -1,0 +1,19 @@
+{
+ "chat_model": "gpt-5-nano",
+ "via": "batch",
+ "sample": "all-gold + sampled-neg",
+ "n_matched": 5219,
+ "n_gold_total": 2220,
+ "n_neg_sample": 3000,
+ "n_neg_full": 43661,
+ "skew_factor": 14.55,
+ "natural_failures": 2,
+ "tp": 1203,
+ "fp_sample": 6,
+ "fp_full_est": 87.3,
+ "recall_end_to_end": 0.5419,
+ "precision_sample": 0.995,
+ "f1_sample": 0.7017,
+ "precision_full_est": 0.9323,
+ "f1_full_est": 0.6854
+}
