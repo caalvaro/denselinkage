@@ -44,7 +44,9 @@ Neither is resolved in the released source at `v1.0.0`.
 ## Arm 2: five single-shot LLM agent attempts per port
 
 Generator: Claude Opus 4.8 (the orchestrating session's model). Protocol and
-contract: `PROMPT.md`. Every existing adapter was withheld. The tasks are not the
+contract: `PROMPT.md`, which states the Matcher task; the Embedder arm used the
+same protocol with the `Embedder` port and value types substituted. Every
+existing adapter was withheld. The tasks are not the
 same as Arm 1's: a `TokenJaccardMatcher` and, for the harder port, a
 `HashingEmbedder`.
 

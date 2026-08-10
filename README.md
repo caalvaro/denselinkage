@@ -46,7 +46,7 @@ Add extras when you need them (or `[all]` for everything):
 
 ```bash
 pip install "denselinkage[sentence-transformers]"  # semantic embeddings
-pip install "denselinkage[faiss]"                  # FAISS approximate-NN index
+pip install "denselinkage[faiss]"                  # exact (flat) FAISS index
 pip install "denselinkage[langchain]"              # LLM matcher
 pip install "denselinkage[all]"
 ```
