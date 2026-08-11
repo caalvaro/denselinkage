@@ -2,12 +2,31 @@
 query-time threshold override, and artifact reuse. InvalidTopK is covered in
 ``test_quickstart_end_to_end``."""
 
+from collections.abc import Sequence
+
 import pytest
 
 from denselinkage.blocking import DenseBlocker
 from denselinkage.core.models import Record
+from denselinkage.core.ports import Vectors
 from denselinkage.embedding import HashedNGramEmbedder
 from denselinkage.indexing import NumpyFlatIndex
+
+
+class _RecordingEmbedder(HashedNGramEmbedder):
+    def __init__(self) -> None:
+        super().__init__()
+        self.batch_sizes: list[int | None] = []
+
+    def encode(
+        self,
+        texts: Sequence[str],
+        *,
+        batch_size: int | None = None,
+        show_progress: bool = False,
+    ) -> Vectors:
+        self.batch_sizes.append(batch_size)
+        return super().encode(texts, batch_size=batch_size, show_progress=show_progress)
 
 
 def _blocker(*, top_k: int = 5, similarity_threshold: float = 0.0) -> DenseBlocker:
@@ -17,6 +36,28 @@ def _blocker(*, top_k: int = 5, similarity_threshold: float = 0.0) -> DenseBlock
         top_k=top_k,
         similarity_threshold=similarity_threshold,
     )
+
+
+def test_build_forwards_explicit_embedder_batch_size() -> None:
+    embedder = _RecordingEmbedder()
+    blocker = DenseBlocker(
+        embedder=embedder,
+        vector_index=NumpyFlatIndex(),
+        batch_size=64,
+    )
+
+    blocker.build([Record("L1", "acme inc")])
+
+    assert embedder.batch_sizes == [64]
+
+
+def test_build_defaults_embedder_batch_size_to_none() -> None:
+    embedder = _RecordingEmbedder()
+    blocker = DenseBlocker(embedder=embedder, vector_index=NumpyFlatIndex())
+
+    blocker.build([Record("L1", "acme inc")])
+
+    assert embedder.batch_sizes == [None]
 
 
 def test_pair_orientation_is_indexed_a_query_b() -> None:
