@@ -37,6 +37,11 @@ uv run python -m compileall examples
 All of the above run in CI (`.github/workflows/ci.yml`) on Python
 3.10–3.13. `pre-commit` runs ruff + mypy locally on each commit.
 
+Open pull requests against `main`; there is no separate development or release
+branch. `main` requires a pull request and passing status checks, with no bypass
+actors. Releasing, version numbering, and the trunk-based branching model are
+documented in [docs/development/releasing.md](docs/development/releasing.md).
+
 ## Conventions
 
 - Branch off `main`; open a PR; keep it focused.

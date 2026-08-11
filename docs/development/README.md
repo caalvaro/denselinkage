@@ -21,6 +21,9 @@ split into the focused documents below.
   contract-shape additions, conscious declines, and roadmap deltas.
 - [examples.md](./examples.md) — the `examples/` as executable spec: status,
   review findings, and roadmap (including the `examples/04` decision).
+- [releasing.md](./releasing.md) — branching model, what decides a version
+  number, the release runbook, and what `main` and the `v*` tags are protected
+  against.
 
 Architecture Decision Records live in [`../ADRs/`](../ADRs/): 0001 (spec→artifact),
 0002 (evaluation types out of core), 0003 (pre-freeze ratification), 0004
