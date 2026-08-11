@@ -28,7 +28,7 @@
 `denselinkage.core.errors`, dependency-free, all rooted at
 `DenseLinkageError`, all exported from `denselinkage.core`:
 `UnknownIdColumn`, `EmptySource`, `DuplicateRecordId`, `DimensionMismatch`,
-`InvalidTopK`. Verb→exception mapping is documented on
+`InvalidTopK`, `IncompatibleStore`. Verb→exception mapping is documented on
 `DenseLinker.index/link/dedupe/match_pairs` and `LinkageIndex.query`
 (plus the existing `ValueError` when `blocker is None`). Bodies land in A1.
 

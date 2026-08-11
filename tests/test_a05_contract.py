@@ -28,6 +28,7 @@ TAXONOMY = (
     "DuplicateRecordId",
     "DimensionMismatch",
     "InvalidTopK",
+    "IncompatibleStore",
 )
 
 
