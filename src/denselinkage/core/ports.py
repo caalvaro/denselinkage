@@ -171,9 +171,8 @@ class Matcher(Protocol):
         cannot decide yields a ``MatchError`` (never raises into the batch, so
         one bad call does not abort the rest).
 
-        Implementations MAY consume ``CandidatePair.similarity_score`` as an
-        informational hint if present, but MUST handle ``None`` when pairs are
-        provided from external blocking sources.
+        See :attr:`CandidatePair.similarity_score` for the contract on handling
+        optional similarity hints.
         """
         ...
 
