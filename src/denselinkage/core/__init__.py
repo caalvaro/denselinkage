@@ -14,6 +14,7 @@ from denselinkage.core.errors import (
     DimensionMismatch,
     DuplicateRecordId,
     EmptySource,
+    IncompatibleStore,
     InvalidTopK,
     UnknownIdColumn,
 )
@@ -56,6 +57,7 @@ __all__ = [
     "Embedder",
     "EmptySource",
     "Filter",
+    "IncompatibleStore",
     "InvalidTopK",
     "LabeledPairs",
     "LinkageResult",
