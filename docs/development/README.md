@@ -24,6 +24,10 @@ split into the focused documents below.
 - [releasing.md](./releasing.md) — branching model, what decides a version
   number, the release runbook, and what `main` and the `v*` tags are protected
   against.
+- [conventions.md](./conventions.md) — the design patterns in use and their
+  anti-patterns, style the linter does not enforce, testing style, and the
+  checklist for adding an adapter. The short form for AI assistants is
+  [`AGENTS.md`](../../AGENTS.md).
 
 Architecture Decision Records live in [`../ADRs/`](../ADRs/): 0001 (spec→artifact),
 0002 (evaluation types out of core), 0003 (pre-freeze ratification), 0004

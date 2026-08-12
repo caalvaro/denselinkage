@@ -38,8 +38,10 @@ Write-Host '== compileall examples ==' -ForegroundColor Cyan
 & "$Bin\python.exe" -m compileall -q examples
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host '== pytest (CI markers) ==' -ForegroundColor Cyan
-& "$Bin\pytest.exe" -m "not adapter and not slow" -q
+# --cov is what makes this parity: pytest alone never exercises the
+# `fail_under = 100` gate that CI enforces.
+Write-Host '== pytest (CI markers, with the 100% coverage gate) ==' -ForegroundColor Cyan
+& "$Bin\pytest.exe" -m "not adapter and not slow" -q --cov=denselinkage --cov-report=term
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host 'All checks passed.' -ForegroundColor Green

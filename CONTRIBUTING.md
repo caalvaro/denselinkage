@@ -27,20 +27,43 @@ uv run pre-commit install
 ## Checks (must pass before a PR)
 
 ```bash
-uv run ruff check .            # lint
-uv run ruff format .           # format (use --check in CI)
-uv run mypy                    # strict type check (src/)
-uv run pytest                  # contract tests
+uv run ruff check src/ tests/ examples/
+uv run ruff format --check src/ tests/ examples/
+uv run mypy src/ examples/     # strict; CI checks examples/ too
 uv run python -m compileall examples
+uv run pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=term
 ```
 
-All of the above run in CI (`.github/workflows/ci.yml`) on Python
-3.10–3.13. `pre-commit` runs ruff + mypy locally on each commit.
+These are exactly what CI runs (`.github/workflows/ci.yml`) on Python 3.10–3.13, and
+`scripts/check.sh` / `scripts/check.ps1` run the same sequence against `.venv`. Two of the
+shorter forms are traps: bare `uv run mypy` checks `src/` only, because
+`[tool.mypy] files = ["src"]` silently skips `examples/`, and bare `uv run pytest` never
+exercises the `fail_under = 100` gate. `pre-commit` runs ruff + mypy on each commit, and
+shares the mypy gap.
+
+With the extras installed, the adapter modules are gated separately:
+
+```bash
+uv run pytest -m adapter --cov=denselinkage --cov-config=.coveragerc.adapter
+```
 
 Open pull requests against `main`; there is no separate development or release
 branch. `main` requires a pull request and passing status checks, with no bypass
 actors. Releasing, version numbering, and the trunk-based branching model are
 documented in [docs/development/releasing.md](docs/development/releasing.md).
+
+## Conventions and agent instructions
+
+[docs/development/conventions.md](docs/development/conventions.md) records the coding,
+style and testing conventions derived from the codebase: the design patterns in use and
+their anti-patterns, what the linter does not enforce, how tests are written here, and the
+checklist for adding an adapter. Read it before a first contribution.
+
+[AGENTS.md](AGENTS.md) is the short form of the invariants, written for AI coding
+assistants, and is a first-class contributor resource: it is the fastest statement of what
+must not break. `CLAUDE.md` is a one-line pointer to it. The reviewed assistant
+configuration lives in `.claude/` and is committed; `.claude/settings.local.json` is yours
+and stays untracked.
 
 ## Conventions
 

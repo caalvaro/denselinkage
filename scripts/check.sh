@@ -38,7 +38,9 @@ echo "== mypy (src + examples) =="
 echo "== compileall examples =="
 "$BIN/python$EXT" -m compileall -q examples
 
-echo "== pytest (CI markers) =="
-"$BIN/pytest$EXT" -m "not adapter and not slow" -q
+# --cov is what makes this parity: pytest alone never exercises the
+# `fail_under = 100` gate that CI enforces.
+echo "== pytest (CI markers, with the 100% coverage gate) =="
+"$BIN/pytest$EXT" -m "not adapter and not slow" -q --cov=denselinkage --cov-report=term
 
 echo "All checks passed."

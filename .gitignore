@@ -208,8 +208,14 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Claude
-.claude/
+# Claude — the reviewed configuration is committed; per-developer state is not.
+.claude/*
+!.claude/settings.json
+!.claude/agents/
+!.claude/commands/
+!.claude/hooks/
+.claude/settings.local.json
+.claude/worktrees/
 
 # Marimo
 marimo/_static/
