@@ -169,7 +169,11 @@ class Matcher(Protocol):
     def match(self, pairs: Sequence[CandidatePair]) -> list[MatchDecision | MatchError]:
         """One outcome per input pair, aligned by position. A pair the matcher
         cannot decide yields a ``MatchError`` (never raises into the batch, so
-        one bad call does not abort the rest)."""
+        one bad call does not abort the rest).
+
+        See :attr:`CandidatePair.similarity_score` for the contract on handling
+        optional similarity hints.
+        """
         ...
 
 

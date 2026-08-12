@@ -23,11 +23,14 @@ class Record:
 class CandidatePair:
     """A pair to be matched.
 
-    ``similarity_score`` is
-    ``float | None``. A dense ``Blocker`` always sets it; pairs supplied to
-    ``DenseLinker.match_pairs`` from external / rule-based blocking have no
-    similarity and use ``None``. ``CandidatePair`` is ``frozen`` so this shape
-    is fixed before freeze — never tightened later (extend-never-modify).
+    ``similarity_score`` is ``float | None``. A dense ``Blocker`` always sets it;
+    pairs supplied to ``DenseLinker.match_pairs`` from external / rule-based
+    blocking have no similarity and use ``None``. ``similarity_score`` is an
+    informational hint: a ``Matcher`` implementation may use it as a shortcut
+    or feature signal, but must not rely on its presence (matchers must
+    gracefully handle ``None`` when pairs originate from external blocking).
+    ``CandidatePair`` is ``frozen`` so this shape is fixed before freeze —
+    never tightened later (extend-never-modify).
     """
 
     record_a: Record
