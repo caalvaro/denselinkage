@@ -10,9 +10,16 @@ Reads the hook payload on stdin and writes a permission decision on stdout.
   are hard to tell apart from the tool input alone, so this asks rather than
   guesses.
 
+Invoked as ``uv run --no-sync python .claude/hooks/guard_paths.py``. ``uv run``
+rather than a bare ``python`` so the interpreter does not depend on PATH, and
+``--no-sync`` so a hook never mutates the project environment as a side effect of
+an edit. The script itself is stdlib-only and runs under any Python 3.10+.
+
 Fails open: any unexpected input leaves the decision to the normal permission
 flow, because a guard that blocks every edit when it misparses is a guard people
-switch off.
+switch off. The corollary is worth knowing: if ``uv`` or the project environment
+is missing, this guard does not fire at all. It is a fast local check, not the
+enforcement mechanism. CI is the enforcement mechanism.
 """
 
 import json

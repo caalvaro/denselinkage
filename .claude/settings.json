@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/guard_paths.py",
-            "timeout": 10
+            "command": "uv run --no-sync python .claude/hooks/guard_paths.py",
+            "timeout": 15
           }
         ]
       }
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python .claude/hooks/format_edited.py",
+            "command": "uv run --no-sync python .claude/hooks/format_edited.py",
             "timeout": 60
           }
         ]
