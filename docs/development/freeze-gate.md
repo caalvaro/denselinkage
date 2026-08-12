@@ -55,6 +55,15 @@ motivations.
 evolution is now constrained to **extend-never-modify**. A1 (the dependency-free
 beta, `1.0.0b1`) may begin.
 
+**Scope of the freeze ([ADR-0006](../ADRs/0006-freeze-scope-parsed-api.md)):** it
+binds the *parsed public API*, not the file bytes. Frozen: the set of `Protocol`s
+and each one's member set; every member's signature (parameter names, order,
+kinds, defaults, annotations, return annotation); field names, types, defaults and
+ordering on the frozen dataclasses; the exception taxonomy's names and
+inheritance; `denselinkage.core.__all__`. Not frozen: docstrings, comments,
+formatting, and private names. A docstring cannot break a structural `Protocol`,
+so it is not a contract change.
+
 ### Gate evidence
 All four oracles plus the A0.5 DoD checks are green:
 
