@@ -209,13 +209,15 @@ cython_debug/
 .pypirc
 
 # Claude — the reviewed configuration is committed; per-developer state is not.
+# `.claude/*` excludes everything, and only the four reviewed entries are added
+# back. Anything else under `.claude/` — `settings.local.json`, `worktrees/`,
+# a personal agent or command — stays ignored by that glob, with no rule of its
+# own. Adding a new committed entry means adding a new negation here.
 .claude/*
 !.claude/settings.json
 !.claude/agents/
 !.claude/commands/
 !.claude/hooks/
-.claude/settings.local.json
-.claude/worktrees/
 
 # Marimo
 marimo/_static/

@@ -11,10 +11,13 @@ in [docs/development/conventions.md](docs/development/conventions.md).
   Under structural typing that breaks every third-party implementer and forces a major
   version (ADR-0003). mypy cannot see them: this repo stays green while their code breaks.
 - NEVER change a signature, field type, default, or public name on the frozen surface.
-- The freeze binds the **parsed public API**, not the file bytes (ADR-0006). A docstring
-  edit in `core/ports.py` is allowed; a signature edit is not.
+- The freeze binds the public surface enumerated in `docs/development/freeze-gate.md`
+  (ports, models, results, errors, orchestration, metrics), not the file bytes. A docstring
+  edit in `core/ports.py` is allowed; a signature edit is not. Ratifying that scope as an
+  ADR is open in #39; until it merges, freeze-gate.md is the citable authority.
 - A new `Protocol` is additive and minor, but it is an architecture decision: propose it.
-- ALWAYS check your own diff: `git diff v1.0.0 -- src/denselinkage/core/`
+- ALWAYS check your own diff: `git diff main...HEAD -- src/denselinkage/core/`. Diffing
+  against `v1.0.0` instead reports every change since the release, not yours.
 
 ## The dependency cut
 
@@ -80,7 +83,7 @@ Rerunning or tidying `paper/probe/` invalidates reported results.
 | --- | --- |
 | What "frozen" means, and its scope | `docs/development/freeze-gate.md` |
 | Conventions, testing style, adapter checklist | `docs/development/conventions.md` |
-| Why a decision was made; v1 versus v2 | `docs/development/decisions.md`, `docs/ADRs/`, `roadmap.md` |
+| Why a decision was made; v1 versus v2 | `docs/development/decisions.md`, `docs/ADRs/`, `docs/development/roadmap.md` |
 | Releasing and version numbering | `docs/development/releasing.md` |
 
 When the contract is ambiguous, read the port docstring, then the ADR. Do not infer intent

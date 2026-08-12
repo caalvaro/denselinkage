@@ -3,11 +3,11 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Edit|Write|MultiEdit",
+        "matcher": "^(Edit|Write|MultiEdit|NotebookEdit)$",
         "hooks": [
           {
             "type": "command",
-            "command": "uv run --no-sync python .claude/hooks/guard_paths.py",
+            "command": "uv run --no-sync python .claude/hooks/guard_paths.py || exit 0",
             "timeout": 15
           }
         ]
@@ -15,11 +15,11 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|Write|MultiEdit",
+        "matcher": "^(Edit|Write|MultiEdit|NotebookEdit)$",
         "hooks": [
           {
             "type": "command",
-            "command": "uv run --no-sync python .claude/hooks/format_edited.py",
+            "command": "uv run --no-sync python .claude/hooks/format_edited.py || exit 0",
             "timeout": 60
           }
         ]

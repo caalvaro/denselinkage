@@ -14,8 +14,9 @@ reasoning.
 
 ## What the freeze binds
 
-ADR-0006 scopes it to the **parsed public API** of `src/denselinkage/core/`, not the file
-bytes:
+`docs/development/freeze-gate.md` § "The frozen surface" enumerates it: the public API of
+`src/denselinkage/core/`, not the file bytes. (Ratifying that scope as an ADR is open in
+\#39; cite freeze-gate.md until it merges.)
 
 Frozen — changing any of these is BREAKING and forces a major version:
 - the set of `Protocol` classes in `core/ports.py`, and each one's member set
@@ -39,7 +40,9 @@ you find one; it is the failure mode this repo exists to prevent.
 
 ## How to work
 
-1. `git diff v1.0.0 -- src/denselinkage/core/` for the frozen surface, then the full diff.
+1. `git diff main...HEAD -- src/denselinkage/core/` for the frozen surface, then the full
+   diff. Use the merge-base form, not `git diff v1.0.0`: the tag reports every change since
+   the release, including ones the author under review did not make.
 2. Classify every hunk: ADDITIVE, BREAKING, or NOT-CONTRACT (docstring, comment, format).
 3. Check the other invariants the diff touches: no module-scope heavy import; `MatchError`
    returned rather than raised from a matcher; a new exception rooted at `DenseLinkageError`

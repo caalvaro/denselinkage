@@ -92,8 +92,8 @@ enforce.
   and asserts equal neighbour ids and scores to `atol=1e-5`. That oracle is specific to the
   exact-flat pair; an approximate backend needs its own recall-bound test, not a relaxation
   of this one.
-- The 100% branch gate is met by writing the missing test. The whole of `src/` contains
-  three pragmas.
+- The 100% branch gate is met by writing the missing test. The whole of `src/` contains one
+  `# pragma: no cover`.
 
 ## Adding an adapter: the checklist
 

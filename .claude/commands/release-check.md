@@ -18,7 +18,8 @@ git diff $(git describe --tags --abbrev=0) -- src/denselinkage/core/
 
 A new Protocol, type, module, or optional field with a default is additive: minor. A member
 added to an existing Protocol, or any signature or field-type change, is breaking: major.
-A docstring or comment is not a contract change at all (ADR-0006). If the diff shows a
+A docstring or comment is not a contract change at all: the freeze binds the surface
+enumerated in `docs/development/freeze-gate.md`, not the bytes. If the diff shows a
 breaking change and the planned version is a minor, stop and say so.
 
 **3. Pre-release, if warranted.** A major, or a minor landing a large new surface, ships a

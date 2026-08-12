@@ -31,11 +31,12 @@ split into the focused documents below.
 
 Architecture Decision Records live in [`../ADRs/`](../ADRs/): 0001 (spec→artifact),
 0002 (evaluation types out of core), 0003 (pre-freeze ratification), 0004
-(dependency-free beta / A1 implementation).
+(dependency-free beta / A1 implementation), 0005 (heavy adapters and the
+adapter-scoped coverage gate).
 
 ## Project stage
 
-**A1 — dependency-free beta (`1.0.0b1`).** The frozen contract's bodies are
+**Released — `1.0.0`.** The frozen contract's bodies are
 implemented for the no-extras surface, which **runs** on numpy + pandas
 (`link` / `dedupe` / `match_pairs`, connected-components clustering, and the
 linkage / blocking / clustering metrics + filtering), under branch coverage with
