@@ -27,7 +27,8 @@ split into the focused documents below.
 
 Architecture Decision Records live in [`../ADRs/`](../ADRs/): 0001 (spec→artifact),
 0002 (evaluation types out of core), 0003 (pre-freeze ratification), 0004
-(dependency-free beta / A1 implementation).
+(dependency-free beta / A1 implementation), 0005 (heavy adapters and the
+adapter-coverage policy), 0006 (the freeze is scoped to the parsed public API).
 
 ## Project stage
 
