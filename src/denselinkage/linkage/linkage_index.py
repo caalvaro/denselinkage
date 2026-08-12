@@ -12,7 +12,9 @@ from denselinkage.linkage._assembly import assemble_linkage_result
 class LinkageIndex:
     """Prepared linkage state: a built ``BlockingIndex`` fused with a
     ``Matcher``. Constructed by ``DenseLinker.index``; not typically built
-    directly. ``kw_only`` for consistency with ``DenseLinker``."""
+    directly. Its ``__init__`` is keyword-only, for consistency with
+    ``DenseLinker``. It is a plain class rather than a dataclass: the private
+    attribute names and ``save``/``load`` depend on that."""
 
     def __init__(self, *, blocking_index: BlockingIndex, matcher: Matcher) -> None:
         self._blocking_index = blocking_index

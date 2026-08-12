@@ -26,19 +26,28 @@ if [ ! -x "$BIN/ruff$EXT" ] || [ ! -x "$BIN/mypy$EXT" ] || [ ! -x "$BIN/pytest$E
     exit 1
 fi
 
-echo "== ruff check (src, tests, examples) =="
-"$BIN/ruff$EXT" check src/ tests/ examples/
+echo "== ruff check (src, tests, examples, hooks) =="
+"$BIN/ruff$EXT" check src/ tests/ examples/ .claude/hooks/
 
 echo "== ruff format --check =="
-"$BIN/ruff$EXT" format --check src/ tests/ examples/
+"$BIN/ruff$EXT" format --check src/ tests/ examples/ .claude/hooks/
 
-echo "== mypy (src + examples) =="
-"$BIN/mypy$EXT" src/ examples/
+echo "== mypy (src + examples + hooks) =="
+"$BIN/mypy$EXT" src/ examples/ .claude/hooks/
 
 echo "== compileall examples =="
 "$BIN/python$EXT" -m compileall -q examples
 
-echo "== pytest (CI markers) =="
-"$BIN/pytest$EXT" -m "not adapter and not slow" -q
+# Compiling an example is not running it. CI executes these four; without them a
+# module-scope crash reaches the PR.
+echo "== run the dependency-free examples =="
+for example in 00_quickstart 03_custom_embedder 04_dedupe 05_failure_accounting; do
+    "$BIN/python$EXT" "examples/$example.py" > /dev/null
+done
+
+# --cov is what makes this parity: pytest alone never exercises the
+# `fail_under = 100` gate that CI enforces.
+echo "== pytest (CI markers, with the 100% coverage gate) =="
+"$BIN/pytest$EXT" -m "not adapter and not slow" -q --cov=denselinkage --cov-report=term
 
 echo "All checks passed."

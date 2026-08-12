@@ -1,6 +1,7 @@
-"""Contract-hardening tests.
+"""Contract-hardening tests: the shape pinned at the A0.5 freeze gate.
 
-Structure-stage: assert the *shape* the brief pins (bodies are still ``...``).
+Shape assertions by reflection, like ``test_contract.py``; behaviour is asserted
+by the value-based tests in the sibling files.
 Covers the exception taxonomy, ordering semantics, the
 ``pair_completeness_at_k`` kwarg, the ``BlockingMetrics`` constructor
 shape, the ``CandidatePair`` default, and the named reader seam,

@@ -1,9 +1,14 @@
-"""Structure-stage contract tests.
+"""Contract tests: the *shape* of the frozen public API.
 
-The package is declarations only (signatures with ``...`` bodies), so these
-assert the *shape* of the public API — that it imports with zero heavy deps
-and the types/ports exist as expected. Behavioural tests come with the
-implementation.
+These assert shape by reflection — ``dataclasses.fields``, ``inspect.signature``,
+``__mro__``, ``__all__``, ``_is_runtime_protocol`` — and never call the code under
+test: that the package imports with zero heavy dependencies, that the ports and
+types exist as expected, and that each first-party adapter subclasses its port.
+
+Behaviour is asserted elsewhere, by the value-based tests in the sibling files
+(``test_metrics.py``, ``test_blocking.py``, ``test_linker_verbs.py`` and the rest).
+Keep the two kinds separate: a contract test that computes a value, or a behaviour
+test that inspects a signature, belongs in the other file.
 """
 
 import dataclasses
