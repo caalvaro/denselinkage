@@ -11,30 +11,54 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Every job builds its environment with `uv sync --locked`, so the committed
+# uv.lock is the only resolution CI ever sees, and runs every tool through
+# `uv run` against that environment (issue #9). `uv run` re-syncs before running
+# by default, so UV_NO_SYNC is set for the whole file (`uv run --help`:
+# "--no-sync  Avoid syncing the virtual environment [env: UV_NO_SYNC=]") and
+# each `uv run` then uses exactly what the job's sync step installed. It does
+# not affect `uv sync`, which has no such flag.
+env:
+  UV_NO_SYNC: "1"
+
 jobs:
   lint-and-type:
     name: Lint + type-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
+      # `version` is pinned exactly: uv.lock fixes the dependency set, but it
+      # fixes a *run* only if the tool reading it is fixed too. pyproject.toml's
+      # `[tool.uv] required-version` is the compatibility floor, not the pin —
+      # setup-uv resolves a range to its highest match (`resolution-strategy`
+      # defaults to `highest`), which would float uv again.
+      # `python-version` sets UV_PYTHON for every later step, and is what selects
+      # the interpreter and therefore the lock fork. It is load-bearing: the repo
+      # tracks a `.python-version` of 3.13 that uv would otherwise use here.
+      # setup-uv publishes no moving major tag after v8, so this is a full
+      # release tag rather than `@v10`.
       - name: Install uv
-        run: pip install --upgrade uv
-      - name: Install project (dev extras)
-        run: uv pip install --system -e ".[dev]"
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          version: "0.11.9"
+          python-version: "3.12"
+          enable-cache: true
+          cache-suffix: lint
+      # `--locked` is a gate, not a hint (`uv sync --help`: "Assert that the
+      # `uv.lock` will remain unchanged"): a pyproject.toml edit without a
+      # matching `uv lock` fails here instead of quietly resolving around it.
+      - name: Sync the locked environment (dev extra)
+        run: uv sync --locked --extra dev
       # `.claude/hooks/` is in scope: those two scripts gate every agent edit,
       # and nothing else checks them.
       - name: Ruff lint (src, tests, examples, hooks)
-        run: ruff check src/ tests/ examples/ .claude/hooks/
+        run: uv run ruff check src/ tests/ examples/ .claude/hooks/
       - name: Ruff format check
-        run: ruff format --check src/ tests/ examples/ .claude/hooks/
+        run: uv run ruff format --check src/ tests/ examples/ .claude/hooks/
       - name: Mypy (src + examples + hooks; examples are the spec)
-        run: mypy src/ examples/ .claude/hooks/
+        run: uv run mypy src/ examples/ .claude/hooks/
       - name: Compile examples
-        run: python -m compileall examples
+        run: uv run python -m compileall examples
       - name: Run dependency-free examples
         # Smoke-run (crash detection) on this job's interpreter only; result
         # correctness is asserted by the unit tests across the 3.10-3.13 matrix.
@@ -42,10 +66,10 @@ jobs:
         # compiled (above) but not executed here; the rest run end to end on
         # numpy + pandas alone.
         run: |
-          python examples/00_quickstart.py
-          python examples/03_custom_embedder.py
-          python examples/04_dedupe.py
-          python examples/05_failure_accounting.py
+          uv run python examples/00_quickstart.py
+          uv run python examples/03_custom_embedder.py
+          uv run python examples/04_dedupe.py
+          uv run python examples/05_failure_accounting.py
 
   test:
     name: Test (Python ${{ matrix.python-version }})
@@ -56,26 +80,38 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+      # uv.lock is universal: `uv sync` evaluates its resolution markers against
+      # the interpreter UV_PYTHON names and installs the matching fork
+      # (uv.lock:463-464, numpy 2.2.6 below 3.11 and 2.4.6 above). No
+      # per-version lock exists. setup-uv's cache key already carries the Python
+      # version, so one suffix serves all four legs. This replaces the former
+      # `~/.cache/pip` cache, which `uv pip install` never wrote to.
+      - name: Install uv + select the interpreter
+        uses: astral-sh/setup-uv@v10.0.0
         with:
+          version: "0.11.9"
           python-version: ${{ matrix.python-version }}
-      - name: Install uv
-        run: pip install --upgrade uv
-      # Cache the FAISS wheel across runs. (The sentence-transformers model is
-      # cached in the `adapter-tests` job, the only one that downloads it.)
-      - name: Cache pip wheels
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
-      - name: Install (dev + faiss extras, without LLM keys)
-        run: uv pip install --system -e ".[dev,faiss]"
+          enable-cache: true
+          cache-suffix: test
+      - name: Sync the locked environment (dev + faiss, without LLM keys)
+        run: uv sync --locked --extra dev --extra faiss
       - name: Run unit + integration tests
         # Use ``and`` (not ``or``): "not adapter or not slow" is true for
         # every test that isn't slow, including unmarked adapter tests,
         # which would then run in CI without an OpenAI key.
-        run: pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=xml
+        run: uv run pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=xml
+      # `[tool.mypy] python_version` is 3.10 in every job, but the target is only
+      # half of it: the stub *set* comes from the installed environment, and an
+      # error can exist under numpy 2.2.6 and not under 2.4.6 (the
+      # faiss_searchable_index.py defect fixed alongside this change was exactly
+      # that). This leg is the only place the lock's `python_full_version <
+      # '3.11'` fork is installed, so it is the only place the older stubs are
+      # checked against the source. Runs after pytest so a stub regression cannot
+      # mask a test failure. `.claude/hooks/` is out of scope here; the
+      # lint-and-type job already covers it.
+      - name: Mypy against the 3.10 dependency set
+        if: matrix.python-version == '3.10'
+        run: uv run mypy --python-version=3.10 src/ examples/
       - name: Upload coverage
         if: matrix.python-version == '3.12'
         uses: codecov/codecov-action@v6
@@ -88,30 +124,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
       - name: Install uv
-        run: pip install --upgrade uv
-      - name: Cache pip wheels
-        uses: actions/cache@v5
+        uses: astral-sh/setup-uv@v10.0.0
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-adapters-${{ hashFiles('pyproject.toml') }}
+          version: "0.11.9"
+          python-version: "3.12"
+          enable-cache: true
+          cache-suffix: adapters
+          # This job's closure is torch plus the CUDA wheels, ~2.7 GB unpacked.
+          # Saving that unpruned would put one entry against the repository's
+          # 10 GB Actions cache quota on every dependency change and evict the
+          # model cache below. `prune-cache` runs `uv cache prune --ci`, which
+          # drops exactly the registry-downloaded wheels.
+          prune-cache: true
+      # Not uv's to manage: the model is a runtime download, not a wheel.
       - name: Cache the sentence-transformers model
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: hf-all-MiniLM-L6-v2-${{ runner.os }}
-      - name: Install (dev + all heavy extras)
-        run: uv pip install --system -e ".[dev,faiss,sentence-transformers,langchain]"
+      # The four extras are listed rather than `--extra all`, so this job keeps
+      # testing exactly the set it tests today even if `all` drifts.
+      - name: Sync the locked environment (dev + all heavy extras)
+        run: >
+          uv sync --locked
+          --extra dev --extra faiss
+          --extra sentence-transformers --extra langchain
       - name: Run adapter tests with adapter-scoped 100% coverage
         # The heavy-adapter bodies are omitted from the dependency-free gate
         # (ADR-0005); gate them here at 100% via .coveragerc.adapter, on the job
         # that can import their backends. The LangChain tests use a fake LLM, so
         # no API key is needed.
         run: >
-          pytest -m "adapter"
+          uv run pytest -m "adapter"
           --cov=denselinkage
           --cov-config=.coveragerc.adapter
           --cov-report=term-missing
@@ -121,24 +166,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
       - name: Install uv
-        run: pip install --upgrade uv
-      - name: Install core + dev ONLY (no faiss / st / langchain)
-        run: uv pip install --system -e ".[dev]"
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          version: "0.11.9"
+          python-version: "3.12"
+          enable-cache: true
+          cache-suffix: core-only
+      # `uv sync` is exact by default: it removes anything outside the
+      # resolution (`uv sync --help` documents `--inexact` as the opt-out, "Do
+      # not remove extraneous packages present in the environment"), and it
+      # builds a fresh `.venv` rather than writing into the runner image's
+      # interpreter. The proof below is therefore about the lock, not about what
+      # the image happens to ship.
+      - name: Sync the locked environment (dev extra ONLY, no faiss / st / langchain)
+        run: uv sync --locked --extra dev
       - name: Assert no heavy backend is importable
+        # The positive control is load-bearing and must stay first. Under
+        # UV_NO_SYNC a `uv run` with no preceding sync creates an EMPTY venv and
+        # exits 0, and in an empty venv every `find_spec(...) is None` below is
+        # vacuously true — the absence proof would pass while proving nothing.
+        # Asserting the core closure is present first turns that into a loud
+        # failure.
         run: |
-          python - <<'PY'
+          uv run python - <<'PY'
           import importlib.util as u
+          for m in ("numpy", "pandas", "denselinkage"):
+              assert u.find_spec(m) is not None, f"{m} missing: this is not the locked dev closure"
           for m in ("faiss", "sentence_transformers", "langchain_core", "langchain_openai", "torch"):
               assert u.find_spec(m) is None, f"{m} leaked into the core env"
           PY
       - name: Import + non-adapter tests with zero extras
         run: |
-          python -c "import sys, denselinkage; assert not {'faiss','sentence_transformers','langchain_core'} & sys.modules.keys()"
-          pytest -m "not adapter and not slow"
+          uv run python -c "import sys, denselinkage; assert not {'faiss','sentence_transformers','langchain_core'} & sys.modules.keys()"
+          uv run pytest -m "not adapter and not slow"
 
   build:
     name: Build distribution
@@ -146,11 +207,20 @@ jobs:
     needs: [lint-and-type, test, core-only, adapter-tests]
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      # No sync step: `uv build` needs no project environment.
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.0
         with:
+          version: "0.11.9"
           python-version: "3.12"
-      - run: pip install build
-      - run: python -m build
+          enable-cache: true
+          cache-suffix: build
+      # Was `pip install build` + `python -m build`, which installed an unpinned
+      # frontend and then resolved `uv_build` fresh from PyPI anywhere in
+      # `>=0.9.24,<0.12`. `uv build` uses the backend bundled in the pinned uv
+      # binary and is the exact command release.yml runs, so this job now
+      # rehearses the release artifact instead of building it a second way.
+      - run: uv build
       - uses: actions/upload-artifact@v7
         with:
           name: dist

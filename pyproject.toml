@@ -71,6 +71,16 @@ docs = [
 requires = ["uv_build>=0.9.24,<0.12"]
 build-backend = "uv_build"
 
+# The uv version floor, not the CI pin. uv.lock fixes the dependency set, but it
+# fixes a *run* only if the tool reading it is fixed too, so each setup-uv step
+# in .github/workflows/ pins `version: "0.11.9"` exactly. This floor stays a
+# range on purpose: `required-version` is enforced on every local uv invocation,
+# and an exact pin here would block a contributor whose uv is merely newer.
+# Raise it only when the lockfile format requires it, and re-run `uv lock` in
+# the same change.
+[tool.uv]
+required-version = ">=0.11.9"
+
 [tool.ruff]
 line-length = 88
 target-version = "py310"
@@ -83,11 +93,17 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 known-first-party = ["denselinkage"]
 
 [tool.mypy]
-# Type-check against the newest supported interpreter, which is also the one the
-# lint job runs. numpy >= 2.5 ships PEP 695 `type` aliases in its stubs, and
-# those cannot be parsed under a pre-3.12 target; runtime support for the whole
-# `requires-python` range is proved by the 3.10-3.13 test matrix instead.
-python_version = "3.12"
+# Type-check against the oldest supported interpreter, matching `requires-python`
+# above and ruff's `target-version`, so a 3.11+ construct in `src/` or
+# `examples/` fails here rather than on a user's 3.10. The 3.12 target was a
+# stopgap for CI floating to numpy 2.5.1, whose stubs use PEP 695 `type` aliases
+# that a pre-3.12 target cannot parse (issue #9). CI now installs from uv.lock,
+# which pins numpy 2.2.6 below 3.11 and 2.4.6 above, and neither ships those
+# aliases. The target is only half the story: the stub *set* comes from the
+# installed environment, so the same error can exist under one numpy and not the
+# other. The `test` job therefore re-runs `mypy --python-version=3.10` on its
+# 3.10 leg, the only environment in CI that installs numpy 2.2.6.
+python_version = "3.10"
 files = ["src"]
 strict = true
 # The `Protocol` port methods in `core/ports.py` are `...` by design, so the

@@ -76,9 +76,17 @@ A single commit that touches only release metadata:
 - `pyproject.toml` — `version`
 - `CITATION.cff` — `version` and `date-released`
 - `CHANGELOG.md` — move the `Unreleased` entries under a dated `## [X.Y.Z]` heading
+- `uv.lock` — regenerate with `uv lock` after the bump, and commit it
 
-These three must agree. Nothing currently enforces that; see the version-drift
-issue on the v1.1.0 milestone.
+The first three must agree. Nothing currently enforces that; see the
+version-drift issue on the v1.1.0 milestone.
+
+`uv.lock` is not optional bookkeeping. The lock records the project's own
+version (`name = "denselinkage"`, `version = ...`), so bumping `[project]
+version` without re-locking leaves it stale, and every CI job installs with
+`uv sync --locked` while `release.yml` runs `uv lock --check`. A release PR that
+skips it fails with "The lockfile at `uv.lock` needs to be updated, but
+`--locked` was provided" before anything is published.
 
 ### 3. Tag and push
 
