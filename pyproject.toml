@@ -130,6 +130,11 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
+# Repo root on the path so the frozen-surface gate can import its derivation as
+# `tests._api_snapshot`, the same name its regeneration entry point is invoked
+# under (`python -m tests._api_snapshot`). Without it pytest puts only `tests/`
+# on the path and the two names would diverge.
+pythonpath = ["."]
 markers = [
     "adapter: requires an optional heavy adapter (faiss / sentence-transformers / langchain)",
     "slow: long-running test",

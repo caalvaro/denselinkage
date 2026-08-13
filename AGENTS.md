@@ -13,8 +13,13 @@ in [docs/development/conventions.md](docs/development/conventions.md).
 - NEVER change a signature, field type, default, or public name on the frozen surface.
 - The freeze binds the public surface enumerated in `docs/development/freeze-gate.md`
   (ports, models, results, errors, orchestration, metrics), not the file bytes. A docstring
-  edit in `core/ports.py` is allowed; a signature edit is not. Ratifying that scope as an
-  ADR is open in #39; until it merges, freeze-gate.md is the citable authority.
+  edit in `core/ports.py` is allowed; a signature edit is not. ADR-0006 ratified the parsed
+  API as the unit; ADR-0007 widened it from `core/` to all six groups. Both are citable.
+- `tests/test_frozen_surface.py` enforces this against `tests/api_snapshot.json`. NEVER
+  hand-edit that snapshot to make a test pass: it is the frozen contract, not a cache of
+  the current source. Regenerating it is the signal that the contract moved, and requires
+  `python -m tests._api_snapshot --regenerate --authority <ADR-#### or #issue>`. If no
+  decision authorises the change, the change is not ready.
 - A new `Protocol` is additive and minor, but it is an architecture decision: propose it.
 - ALWAYS check your own diff: `git diff main...HEAD -- src/denselinkage/core/`. Diffing
   against `v1.0.0` instead reports every change since the release, not yours.

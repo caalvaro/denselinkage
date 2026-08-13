@@ -39,8 +39,8 @@ Write-Host '== ruff format --check ==' -ForegroundColor Cyan
 & "$Bin\ruff.exe" format --check src/ tests/ examples/ .claude/hooks/
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-Write-Host '== mypy (src + examples + hooks) ==' -ForegroundColor Cyan
-& "$Bin\mypy.exe" src/ examples/ .claude/hooks/
+Write-Host '== mypy (src + examples + hooks + frozen-surface derivation) ==' -ForegroundColor Cyan
+& "$Bin\mypy.exe" src/ examples/ .claude/hooks/ tests/_api_snapshot.py
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host '== compileall examples ==' -ForegroundColor Cyan

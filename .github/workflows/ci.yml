@@ -56,7 +56,7 @@ jobs:
       - name: Ruff format check
         run: uv run ruff format --check src/ tests/ examples/ .claude/hooks/
       - name: Mypy (src + examples + hooks; examples are the spec)
-        run: uv run mypy src/ examples/ .claude/hooks/
+        run: uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py
       - name: Compile examples
         run: uv run python -m compileall examples
       - name: Run dependency-free examples
@@ -192,9 +192,18 @@ jobs:
           uv run python - <<'PY'
           import importlib.util as u
           for m in ("numpy", "pandas", "denselinkage"):
-              assert u.find_spec(m) is not None, f"{m} missing: this is not the locked dev closure"
+              assert u.find_spec(m) is not None, (
+                  f"{m} missing: this is not the locked dev closure"
+              )
           for m in ("faiss", "sentence_transformers", "langchain_core", "langchain_openai", "torch"):
-              assert u.find_spec(m) is None, f"{m} leaked into the core env"
+              assert u.find_spec(m) is None, (
+                  f"DEPENDENCY CUT VIOLATION: {m} is installed in the core env.\n"
+                  "This job installs `--extra dev` ONLY. A heavy backend reaching it "
+                  "means it became a hard dependency instead of staying behind its "
+                  "optional extra, so `pip install denselinkage` would now pull it in.\n"
+                  "Check pyproject.toml: it belongs in [project.optional-dependencies], "
+                  "never in [project] dependencies (AGENTS.md, 'The dependency cut')."
+              )
           PY
       - name: Import + non-adapter tests with zero extras
         run: |
