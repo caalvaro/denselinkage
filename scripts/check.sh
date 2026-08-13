@@ -20,9 +20,10 @@ else
 fi
 
 if [ ! -x "$BIN/ruff$EXT" ] || [ ! -x "$BIN/mypy$EXT" ] || [ ! -x "$BIN/pytest$EXT" ]; then
+    # `uv sync --locked`, not `uv pip install -e '.[dev]'`: the latter resolves
+    # fresh and gives a different toolchain from the one CI runs (issue #9).
     echo "Missing dev tools in .venv — run:" >&2
-    echo "  uv venv .venv" >&2
-    echo "  uv pip install --python $BIN/python$EXT -e '.[dev]'" >&2
+    echo "  uv sync --locked --extra dev" >&2
     exit 1
 fi
 

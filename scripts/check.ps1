@@ -26,7 +26,9 @@ $Bin = Join-Path $RepoRoot '.venv\Scripts'
 if (-not (Test-Path "$Bin\ruff.exe") -or
     -not (Test-Path "$Bin\mypy.exe") -or
     -not (Test-Path "$Bin\pytest.exe")) {
-    Write-Error "Missing dev tools in .venv. Run: uv venv .venv; uv pip install --python .venv\Scripts\python.exe -e '.[dev]'"
+    # `uv sync --locked`, not `uv pip install -e '.[dev]'`: the latter resolves
+    # fresh and gives a different toolchain from the one CI runs (issue #9).
+    Write-Error "Missing dev tools in .venv. Run: uv sync --locked --extra dev"
 }
 
 Write-Host '== ruff check (src, tests, examples, hooks) ==' -ForegroundColor Cyan

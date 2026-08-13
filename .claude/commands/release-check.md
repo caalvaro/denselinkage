@@ -10,6 +10,10 @@ without saying so first. The runbook is `docs/development/releasing.md`.
 `CITATION.cff` `version` (and `date-released`), and the newest non-`Unreleased` heading in
 `CHANGELOG.md`. Nothing enforces this yet.
 
+**1b. The lockfile was regenerated.** `uv.lock` records the project's own version, so a bump
+without `uv lock` leaves it stale and every job fails on `uv sync --locked`. Run
+`uv lock --check`; it must report no update needed.
+
 **2. The bump matches the change.** Diff the frozen surface:
 
 ```bash

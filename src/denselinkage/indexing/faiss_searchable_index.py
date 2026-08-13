@@ -36,6 +36,12 @@ class FaissSearchableIndex(SearchableIndex):
         read-only array reconstructed from the FAISS index — this artifact is
         immutable."""
         n = len(self._ids)
+        # Declared, not inferred: under the numpy 2.2.6 stubs that uv.lock
+        # selects below Python 3.11, the ``np.zeros`` branch infers a
+        # shape-typed ``ndarray[tuple[int, int], ...]`` that the shape-agnostic
+        # ``np.asarray`` result below cannot satisfy. Removable once that fork
+        # is gone; numpy 2.4.6 infers both branches compatibly.
+        reconstructed: Vectors
         if n == 0:
             reconstructed = np.zeros((0, int(self._index.d)), dtype=np.float32)
         else:

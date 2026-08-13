@@ -18,16 +18,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
+      # Pinned exactly, like every setup-uv step in ci.yml: this is the job that
+      # builds the published artifact, so its toolchain must not float.
+      # `enable-cache` is left at its default `auto`, which already disables
+      # caching on tag-push and release events — this workflow's only production
+      # trigger.
       - name: Install uv
-        run: pip install --upgrade uv
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          version: "0.11.9"
+          python-version: "3.12"
+      # The other workflows get lock freshness for free from `uv sync --locked`.
+      # This one never syncs, so assert it directly: a tag must not be built
+      # from a tree whose lockfile is behind pyproject.toml.
+      - name: Assert the lockfile matches pyproject.toml
+        run: uv lock --check
       - name: Build sdist + wheel
         run: uv build
+      # twine is a one-shot metadata check on an already-built artifact, not a
+      # project dependency, so it is absent from uv.lock and pinned in the uvx
+      # spec instead (`uv help tool run`: "The name of the command can include
+      # an exact version in the format `<package>@<version>`").
       - name: Check distribution metadata
-        run: uvx twine check dist/*
+        run: uvx twine@7.0.0 check dist/*
       - uses: actions/upload-artifact@v7
         with:
           name: dist

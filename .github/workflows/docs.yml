@@ -18,25 +18,31 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# See ci.yml: `uv run` re-syncs by default, so UV_NO_SYNC turns that off and the
+# sphinx-build step uses exactly what `uv sync --locked` installed.
+env:
+  UV_NO_SYNC: "1"
+
 jobs:
   build:
     name: Build docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
       - name: Install uv
-        run: pip install --upgrade uv
+        uses: astral-sh/setup-uv@v10.0.0
+        with:
+          version: "0.11.9"
+          python-version: "3.12"
+          enable-cache: true
+          cache-suffix: docs
       # Core deps (numpy + pandas) come in transitively; heavy extras are NOT
       # needed — the package's lazy-import discipline lets autodoc import every
       # adapter without faiss / sentence-transformers / langchain installed.
-      - name: Install project + docs extra
-        run: uv pip install --system -e ".[docs]"
+      - name: Sync the locked environment (docs extra)
+        run: uv sync --locked --extra docs
       - name: Build HTML (warnings are errors)
-        run: sphinx-build -b html -W --keep-going docs docs/_build/html
+        run: uv run sphinx-build -b html -W --keep-going docs docs/_build/html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
