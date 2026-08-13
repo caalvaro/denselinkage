@@ -129,14 +129,14 @@ jobs:
         with:
           version: "0.11.9"
           python-version: "3.12"
-          enable-cache: true
-          cache-suffix: adapters
-          # This job's closure is torch plus the CUDA wheels, ~2.7 GB unpacked.
-          # Saving that unpruned would put one entry against the repository's
-          # 10 GB Actions cache quota on every dependency change and evict the
-          # model cache below. `prune-cache` runs `uv cache prune --ci`, which
-          # drops exactly the registry-downloaded wheels.
-          prune-cache: true
+          # Explicitly off, because the default `auto` caches on pull_request.
+          # This job's closure is torch plus the CUDA wheels, ~2.7 GB unpacked,
+          # and all of it is registry wheels. Caching it unpruned spends most of
+          # the repository's 10 GB quota on one entry and evicts the model cache
+          # below; pruning it (`uv cache prune --ci`) drops registry wheels,
+          # which here is the whole cache. Measured instead: a cold run of this
+          # job takes 56s end to end, so there is little left to save.
+          enable-cache: false
       # Not uv's to manage: the model is a runtime download, not a wheel.
       - name: Cache the sentence-transformers model
         uses: actions/cache@v5
@@ -213,8 +213,10 @@ jobs:
         with:
           version: "0.11.9"
           python-version: "3.12"
-          enable-cache: true
-          cache-suffix: build
+          # Explicitly off, because the default `auto` caches on pull_request.
+          # This job installs no dependencies, so there is nothing to cache: the
+          # first run saved 1039 bytes and paid a tar and an upload for it.
+          enable-cache: false
       # Was `pip install build` + `python -m build`, which installed an unpinned
       # frontend and then resolved `uv_build` fresh from PyPI anywhere in
       # `>=0.9.24,<0.12`. `uv build` uses the backend bundled in the pinned uv

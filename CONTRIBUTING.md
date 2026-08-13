@@ -20,13 +20,19 @@ and the [ADRs](docs/ADRs/).
 Requires [uv](https://docs.astral.sh/uv/).
 
 ```bash
-uv sync --extra dev    # core deps (numpy, pandas) + dev tools
+uv sync --locked --extra dev    # core deps (numpy, pandas) + dev tools
 uv run pre-commit install
 ```
 
 `dev` is an entry in `[project.optional-dependencies]`, not a PEP 735 dependency group, so
 it needs `--extra dev`. `uv sync --dev` is a no-op flag that installs the runtime
 dependencies and *uninstalls* ruff, mypy, pytest and pytest-cov.
+
+`--locked` matters as much as the extra. Every CI job installs with `uv sync --locked`, so
+the committed `uv.lock` is the only resolution CI ever sees. Omit it locally and uv quietly
+rewrites the lock to match whatever you changed, and the PR then fails every job with "The
+lockfile at `uv.lock` needs to be updated, but `--locked` was provided". If you add or bump
+a dependency, run `uv lock` deliberately and commit the result with the change.
 
 ## Checks (must pass before a PR)
 

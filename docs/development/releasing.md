@@ -141,16 +141,49 @@ The commands in [CONTRIBUTING.md](../../CONTRIBUTING.md) are the short form and 
 a weaker `mypy` than CI. Before tagging, run what CI runs:
 
 ```bash
-uv sync --dev
-uv run ruff check src/ tests/ examples/
-uv run ruff format --check src/ tests/ examples/
-uv run mypy src/ examples/            # CI checks examples/; bare `uv run mypy` does not
+uv sync --locked --extra dev
+uv run ruff check src/ tests/ examples/ .claude/hooks/
+uv run ruff format --check src/ tests/ examples/ .claude/hooks/
+uv run mypy src/ examples/ .claude/hooks/   # CI checks all three; bare `uv run mypy` does not
 uv run python -m compileall examples
+uv run python examples/00_quickstart.py     # and 03, 04, 05: CI executes all four
+uv run python examples/03_custom_embedder.py
+uv run python examples/04_dedupe.py
+uv run python examples/05_failure_accounting.py
 uv run pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=term
 
-uv sync --dev --extra all
-uv run pytest -m adapter --cov=denselinkage --cov-config=.coveragerc.adapter
+uv sync --locked --extra dev --extra faiss --extra sentence-transformers --extra langchain
+uv run pytest -m "adapter" --cov=denselinkage --cov-config=.coveragerc.adapter --cov-report=term-missing
 ```
+
+Two of those spellings are load-bearing. `--extra dev` is not `--dev`: `dev` lives in
+`[project.optional-dependencies]`, not a PEP 735 group, so `uv sync --dev` *uninstalls*
+ruff, mypy, pytest and pytest-cov and the commands below it then run the wrong toolchain
+or none at all. `--locked` is what every CI job uses, so without it a local sync can
+rewrite `uv.lock` and the divergence surfaces only on the PR.
+
+The `test` job also re-runs mypy against its oldest leg, the only environment installing
+the lock's numpy 2.2.6 fork. An error can exist there and not under numpy 2.4.6, so
+reproduce it with a 3.10 interpreter before tagging:
+
+```bash
+UV_PROJECT_ENVIRONMENT=.venv-310 uv sync --locked --extra dev --extra faiss --python 3.10
+UV_PROJECT_ENVIRONMENT=.venv-310 uv run --no-sync mypy --python-version=3.10 src/ examples/
+```
+
+One CI job still has no local equivalent: `core-only` syncs with no heavy extras and asserts
+that none of them is importable. It needs a clean environment, so reproduce it in a throwaway
+one rather than `.venv`:
+
+```bash
+UV_PROJECT_ENVIRONMENT=.venv-core uv sync --locked --extra dev
+UV_PROJECT_ENVIRONMENT=.venv-core uv run --no-sync python -c "import importlib.util as u; assert all(u.find_spec(m) is not None for m in ('numpy','pandas','denselinkage')); assert all(u.find_spec(m) is None for m in ('faiss','sentence_transformers','langchain_core','langchain_openai','torch'))"
+UV_PROJECT_ENVIRONMENT=.venv-core uv run --no-sync python -c "import sys, denselinkage; assert not {'faiss','sentence_transformers','langchain_core'} & sys.modules.keys()"
+UV_PROJECT_ENVIRONMENT=.venv-core uv run --no-sync pytest -m "not adapter and not slow"
+```
+
+The first assertion checks the core closure is present before checking the heavy backends are
+absent. Without that, an empty or half-built environment passes it vacuously.
 
 A new adapter module must be registered in **both** coverage configurations:
 `omit` in `pyproject.toml` and `include` in `.coveragerc.adapter`. They use
