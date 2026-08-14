@@ -217,9 +217,106 @@ def test_an_adapter_that_declares_the_wrong_port_is_visible(tmp_path: Path) -> N
         for e in scan.adapters(tree)
         if e["record"]["name"] == "NumpyFlatIndex"
     )
+    required = scan.port_members(tree)["SearchableIndex"]
     assert scan.declared(record, _PORT_NAMES) == ("SearchableIndex",)
-    missing = scan.missing_members(record, scan.port_members(tree)["SearchableIndex"])
+    missing = scan.missing_members(record, required)
     assert missing, "declaring the wrong port must surface as missing members"
+    # A member that is absent is reported once, as missing, and never also as
+    # incompatible. Two messages for one defect sends the reader looking for a
+    # signature problem that does not exist.
+    assert set(scan.incompatible_members(record, required)).isdisjoint(missing)
+
+
+@pytest.mark.parametrize(
+    ("case", "find", "replace"),
+    [
+        pytest.param(
+            "renamed-parameter",
+            "def match(self, pairs: Sequence[CandidatePair])",
+            "def match(self, items: Sequence[CandidatePair])",
+            id="renamed-parameter",
+        ),
+        pytest.param(
+            "extra-required-parameter",
+            "def match(self, pairs: Sequence[CandidatePair])",
+            "def match(self, pairs: Sequence[CandidatePair], budget: int)",
+            id="extra-required-positional",
+        ),
+        pytest.param(
+            "override-drops-keyword-only",
+            "def match(self, pairs: Sequence[CandidatePair])",
+            "def match(self, pairs: Sequence[CandidatePair], *, budget: int)",
+            id="extra-keyword-only-without-default",
+        ),
+    ],
+)
+def test_an_adapter_whose_signature_diverges_is_visible(
+    tmp_path: Path, case: str, find: str, replace: str
+) -> None:
+    """The override rule, exercised in all three ways it can be broken.
+
+    All fifteen adapters conform today, so nothing else reaches this branch.
+    A rule whose violation has never been observed is a rule nobody has seen
+    work: renaming a parameter breaks callers passing it by keyword, an extra
+    required positional breaks every existing call, and an extra keyword-only
+    without a default breaks construction through the port.
+    """
+    tree = plant(tmp_path, [("matching/threshold_matcher.py", find, replace)])
+    record = next(
+        e["record"]
+        for e in scan.adapters(tree)
+        if e["record"]["name"] == "ThresholdMatcher"
+    )
+    bad = scan.incompatible_members(record, scan.port_members(tree)["Matcher"])
+    assert bad == ["match"], f"{case}: expected match to be incompatible, got {bad}"
+
+
+def test_an_adapter_adding_an_optional_keyword_is_accepted(tmp_path: Path) -> None:
+    """The other half of the override rule: widening compatibly is allowed.
+
+    A caller holding the port can still call this, so it is not a violation.
+    Without this control the rule would be indistinguishable from exact
+    equality, which would reject a legitimate adapter.
+    """
+    tree = plant(
+        tmp_path,
+        [
+            (
+                "matching/threshold_matcher.py",
+                "def match(self, pairs: Sequence[CandidatePair])",
+                "def match(self, pairs: Sequence[CandidatePair], *, budget: int = 0)",
+            )
+        ],
+    )
+    record = next(
+        e["record"]
+        for e in scan.adapters(tree)
+        if e["record"]["name"] == "ThresholdMatcher"
+    )
+    assert scan.incompatible_members(record, scan.port_members(tree)["Matcher"]) == []
+
+
+def test_a_stray_error_reports_where_it_was_declared(tmp_path: Path) -> None:
+    """The message must locate the offender, not merely name it.
+
+    ``where`` renders only inside a failing assertion, so it would otherwise
+    never execute.
+    """
+    tree = plant(
+        tmp_path,
+        [
+            (
+                "_store/reference_store.py",
+                "_FORMAT = 1",
+                "class SneakyError(IncompatibleStore):\n"
+                '    """Planted."""\n\n\n_FORMAT = 1',
+            )
+        ],
+    )
+    stray = scan.error_family_outside(tree)
+    assert [d.name for d in stray] == ["SneakyError"]
+    assert stray[0].where.startswith("src/denselinkage/_store/reference_store.py:")
+    assert stray[0].where.rsplit(":", 1)[1].isdigit()
 
 
 # --- ports carry @runtime_checkable ------------------------------------------
