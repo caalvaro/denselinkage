@@ -124,7 +124,7 @@ larger claim.
   contract is implementable by someone outside this repository.
 - Method adapters are additive under ADR-0003 and do not by themselves force a
   major version. See [roadmap.md](../development/roadmap.md) on why Phase C
-  currently targets 1.2.0.
+  currently targets a minor release.
 
 ## Action Items
 

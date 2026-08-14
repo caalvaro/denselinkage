@@ -30,13 +30,13 @@
   `LinkageResult.from_candidate_frame` (the ergonomic frame→pairs constructor
   that makes `match_pairs` end-to-end usable — see D2 in
   [decisions.md](./decisions.md)).
-- **Phase C** *(behind `[train]`; targets 1.2.0, see below)* —
+- **Phase C** *(behind `[train]`; targets 1.3.0, see below)* —
   `EmbedderTrainer` / `CrossEncoderTrainer` (implement the `Trainer` protocol) +
   few-shot selection. LLM fine-tuning is out of scope. The first/second-pass
   hard-negative *simulation* example (former `examples/04`) is a Phase-C
   deliverable — restored then as a **real** (non-faked) example once mining +
   trainers exist (see [examples.md](./examples.md)).
-- **Phase D** *(published methods, each behind its own extra)* — implementations
+- **Phase D** *(published methods, each behind its own extra; after Phase C)* — implementations
   of published entity-matching methods as first-party adapters: Ditto, the
   DeepMatcher line, and others. They are `Matcher` implementations, so the port
   already covers them and no contract change is expected
@@ -44,7 +44,7 @@
   method cannot be expressed against the frozen ports, that is a finding about
   the ports and is recorded as one.
 
-## Phase C and D: why this is 1.2.0 and not 2.0.0
+## Phase C and D: why these are minor releases
 
 The `Trainer` protocol, the `[train]` extra and the `denselinkage.training`
 namespace were all reserved in Phase A precisely so that filling them later
@@ -53,7 +53,7 @@ would add nothing to the frozen surface. Under
 asymmetry, a new adapter, a new module and a filled body are all **additive**,
 and additive work ships in a minor release.
 
-So the default target is **1.2.0**, and the decision is deferred to the
+So the default target is **1.3.0**, and the decision is deferred to the
 evidence rather than taken in advance: `tests/test_frozen_surface.py` compares
 the parsed public API against `tests/api_snapshot.json` on every matrix leg, so
 it reports whether the release breaks anything. If the snapshot does not move,
