@@ -226,20 +226,31 @@ def _class(node: ast.ClassDef) -> dict[str, Any]:
     }
 
 
-def _iter_statements(tree: ast.Module) -> list[ast.stmt]:
-    """Module body, descending one level into ``if`` blocks.
+def _iter_statements(body: list[ast.stmt]) -> list[ast.stmt]:
+    """Module body, descending through any conditional or guard blocks.
 
     ``Vectors`` is defined in both branches of ``if TYPE_CHECKING:``
     (``core/ports.py:24,26``) and is the annotation text on four port members, so
     a plain ``tree.body`` walk would never see it and a dtype change would leave
     every recorded signature byte-identical.
+
+    The descent is recursive rather than one level deep. Nothing on the surface
+    is currently nested further, but a symbol moved inside a ``try:`` import
+    guard or a nested ``if`` would otherwise leave the snapshot silently, which
+    is the one failure mode this module must not have.
     """
     statements: list[ast.stmt] = []
-    for node in tree.body:
+    for node in body:
         statements.append(node)
-        if isinstance(node, ast.If):
-            statements.extend(node.body)
-            statements.extend(node.orelse)
+        if isinstance(node, ast.If | ast.Try):
+            statements.extend(_iter_statements(node.body))
+            statements.extend(_iter_statements(node.orelse))
+            if isinstance(node, ast.Try):
+                statements.extend(_iter_statements(node.finalbody))
+                for handler in node.handlers:
+                    statements.extend(_iter_statements(handler.body))
+        elif isinstance(node, ast.With):
+            statements.extend(_iter_statements(node.body))
     return statements
 
 
@@ -250,7 +261,7 @@ def _module(path: Path, relative: str) -> dict[str, Any]:
     aliases: list[dict[str, Any]] = []
     dunder_all: list[str] | None = None
 
-    for node in _iter_statements(tree):
+    for node in _iter_statements(tree.body):
         if isinstance(node, ast.ClassDef):
             if _is_public(node.name):
                 classes.append(_class(node))
@@ -619,7 +630,12 @@ def diff_surface(expected: dict[str, Any], actual: dict[str, Any]) -> list[Chang
         )
 
     order = {BREAKING: 0, RELAXING: 1, ADDITIVE: 2}
-    return sorted(changes, key=lambda c: (order[c.severity], c.module, c.symbol))
+    # `verb` is in the key so the order is total. Without it two changes on the
+    # same symbol keep set-iteration order, which varies with PYTHONHASHSEED and
+    # would make the failure message differ between runs.
+    return sorted(
+        changes, key=lambda c: (order[c.severity], c.module, c.symbol, c.verb)
+    )
 
 
 # --------------------------------------------------------------------------
@@ -702,7 +718,7 @@ def _regenerate(authority: str) -> int:
     return 0
 
 
-def main(argv: list[str] | None = None) -> int:  # pragma: no cover - entry point
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m tests._api_snapshot",
         description=(
