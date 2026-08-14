@@ -39,7 +39,7 @@ a dependency, run `uv lock` deliberately and commit the result with the change.
 ```bash
 uv run ruff check src/ tests/ examples/ .claude/hooks/
 uv run ruff format --check src/ tests/ examples/ .claude/hooks/
-uv run mypy src/ examples/ .claude/hooks/   # strict; CI checks all three too
+uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py   # strict; CI checks all three too
 uv run python -m compileall examples
 uv run python examples/00_quickstart.py     # and 03, 04, 05
 uv run pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=term
@@ -57,6 +57,28 @@ A third CI job, `core-only`, has no local equivalent: it installs with no extras
 asserts that no heavy backend is importable and that `import denselinkage` pulls none into
 `sys.modules`. Reproducing it needs a throwaway venv, so a module-scope `import faiss`
 passes every check above and fails only on the PR.
+
+## If `test_frozen_surface` fails
+
+The public API is frozen (ADR-0006, ADR-0007) and `tests/api_snapshot.json` records it.
+The test fails whenever the parsed API moves: a signature, a field type or default, a
+field's position, a decorator argument, a member set, or `denselinkage.core.__all__`.
+Docstrings, comments and formatting cannot move it.
+
+Read the failure message first. It classifies each change as BREAKING, RELAXING or
+ADDITIVE, which is what decides whether the change needs a major version.
+
+**Do not edit `tests/api_snapshot.json` by hand.** It is the frozen contract, not a cache
+of the current source, and hand-editing it turns a caught break into a silent one. If the
+change is deliberate, regenerate:
+
+```bash
+python -m tests._api_snapshot --regenerate --authority <ADR-#### or #issue>
+```
+
+The `--authority` is required and is stored in the snapshot: a contract change needs a
+decision behind it. If neither an ADR nor an issue authorises it, the change is not ready.
+Commit the regenerated snapshot with the change and cite the same authority in the PR.
 
 With the extras installed, the adapter modules are gated separately:
 

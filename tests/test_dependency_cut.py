@@ -51,12 +51,26 @@ def test_core_imports_pull_no_heavy_backend() -> None:
         f"for mod in {list(CORE_MODULES)!r}:\n"
         "    importlib.import_module(mod)\n"
         f"leaked = sorted({set(HEAVY)!r} & set(sys.modules))\n"
-        "assert not leaked, f'heavy backend leaked on import: {leaked}'\n"
+        "assert not leaked, (\n"
+        "    f'DEPENDENCY CUT VIOLATION: importing denselinkage pulled in "
+        "{leaked}.\\n'\n"
+        "    'A heavy backend must never be imported at module scope. Call\\n'\n"
+        "    '`require(\"<module>\")` and then the real import, both INSIDE the\\n'\n"
+        "    'method that needs it, and do not bind require()s return value:\\n'\n"
+        "    'that hands mypy a ModuleType and defeats the stub override.\\n'\n"
+        "    'This is what lets the core install without faiss / torch /\\n'\n"
+        "    'sentence-transformers / langchain at all (AGENTS.md).'\n"
+        ")\n"
     )
     result = subprocess.run(
         [sys.executable, "-c", child], capture_output=True, text=True
     )
-    assert result.returncode == 0, result.stderr
+    assert result.returncode == 0, (
+        "The dependency-cut proof failed in a fresh interpreter.\n"
+        "It runs in a subprocess deliberately, so it is immune to backends the "
+        "adapter suite imported into this process. The child's output was:\n\n"
+        f"{result.stderr}"
+    )
 
 
 def test_optional_helper_unknown_module_is_actionable() -> None:

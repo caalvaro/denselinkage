@@ -33,8 +33,8 @@ echo "== ruff check (src, tests, examples, hooks) =="
 echo "== ruff format --check =="
 "$BIN/ruff$EXT" format --check src/ tests/ examples/ .claude/hooks/
 
-echo "== mypy (src + examples + hooks) =="
-"$BIN/mypy$EXT" src/ examples/ .claude/hooks/
+echo "== mypy (src + examples + hooks + the frozen-surface derivation) =="
+"$BIN/mypy$EXT" src/ examples/ .claude/hooks/ tests/_api_snapshot.py
 
 echo "== compileall examples =="
 "$BIN/python$EXT" -m compileall -q examples

@@ -1,0 +1,2282 @@
+{
+  "schema_version": 1,
+  "protocol_count": 10,
+  "core_all": [
+    "Blocker",
+    "BlockingIndex",
+    "CandidatePair",
+    "Clusterer",
+    "ClusteringResult",
+    "DenseLinkageError",
+    "DimensionMismatch",
+    "DuplicateRecordId",
+    "Embedder",
+    "EmptySource",
+    "Filter",
+    "IncompatibleStore",
+    "InvalidTopK",
+    "LabeledPairs",
+    "LinkageResult",
+    "MatchDecision",
+    "MatchError",
+    "Matcher",
+    "Record",
+    "RecordId",
+    "SearchableIndex",
+    "Serializer",
+    "Source",
+    "Trainer",
+    "TrainingPairs",
+    "UnknownIdColumn",
+    "VectorIndex"
+  ],
+  "modules": [
+    {
+      "path": "core/ports.py",
+      "__all__": null,
+      "aliases": [
+        {
+          "name": "Vectors",
+          "value": "npt.NDArray[np.float32]"
+        },
+        {
+          "name": "Vectors",
+          "value": "Any"
+        },
+        {
+          "name": "ComponentT",
+          "value": "TypeVar('ComponentT')"
+        }
+      ],
+      "classes": [
+        {
+          "name": "Serializer",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "serialize",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "record",
+                  "kind": "positional",
+                  "annotation": "Mapping[str, Any]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "str",
+              "signature": "serialize(self, record: Mapping[str, Any])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Embedder",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "property",
+              "name": "model_id",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "str",
+              "signature": "model_id(self)",
+              "is_async": false
+            },
+            {
+              "kind": "property",
+              "name": "embedding_dim",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "int",
+              "signature": "embedding_dim(self)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "encode",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "texts",
+                  "kind": "positional",
+                  "annotation": "Sequence[str]",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "batch_size",
+                  "kind": "keyword_only",
+                  "annotation": "int | None",
+                  "has_default": true,
+                  "default": "None"
+                },
+                {
+                  "name": "show_progress",
+                  "kind": "keyword_only",
+                  "annotation": "bool",
+                  "has_default": true,
+                  "default": "False"
+                }
+              ],
+              "returns": "Vectors",
+              "signature": "encode(self, texts: Sequence[str], *, batch_size: int | None=None, show_progress: bool=False)",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "VectorIndex",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "build",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "vectors",
+                  "kind": "positional",
+                  "annotation": "Vectors",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "ids",
+                  "kind": "positional",
+                  "annotation": "Sequence[RecordId]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'SearchableIndex'",
+              "signature": "build(self, vectors: Vectors, ids: Sequence[RecordId])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "SearchableIndex",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "search",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "queries",
+                  "kind": "positional",
+                  "annotation": "Vectors",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "top_k",
+                  "kind": "keyword_only",
+                  "annotation": "int",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "list[list[tuple[RecordId, float]]]",
+              "signature": "search(self, queries: Vectors, *, top_k: int)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "extended",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "vectors",
+                  "kind": "positional",
+                  "annotation": "Vectors",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "ids",
+                  "kind": "positional",
+                  "annotation": "Sequence[RecordId]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'SearchableIndex'",
+              "signature": "extended(self, vectors: Vectors, ids: Sequence[RecordId])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Blocker",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "build",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "records",
+                  "kind": "positional",
+                  "annotation": "Sequence[Record]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'BlockingIndex'",
+              "signature": "build(self, records: Sequence[Record])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "BlockingIndex",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "query",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "records",
+                  "kind": "positional",
+                  "annotation": "Sequence[Record]",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "top_k",
+                  "kind": "keyword_only",
+                  "annotation": "int | None",
+                  "has_default": true,
+                  "default": "None"
+                },
+                {
+                  "name": "similarity_threshold",
+                  "kind": "keyword_only",
+                  "annotation": "float | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "list[CandidatePair]",
+              "signature": "query(self, records: Sequence[Record], *, top_k: int | None=None, similarity_threshold: float | None=None)",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Filter",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "filter",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "pairs",
+                  "kind": "positional",
+                  "annotation": "Sequence[CandidatePair]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "list[CandidatePair]",
+              "signature": "filter(self, pairs: Sequence[CandidatePair])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Matcher",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "match",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "pairs",
+                  "kind": "positional",
+                  "annotation": "Sequence[CandidatePair]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "list[MatchDecision | MatchError]",
+              "signature": "match(self, pairs: Sequence[CandidatePair])",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Clusterer",
+          "bases": [
+            "Protocol"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "cluster",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "result",
+                  "kind": "positional",
+                  "annotation": "'LinkageResult'",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'ClusteringResult'",
+              "signature": "cluster(self, result: 'LinkageResult')",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "Trainer",
+          "bases": [
+            "Protocol[ComponentT]"
+          ],
+          "decorators": [
+            {
+              "name": "runtime_checkable",
+              "args": [],
+              "kwargs": {}
+            }
+          ],
+          "is_protocol": true,
+          "members": [
+            {
+              "kind": "method",
+              "name": "train",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "pairs",
+                  "kind": "positional",
+                  "annotation": "'TrainingPairs'",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "base",
+                  "kind": "keyword_only",
+                  "annotation": "ComponentT | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "ComponentT",
+              "signature": "train(self, pairs: 'TrainingPairs', *, base: ComponentT | None=None)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "core/models.py",
+      "__all__": null,
+      "aliases": [
+        {
+          "name": "RecordId",
+          "value": "str"
+        }
+      ],
+      "classes": [
+        {
+          "name": "Record",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "annotation": "RecordId",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "text",
+              "annotation": "str",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "fields",
+              "annotation": "Mapping[str, Any]",
+              "has_default": true,
+              "default": "field(default_factory=dict)"
+            }
+          ]
+        },
+        {
+          "name": "CandidatePair",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "record_a",
+              "annotation": "Record",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "record_b",
+              "annotation": "Record",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "similarity_score",
+              "annotation": "float | None",
+              "has_default": true,
+              "default": "None"
+            }
+          ]
+        },
+        {
+          "name": "MatchDecision",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "is_match",
+              "annotation": "bool",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "confidence",
+              "annotation": "float | None",
+              "has_default": true,
+              "default": "None"
+            },
+            {
+              "kind": "field",
+              "name": "rationale",
+              "annotation": "str | None",
+              "has_default": true,
+              "default": "None"
+            }
+          ]
+        },
+        {
+          "name": "MatchError",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "reason",
+              "annotation": "str",
+              "has_default": false,
+              "default": null
+            }
+          ]
+        },
+        {
+          "name": "Source",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "frame",
+              "annotation": "'pd.DataFrame'",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "id_column",
+              "annotation": "str",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "serializer",
+              "annotation": "'Serializer | None'",
+              "has_default": true,
+              "default": "None"
+            }
+          ]
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "core/results.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "LabeledPairs",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "pairs",
+              "annotation": "frozenset[tuple[RecordId, RecordId]]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "classmethod",
+              "name": "from_pairs",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "pairs",
+                  "kind": "positional",
+                  "annotation": "Iterable[tuple[str, str]]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'LabeledPairs'",
+              "signature": "from_pairs(cls, pairs: Iterable[tuple[str, str]])",
+              "is_async": false
+            },
+            {
+              "kind": "classmethod",
+              "name": "from_frame",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "frame",
+                  "kind": "positional",
+                  "annotation": "'pd.DataFrame'",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "left_id",
+                  "kind": "keyword_only",
+                  "annotation": "str",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "right_id",
+                  "kind": "keyword_only",
+                  "annotation": "str",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'LabeledPairs'",
+              "signature": "from_frame(cls, frame: 'pd.DataFrame', *, left_id: str, right_id: str)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "split",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "test_size",
+                  "kind": "keyword_only",
+                  "annotation": "float",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "seed",
+                  "kind": "keyword_only",
+                  "annotation": "int | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "tuple['LabeledPairs', 'LabeledPairs']",
+              "signature": "split(self, *, test_size: float, seed: int | None=None)",
+              "is_async": false
+            }
+          ]
+        },
+        {
+          "name": "LinkageResult",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "decisions",
+              "annotation": "tuple[tuple[CandidatePair, MatchDecision], ...]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "errors",
+              "annotation": "tuple[tuple[CandidatePair, MatchError], ...]",
+              "has_default": true,
+              "default": "()"
+            },
+            {
+              "kind": "method",
+              "name": "to_frame",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'pd.DataFrame'",
+              "signature": "to_frame(self)",
+              "is_async": false,
+              "column_schema": "['left_id', 'right_id', 'similarity', 'match', 'confidence', 'reason']"
+            }
+          ]
+        },
+        {
+          "name": "ClusteringResult",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "labels",
+              "annotation": "Mapping[RecordId, int]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "property",
+              "name": "n_clusters",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "int",
+              "signature": "n_clusters(self)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "to_frame",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'pd.DataFrame'",
+              "signature": "to_frame(self)",
+              "is_async": false,
+              "column_schema": "['record_id', 'cluster_id']"
+            }
+          ]
+        },
+        {
+          "name": "TrainingPairs",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "positives",
+              "annotation": "tuple[tuple[Record, Record], ...]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "negatives",
+              "annotation": "tuple[tuple[Record, Record], ...]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "batches",
+              "annotation": "tuple[tuple[int, ...], ...] | None",
+              "has_default": true,
+              "default": "None"
+            }
+          ]
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "core/errors.py",
+      "__all__": [
+        "DenseLinkageError",
+        "DimensionMismatch",
+        "DuplicateRecordId",
+        "EmptySource",
+        "IncompatibleStore",
+        "InvalidTopK",
+        "UnknownIdColumn"
+      ],
+      "aliases": [],
+      "classes": [
+        {
+          "name": "DenseLinkageError",
+          "bases": [
+            "Exception"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "UnknownIdColumn",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "EmptySource",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "DuplicateRecordId",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "DimensionMismatch",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "InvalidTopK",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        },
+        {
+          "name": "IncompatibleStore",
+          "bases": [
+            "DenseLinkageError"
+          ],
+          "decorators": [],
+          "is_protocol": false,
+          "members": []
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "linkage/dense_linker.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "DenseLinker",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True",
+                "kw_only": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "blocker",
+              "annotation": "Blocker | None",
+              "has_default": true,
+              "default": "None"
+            },
+            {
+              "kind": "field",
+              "name": "matcher",
+              "annotation": "Matcher",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "classmethod",
+              "name": "with_defaults",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "blocker",
+                  "kind": "keyword_only",
+                  "annotation": "Blocker | None",
+                  "has_default": true,
+                  "default": "None"
+                },
+                {
+                  "name": "matcher",
+                  "kind": "keyword_only",
+                  "annotation": "Matcher | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "'DenseLinker'",
+              "signature": "with_defaults(cls, *, blocker: Blocker | None=None, matcher: Matcher | None=None)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "index",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "source",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "LinkageIndex",
+              "signature": "index(self, source: Source)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "link",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "left",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "right",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "LinkageResult",
+              "signature": "link(self, left: Source, right: Source)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "block",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "left",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "right",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "top_k",
+                  "kind": "keyword_only",
+                  "annotation": "int | None",
+                  "has_default": true,
+                  "default": "None"
+                },
+                {
+                  "name": "similarity_threshold",
+                  "kind": "keyword_only",
+                  "annotation": "float | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "list[CandidatePair]",
+              "signature": "block(self, left: Source, right: Source, *, top_k: int | None=None, similarity_threshold: float | None=None)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "dedupe",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "source",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "LinkageResult",
+              "signature": "dedupe(self, source: Source)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "match_pairs",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "candidates",
+                  "kind": "positional",
+                  "annotation": "Sequence[CandidatePair]",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "LinkageResult",
+              "signature": "match_pairs(self, candidates: Sequence[CandidatePair])",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "linkage/linkage_index.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "LinkageIndex",
+          "bases": [],
+          "decorators": [],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "method",
+              "name": "__init__",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "blocking_index",
+                  "kind": "keyword_only",
+                  "annotation": "BlockingIndex",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "matcher",
+                  "kind": "keyword_only",
+                  "annotation": "Matcher",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "None",
+              "signature": "__init__(self, *, blocking_index: BlockingIndex, matcher: Matcher)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "candidates",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "source",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "top_k",
+                  "kind": "keyword_only",
+                  "annotation": "int | None",
+                  "has_default": true,
+                  "default": "None"
+                },
+                {
+                  "name": "similarity_threshold",
+                  "kind": "keyword_only",
+                  "annotation": "float | None",
+                  "has_default": true,
+                  "default": "None"
+                }
+              ],
+              "returns": "list[CandidatePair]",
+              "signature": "candidates(self, source: Source, *, top_k: int | None=None, similarity_threshold: float | None=None)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "query",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "source",
+                  "kind": "positional",
+                  "annotation": "Source",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "LinkageResult",
+              "signature": "query(self, source: Source)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "save",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "path",
+                  "kind": "positional",
+                  "annotation": "str | Path",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "None",
+              "signature": "save(self, path: str | Path)",
+              "is_async": false
+            },
+            {
+              "kind": "classmethod",
+              "name": "load",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "path",
+                  "kind": "positional",
+                  "annotation": "str | Path",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "embedder",
+                  "kind": "keyword_only",
+                  "annotation": "Embedder",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "matcher",
+                  "kind": "keyword_only",
+                  "annotation": "Matcher",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'LinkageIndex'",
+              "signature": "load(cls, path: str | Path, *, embedder: Embedder, matcher: Matcher)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": []
+    },
+    {
+      "path": "metrics/linkage.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "LinkageMetrics",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "true_positive",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "false_positive",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "false_negative",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "n_gold",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "n_errors",
+              "annotation": "int",
+              "has_default": true,
+              "default": "0"
+            },
+            {
+              "kind": "property",
+              "name": "precision",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "precision(self)",
+              "is_async": false
+            },
+            {
+              "kind": "property",
+              "name": "recall",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "recall(self)",
+              "is_async": false
+            },
+            {
+              "kind": "property",
+              "name": "f1",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "f1(self)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "kind": "method",
+          "name": "linkage_metrics",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "result",
+              "kind": "positional",
+              "annotation": "LinkageResult",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "directed",
+              "kind": "keyword_only",
+              "annotation": "bool",
+              "has_default": true,
+              "default": "True"
+            }
+          ],
+          "returns": "LinkageMetrics",
+          "signature": "linkage_metrics(result: LinkageResult, *, gold: LabeledPairs, directed: bool=True)",
+          "is_async": false
+        }
+      ]
+    },
+    {
+      "path": "metrics/blocking.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "BlockingMetrics",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "pc",
+              "annotation": "Mapping[int, float]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "n_gold",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "classmethod",
+              "name": "from_pc_map",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "pc",
+                  "kind": "positional",
+                  "annotation": "Mapping[int, float]",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "n_gold",
+                  "kind": "keyword_only",
+                  "annotation": "int",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'BlockingMetrics'",
+              "signature": "from_pc_map(cls, pc: Mapping[int, float], *, n_gold: int)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "pc_at",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "k",
+                  "kind": "positional",
+                  "annotation": "int",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "pc_at(self, k: int)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "kind": "method",
+          "name": "blocking_metrics",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "candidates",
+              "kind": "positional",
+              "annotation": "Sequence[CandidatePair]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "ks",
+              "kind": "keyword_only",
+              "annotation": "Sequence[int]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "directed",
+              "kind": "keyword_only",
+              "annotation": "bool",
+              "has_default": true,
+              "default": "True"
+            }
+          ],
+          "returns": "BlockingMetrics",
+          "signature": "blocking_metrics(candidates: Sequence[CandidatePair], *, gold: LabeledPairs, ks: Sequence[int], directed: bool=True)",
+          "is_async": false
+        },
+        {
+          "kind": "method",
+          "name": "pair_completeness_at_k",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "candidates",
+              "kind": "positional",
+              "annotation": "Sequence[CandidatePair]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "k",
+              "kind": "keyword_only",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "directed",
+              "kind": "keyword_only",
+              "annotation": "bool",
+              "has_default": true,
+              "default": "True"
+            }
+          ],
+          "returns": "float",
+          "signature": "pair_completeness_at_k(candidates: Sequence[CandidatePair], *, gold: LabeledPairs, k: int, directed: bool=True)",
+          "is_async": false
+        }
+      ]
+    },
+    {
+      "path": "metrics/clustering.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "ClusteringMetrics",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "b3_precision",
+              "annotation": "float",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "b3_recall",
+              "annotation": "float",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "n_clusters",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "n_gold_clusters",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "classmethod",
+              "name": "from_b3",
+              "decorators": [
+                {
+                  "name": "classmethod",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "cls",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "b3_precision",
+                  "kind": "keyword_only",
+                  "annotation": "float",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "b3_recall",
+                  "kind": "keyword_only",
+                  "annotation": "float",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "n_clusters",
+                  "kind": "keyword_only",
+                  "annotation": "int",
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "n_gold_clusters",
+                  "kind": "keyword_only",
+                  "annotation": "int",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "'ClusteringMetrics'",
+              "signature": "from_b3(cls, *, b3_precision: float, b3_recall: float, n_clusters: int, n_gold_clusters: int)",
+              "is_async": false
+            },
+            {
+              "kind": "property",
+              "name": "b3_f1",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "b3_f1(self)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "kind": "method",
+          "name": "clustering_metrics",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "clustering",
+              "kind": "positional",
+              "annotation": "ClusteringResult",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            }
+          ],
+          "returns": "ClusteringMetrics",
+          "signature": "clustering_metrics(clustering: ClusteringResult, *, gold: LabeledPairs)",
+          "is_async": false
+        }
+      ]
+    },
+    {
+      "path": "metrics/tuning.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "ThresholdSweep",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "rows",
+              "annotation": "tuple[tuple[float, LinkageMetrics], ...]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "method",
+              "name": "best_f1",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "tuple[float, LinkageMetrics]",
+              "signature": "best_f1(self)",
+              "is_async": false
+            },
+            {
+              "kind": "method",
+              "name": "at_recall",
+              "decorators": [],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                },
+                {
+                  "name": "target",
+                  "kind": "positional",
+                  "annotation": "float",
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "tuple[float, LinkageMetrics]",
+              "signature": "at_recall(self, target: float)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "kind": "method",
+          "name": "tune_threshold",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "candidates",
+              "kind": "positional",
+              "annotation": "Sequence[CandidatePair]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "thresholds",
+              "kind": "keyword_only",
+              "annotation": "Sequence[float] | None",
+              "has_default": true,
+              "default": "None"
+            },
+            {
+              "name": "directed",
+              "kind": "keyword_only",
+              "annotation": "bool",
+              "has_default": true,
+              "default": "True"
+            }
+          ],
+          "returns": "ThresholdSweep",
+          "signature": "tune_threshold(candidates: Sequence[CandidatePair], *, gold: LabeledPairs, thresholds: Sequence[float] | None=None, directed: bool=True)",
+          "is_async": false
+        }
+      ]
+    },
+    {
+      "path": "metrics/adjusted.py",
+      "__all__": null,
+      "aliases": [],
+      "classes": [
+        {
+          "name": "AdjustedMetrics",
+          "bases": [],
+          "decorators": [
+            {
+              "name": "dataclass",
+              "args": [],
+              "kwargs": {
+                "frozen": "True",
+                "slots": "True"
+              }
+            }
+          ],
+          "is_protocol": false,
+          "members": [
+            {
+              "kind": "field",
+              "name": "matcher",
+              "annotation": "LinkageMetrics",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "blocking_recall_at_k",
+              "annotation": "float",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "field",
+              "name": "k",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "kind": "property",
+              "name": "recall_adjusted",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "recall_adjusted(self)",
+              "is_async": false
+            },
+            {
+              "kind": "property",
+              "name": "f1_adjusted",
+              "decorators": [
+                {
+                  "name": "property",
+                  "args": [],
+                  "kwargs": {}
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "self",
+                  "kind": "positional",
+                  "annotation": null,
+                  "has_default": false,
+                  "default": null
+                }
+              ],
+              "returns": "float",
+              "signature": "f1_adjusted(self)",
+              "is_async": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "kind": "method",
+          "name": "adjusted_metrics",
+          "decorators": [],
+          "parameters": [
+            {
+              "name": "result",
+              "kind": "positional",
+              "annotation": "LinkageResult",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "candidates",
+              "kind": "positional",
+              "annotation": "Sequence[CandidatePair]",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "gold",
+              "kind": "keyword_only",
+              "annotation": "LabeledPairs",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "k",
+              "kind": "keyword_only",
+              "annotation": "int",
+              "has_default": false,
+              "default": null
+            },
+            {
+              "name": "directed",
+              "kind": "keyword_only",
+              "annotation": "bool",
+              "has_default": true,
+              "default": "True"
+            }
+          ],
+          "returns": "AdjustedMetrics",
+          "signature": "adjusted_metrics(result: LinkageResult, candidates: Sequence[CandidatePair], *, gold: LabeledPairs, k: int, directed: bool=True)",
+          "is_async": false
+        }
+      ]
+    }
+  ],
+  "authority": "ADR-0007"
+}

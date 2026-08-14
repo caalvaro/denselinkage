@@ -14,9 +14,12 @@ reasoning.
 
 ## What the freeze binds
 
-`docs/development/freeze-gate.md` § "The frozen surface" enumerates it: the public API of
-`src/denselinkage/core/`, not the file bytes. (Ratifying that scope as an ADR is open in
-\#39; cite freeze-gate.md until it merges.)
+`docs/development/freeze-gate.md` § "The frozen surface" enumerates it: the parsed public
+API, not the file bytes. ADR-0006 ratified the parsed API as the unit; ADR-0007 widened the
+scope from `src/denselinkage/core/` to all six enumerated groups, so orchestration
+(`linkage/`) and metrics (`metrics/`) are bound too. `tests/test_frozen_surface.py` enforces
+this mechanically against `tests/api_snapshot.json`; a diff there is the authoritative answer
+to "is this breaking", and its failure message reports the severity.
 
 Frozen — changing any of these is BREAKING and forces a major version:
 - the set of `Protocol` classes in `core/ports.py`, and each one's member set

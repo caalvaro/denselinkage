@@ -55,8 +55,10 @@ motivations.
 evolution is now constrained to **extend-never-modify**. A1 (the dependency-free
 beta, `1.0.0b1`) may begin.
 
-**Scope of the freeze ([ADR-0006](../ADRs/0006-freeze-scope-parsed-api.md)):** it
-binds the *parsed public API*, not the file bytes. Frozen: the set of `Protocol`s
+**Scope of the freeze ([ADR-0006](../ADRs/0006-freeze-scope-parsed-api.md),
+widened by [ADR-0007](../ADRs/0007-freeze-scope-enumerated-surface.md)):** it
+binds the *parsed public API* of the surface enumerated below, not the file
+bytes, and not `core/` alone. Frozen: the set of `Protocol`s
 and each one's member set; every member's signature (parameter names, order,
 kinds, defaults, annotations, return annotation); field names, types, defaults and
 ordering on the frozen dataclasses; the exception taxonomy's names and
@@ -89,6 +91,15 @@ confirmed *intentional* (not defects):
 - `Embedder.model_id` / `embedding_dim` retained (ADR-0003).
 
 ### The frozen surface
+
+Enforced by `tests/test_frozen_surface.py` against `tests/api_snapshot.json`,
+which is derived from the AST of these eleven modules on every leg of the
+3.10-3.13 matrix. Enforcement is **closed-world**: every public class, member,
+field, decorator argument, module `__all__` and type alias in them is recorded,
+so the list below describes the surface while the snapshot defines it. That is
+deliberate — a second hand-written list would drift from the first, which is the
+defect class issue #31 exists to remove.
+
 - **Ports** (`core.ports`): `Serializer`, `Embedder`, `VectorIndex`,
   `SearchableIndex`, `Blocker`, `BlockingIndex`, `Filter`, `Matcher`,
   `Clusterer`, `Trainer`.

@@ -40,6 +40,14 @@ question.
 
 **The freeze is scoped to the parsed public API of `src/denselinkage/core/`.**
 
+> **Widened by [ADR-0007](./0007-freeze-scope-enumerated-surface.md)
+> (2026-08-13).** The location clause above is superseded: the freeze binds the
+> whole surface enumerated in
+> [freeze-gate.md](../development/freeze-gate.md), which includes orchestration
+> (`linkage/`) and metrics (`metrics/`). Everything below about *what* is frozen
+> — the parsed API rather than the file bytes — stands unchanged, and remains
+> the authority for it.
+
 Frozen, and changeable only by a major version:
 
 - the set of `Protocol` classes in `core/ports.py` and the member set of each
