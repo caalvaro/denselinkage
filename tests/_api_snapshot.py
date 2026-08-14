@@ -254,7 +254,7 @@ def _iter_statements(body: list[ast.stmt]) -> list[ast.stmt]:
     return statements
 
 
-def _module(path: Path, relative: str) -> dict[str, Any]:
+def parse_module(path: Path, relative: str) -> dict[str, Any]:
     tree = ast.parse(path.read_text(encoding="utf-8"))
     classes: list[dict[str, Any]] = []
     functions: list[dict[str, Any]] = []
@@ -295,9 +295,9 @@ def _module(path: Path, relative: str) -> dict[str, Any]:
 def extract_surface(package_root: Path = PACKAGE_ROOT) -> dict[str, Any]:
     """The frozen public API, derived from source."""
     modules = [
-        _module(package_root / relative, relative) for relative in FROZEN_MODULES
+        parse_module(package_root / relative, relative) for relative in FROZEN_MODULES
     ]
-    core_init = _module(package_root / "core" / "__init__.py", "core/__init__.py")
+    core_init = parse_module(package_root / "core" / "__init__.py", "core/__init__.py")
     n_protocols = sum(1 for m in modules for c in m["classes"] if c["is_protocol"])
     return {
         "schema_version": SCHEMA_VERSION,

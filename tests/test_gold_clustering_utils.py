@@ -8,6 +8,23 @@ from denselinkage.core.models import CandidatePair, MatchDecision, Record
 from denselinkage.core.results import LinkageResult
 from denselinkage.metrics import clustering_metrics
 
+# --- LabeledPairs construction ---------------------------------------------
+
+
+def test_labeledpairs_is_ordered_and_not_symmetrized() -> None:
+    """D1's lock: a gold pair is directed, and construction never symmetrizes.
+
+    ``link`` compares a left record against a right record, so ("A1", "B1") and
+    ("B1", "A1") are different claims. Symmetrizing here would silently inflate
+    recall for every directed metric. Rehomed from the deleted
+    ``test_a05_contract.py`` (issue #31); ``docs/development/decisions.md`` cites
+    it as D1's named lock.
+    """
+    lp = LabeledPairs(pairs=frozenset({("A1", "B1")}))
+    assert ("A1", "B1") in lp.pairs
+    assert ("B1", "A1") not in lp.pairs
+
+
 # --- LabeledPairs.split -----------------------------------------------------
 
 

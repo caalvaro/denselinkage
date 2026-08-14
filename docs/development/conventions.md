@@ -99,7 +99,9 @@ enforce.
 
 1. A module in the right package, with a class subclassing its port.
 2. A line in the package `__init__.py` and its `__all__`.
-3. A row in the `(adapter, port)` table in `tests/test_contract.py`.
+3. Nothing. `tests/test_contract.py` derives the `(adapter, port)` pairs from source
+   (issue #31); a public class with a public callable outside the frozen surface is
+   collected automatically and must declare a port.
 4. A dedicated test file; if it needs an extra, a module-scope `pytestmark`.
 5. For a heavy adapter: the extra in `pyproject.toml`, the module registered in **both**
    coverage configs, and `require(...)` plus a method-local import.

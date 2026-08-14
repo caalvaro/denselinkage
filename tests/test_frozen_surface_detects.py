@@ -18,7 +18,6 @@ and comment cases are here because ADR-0006 says formatting is not the contract.
 """
 
 import json
-import shutil
 from pathlib import Path
 
 import pytest
@@ -27,7 +26,6 @@ from tests import _api_snapshot
 from tests._api_snapshot import (
     ADDITIVE,
     BREAKING,
-    PACKAGE_ROOT,
     RELAXING,
     Change,
     diff_surface,
@@ -36,6 +34,7 @@ from tests._api_snapshot import (
     load_snapshot,
 )
 from tests._api_snapshot import main as _snapshot_main
+from tests._mutation import plant
 
 # (id, module, find, replace, expected top severity or None for "must not fire")
 _MUTATIONS: list[tuple[str, str, str, str, str | None]] = [
@@ -171,19 +170,14 @@ _MUTATIONS: list[tuple[str, str, str, str, str | None]] = [
 
 
 def _mutated_surface(tmp_path: Path, module: str, find: str, replace: str) -> dict:
-    """Copy the package, apply one edit, and derive the surface from the copy."""
-    tree = tmp_path / "denselinkage"
-    shutil.copytree(PACKAGE_ROOT, tree)
-    target = tree / module
-    source = target.read_text(encoding="utf-8")
-    assert find in source, (
-        f"The mutation pattern for this case no longer appears in {module}:\n"
-        f"  {find!r}\n"
-        "The source moved under the test. Update the pattern so the case still "
-        "exercises what it claims to; do not delete the case."
-    )
-    target.write_text(source.replace(find, replace, 1), encoding="utf-8")
-    return extract_surface(tree)
+    """Copy the package, apply one edit, and derive the surface from the copy.
+
+    The planting itself lives in ``tests/_mutation.py``, shared with
+    ``tests/test_contract_detects.py``. Both suites rest on a pattern that no
+    longer matches being an error rather than a silent no-op, and that rule
+    belongs in one place.
+    """
+    return extract_surface(plant(tmp_path, [(module, find, replace)]))
 
 
 def _committed() -> dict:

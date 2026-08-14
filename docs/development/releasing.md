@@ -144,7 +144,7 @@ a weaker `mypy` than CI. Before tagging, run what CI runs:
 uv sync --locked --extra dev
 uv run ruff check src/ tests/ examples/ .claude/hooks/
 uv run ruff format --check src/ tests/ examples/ .claude/hooks/
-uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py   # CI checks all three; bare `uv run mypy` does not
+uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py tests/_contract_scan.py   # CI checks all three; bare `uv run mypy` does not
 uv run python -m compileall examples
 uv run python examples/00_quickstart.py     # and 03, 04, 05: CI executes all four
 uv run python examples/03_custom_embedder.py
