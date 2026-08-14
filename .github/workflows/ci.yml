@@ -56,7 +56,7 @@ jobs:
       - name: Ruff format check
         run: uv run ruff format --check src/ tests/ examples/ .claude/hooks/
       - name: Mypy (src + examples + hooks; examples are the spec)
-        run: uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py
+        run: uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py tests/_contract_scan.py
       - name: Compile examples
         run: uv run python -m compileall examples
       - name: Run dependency-free examples

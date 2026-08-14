@@ -12,7 +12,9 @@ Work through this checklist and report which items are done:
 1. **Module** in the right package, class subclassing its port explicitly. The subclassing
    is what makes `mypy --strict` check the implementation is complete.
 2. **Façade**: a line in the package `__init__.py` and in its `__all__`.
-3. **Contract row**: add the `(adapter, port)` pair to the table in `tests/test_contract.py`.
+3. **No contract row.** `tests/test_contract.py` derives the `(adapter, port)` pairs from
+   source (issue #31), so a new adapter is picked up the moment it is written. It will
+   FAIL until step 1's explicit subclassing is in place, which is the point.
 4. **Test file** `tests/test_<subject>.py`, module docstring cross-referencing where
    adjacent cases live. Fakes are hand-written; `unittest.mock` only to patch a third-party
    class at its import site.

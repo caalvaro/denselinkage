@@ -66,7 +66,8 @@ port and joins the adapter-declares-its-port contract test, while the existing
 `connected_components` function is kept as its prelude convenience wrapper
 (extend, never modify). Bodies stay `...`. Contract-shape: adding the port
 post-freeze is breaking. Recorded in: `core/ports.py` + `cluster.py` + here +
-`tests/test_contract.py` / `tests/test_a05_contract.py`.
+`tests/test_contract.py`, whose port and adapter subjects are derived from source
+rather than listed (issue #31).
 
 ## A0.5 contract-shape additions (signatures / `...` only)
 

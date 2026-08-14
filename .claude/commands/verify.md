@@ -9,7 +9,7 @@ summarise, and do not report a step as passing without its output.
 uv sync --locked --extra dev
 uv run ruff check src/ tests/ examples/ .claude/hooks/
 uv run ruff format --check src/ tests/ examples/ .claude/hooks/
-uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py
+uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py tests/_contract_scan.py
 uv run python -m compileall examples
 uv run python examples/00_quickstart.py
 uv run python examples/03_custom_embedder.py

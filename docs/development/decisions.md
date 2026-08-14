@@ -13,7 +13,9 @@ Evaluation comparison is verb-dependent: `link` compares by order;
 (`frozenset({a, b})`) before comparing. Removes the silent recall/precision
 fork. Recorded in: `LabeledPairs` docstring + `linkage_metrics` /
 `blocking_metrics` / `pair_completeness_at_k` docstrings. Test:
-`tests/test_a05_contract.py::test_d1_labeledpairs_is_ordered_and_not_symmetrized`.
+`tests/test_gold_clustering_utils.py::test_labeledpairs_is_ordered_and_not_symmetrized`
+(rehomed from the deleted `test_a05_contract.py` in issue #31; it asserts a computed
+value, so it belongs with the behaviour tests).
 
 **Amendment (A0.5, surfaced by oracle 4).** "Verb-dependent comparison" is not
 recoverable from a `LinkageResult` / candidate list alone — the result does not
@@ -144,9 +146,10 @@ like `Source`, and read beyond evaluation by Phase-B mining).
 Full record: [`docs/ADRs/0002-evaluation-types-out-of-core.md`](../ADRs/0002-evaluation-types-out-of-core.md).
 Recorded in: `core/__init__.py` (`__all__` + docstring), `denselinkage/__init__.py`
 (prelude re-export), the `metrics` modules (`linkage`/`blocking`/`clustering`/
-`tuning`/`adjusted`), and the fitness functions `tests/test_contract.py` /
-`tests/test_a05_contract.py` / `tests/test_phase_a_additions.py` (the reports now
-assert membership in `metrics`, not `core`). The `core/results.py` →
+`tuning`/`adjusted`), and the fitness function `tests/test_contract.py`, whose
+`test_no_metrics_report_type_leaks_into_core` asserts membership in `metrics` and
+absence from `core` (issue #31 folded the former `test_a05_contract.py` and
+`test_phase_a_additions.py` into it and derived their subjects from source). The `core/results.py` →
 `core/outputs.py` rename is deferred (cosmetic; would churn every import site).
 
 ## D8 — Pre-freeze contract ratification (ADR-0003)

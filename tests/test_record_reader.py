@@ -38,3 +38,19 @@ def test_record_id_is_stringified_and_fields_preserved() -> None:
     assert record.id == "1"  # str(1)
     assert record.fields["name"] == "Acme"  # raw row carried on the record
     assert record.text == "1 | Acme"
+
+
+def test_the_seam_is_named_and_documents_serializer_resolution() -> None:
+    """The Source -> Record materialization is the one named orchestration seam.
+
+    ``Source.serializer=None`` resolving to the default is the reader's job, and
+    the module docstring is where that responsibility is recorded. Rehomed from
+    the deleted ``test_a05_contract.py`` (issue #31): it pins a private module's
+    docstring, which ADR-0006 puts outside the freeze twice over, so it belongs
+    with the reader rather than in a contract file.
+    """
+    import denselinkage._reader as reader_mod
+
+    assert hasattr(RecordReader, "read")
+    assert reader_mod.__doc__ is not None
+    assert "serializer" in reader_mod.__doc__.lower()

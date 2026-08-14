@@ -39,7 +39,7 @@ a dependency, run `uv lock` deliberately and commit the result with the change.
 ```bash
 uv run ruff check src/ tests/ examples/ .claude/hooks/
 uv run ruff format --check src/ tests/ examples/ .claude/hooks/
-uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py   # strict; CI checks all three too
+uv run mypy src/ examples/ .claude/hooks/ tests/_api_snapshot.py tests/_contract_scan.py   # strict; CI checks all three too
 uv run python -m compileall examples
 uv run python examples/00_quickstart.py     # and 03, 04, 05
 uv run pytest -m "not adapter and not slow" --cov=denselinkage --cov-report=term
