@@ -90,6 +90,58 @@ metrics report types are its evaluation output; declaring them unfrozen after
 Rejected as the status quo that produced the problem. Whichever set the gate
 reads becomes operative, so leaving it undecided means deciding by accident.
 
+### Implementation: an existing API-diff tool versus a bespoke derivation
+
+This practice is not novel and the ADR should not pretend it is. Committing an
+approved-API file and failing the build when the parsed API departs from it is
+the same design as .NET's `Microsoft.CodeAnalysis.PublicApiAnalyzers`, which
+tracks `PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt`. Framing it as an
+automated check on an architectural characteristic is the *fitness function* of
+Ford, Parsons and Kua. Detecting breaking changes by differencing two parsed API
+versions is what APIDiff (Brito, Xavier, Hora and Valente, SANER 2018) does for
+Java, over types, methods and fields.
+
+For Python the closest tool is **griffe**, which exposes `griffe dump` to
+serialise the API and `griffe check` / `find_breaking_changes()` to compare two
+versions. It was evaluated against griffe 2.1.0 before this gate was kept, using
+the same 16 mutations `tests/test_frozen_surface.py` is verified on.
+
+**Result: griffe agreed with the required verdict on 8 of 16.**
+
+| griffe catches | griffe misses |
+| --- | --- |
+| narrowing a port (`PARAMETER_REMOVED`) | widening a port with an optional keyword parameter |
+| reordering dataclass fields (`PARAMETER_MOVED`) | adding a member to an existing `Protocol` |
+| a changed `Vectors` dtype (`ATTRIBUTE_CHANGED_VALUE`) | adding a whole new `Protocol` |
+| a changed field type | dropping `frozen=True` or `kw_only=True` |
+| a new required field (`PARAMETER_ADDED_REQUIRED`) | a name removed from `core.__all__` |
+| the three docstring/comment non-changes | a changed `to_frame` column schema |
+| | a new optional field with a default |
+
+The misses are structural, not defects. Every one of griffe's twelve
+`BreakageKind` members is **caller-facing**: `PARAMETER_REMOVED`,
+`RETURN_CHANGED_TYPE`, `OBJECT_REMOVED`, `CLASS_REMOVED_BASE` and so on. This
+project's rule is **implementer-facing**, which is exactly the asymmetry
+ADR-0003 records: adding `timeout=0.0` to `Matcher.match` breaks no caller and
+breaks every third-party `Matcher`. Under nominal typing that is not a breakage,
+so griffe has no kind for it. It reproduces mypy's blind spot for the same
+structural reason, which is the reason this gate exists at all.
+
+Two further gaps. Griffe reports breakages only, so additive changes are silent
+by design, while a freeze gate needs every movement to be deliberate. And it
+models no decorator arguments.
+
+`griffe dump` was also evaluated as the snapshot format directly, since it does
+record decorator keyword arguments. It is unusable for that: the dump embeds
+`lineno` / `endlineno` and docstrings, so adding a single comment line changed
+its hash (`032b1df7…` to `713d8fbd…`). ADR-0006 requires the snapshot be
+invariant to docstrings and formatting, so the dump would have to be filtered
+down to approximately what the bespoke derivation already produces.
+
+The bespoke derivation is therefore kept, on measurement rather than preference.
+Griffe remains the right tool for the question it answers, and applying it to
+the adapters, which this snapshot does not cover, is filed separately.
+
 ## Trade-off Analysis
 
 Option A widens what a major version protects, which raises the cost of changing
@@ -132,8 +184,31 @@ how `IncompatibleStore` reached `errors.__all__` while missing from
 - [x] #32's failure messages cite this ADR for scope and ADR-0003 for severity.
 - [ ] #31 derives the remaining hand-maintained whitelists (adapter/port pairs)
       from the same AST machinery.
+- [ ] #45 applies `griffe check` to the adapters, which this snapshot does not
+      cover and where griffe's caller-facing taxonomy is the right question.
 
 ## References / prior art
+
+External, for the practice this implements:
+
+- Ford, Parsons and Kua, *Building Evolutionary Architectures* (O'Reilly, 2017)
+  — the **architectural fitness function**: an objective integrity assessment of
+  an architectural characteristic, classified as atomic (one aspect) or holistic.
+  This gate and the dependency-cut check are both atomic fitness functions.
+  <https://www.oreilly.com/library/view/building-evolutionary-architectures/9781491986356/ch02.html>
+- `Microsoft.CodeAnalysis.PublicApiAnalyzers` — the committed approved-API file
+  (`PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`) enforced by an analyzer.
+  The closest production precedent for `tests/api_snapshot.json`, including the
+  shipped-versus-pending split.
+  <https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md>
+- Brito, Xavier, Hora and Valente, "APIDiff: Detecting API breaking changes"
+  (SANER 2018) — differencing two parsed API versions over types, methods and
+  fields, with a large-scale study of breaking changes in the Java ecosystem.
+  <https://github.com/aserg-ufmg/apidiff>
+- **griffe** — the Python equivalent, evaluated and not adopted for the reasons
+  measured under Options Considered. <https://github.com/mkdocstrings/griffe>
+
+Internal:
 
 - [ADR-0003](./0003-pre-freeze-contract-ratification.md) — the add/remove
   asymmetry table that classifies each change the gate reports.
