@@ -22,12 +22,12 @@ adapter-coverage matrix, and what a reader of the package understands
 `denselinkage` to be: a contract other people implement, or a library that
 carries the methods.
 
-A second motivation is external. The project intends a JOSS submission after
-v1.1.0 (see [roadmap.md](../development/roadmap.md)). JOSS requires software
-that is feature-complete and represents substantial scholarly effort, and
-weighs signals including size and demonstrated research use. A package that is
-mostly protocol definitions is defensible architecturally and reads thin under
-that rubric.
+A second motivation is external. A software paper describing the library as a
+research instrument is planned after Phase C (see
+[roadmap.md](../development/roadmap.md)). Such a paper is judged on whether the
+software is feature-complete and represents substantial effort, weighing signals
+including size and demonstrated research use. A package that is mostly protocol
+definitions is defensible architecturally and reads thin under that rubric.
 
 ## Decision
 
@@ -54,7 +54,7 @@ One install, one test suite, one coverage gate, one place to look. The
 comparison the project exists to enable, running several methods over the same
 data through the same ports, works out of the box rather than requiring the
 reader to assemble it. It is also the option that most obviously satisfies a
-JOSS reviewer asking whether the software is feature-complete and substantial.
+reviewer asking whether the software is feature-complete and substantial.
 
 ### Option B — Contract and conformance harness only, methods live outside
 
@@ -65,7 +65,7 @@ This is the option the architecture argues for, and rejecting it is the
 substance of this decision. It keeps the wheel small, keeps heavy backends out
 entirely, and makes the contract the product. It was rejected because it moves
 the burden of assembly onto every user, gives the project no way to guarantee
-that a claimed implementation actually conforms, and offers a JOSS reviewer a
+that a claimed implementation actually conforms, and offers a reviewer a
 package that is mostly interface definitions.
 
 ### Option C — A flagship method in-repo, the rest documented as a pattern

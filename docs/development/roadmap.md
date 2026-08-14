@@ -72,28 +72,30 @@ Three things could still force a major version, and each needs its own ADR:
 - reworking `SearchableIndex.extended` beyond what
   [ADR-0001](../ADRs/0001-stateful-components-as-artifacts.md) already settled.
 
-## JOSS submission
+## Readiness for external review
 
-A [JOSS](https://joss.theoj.org) submission is planned once Phase C lands. The
-relevant constraints, checked against JOSS's own documentation rather than
-assumed:
+A software paper describing the library as a research instrument is planned once
+Phase C lands. That is a separate object from the ISE 2026 paper, whose
+contribution is the design method rather than the tool, and the venue is not
+settled: nothing is cited here until the ISE paper is published.
 
-- **Prior publication is not a bar.** JOSS explicitly handles co-publication:
-  it "considers submissions for which the implementation of the software itself
-  reflects a substantial scientific effort", and asks authors to declare related
-  publications. The ISE 2026 paper's contribution is a design method; a JOSS
-  paper's contribution is the library as a research instrument. Different
-  objects, different claims.
-- **The repository must have been public for more than six months with active
-  development spanning that period.** This repository has been public since
-  2026-05-19, so that window opens around **19 November 2026**.
-- **Feature-complete, no half-baked solutions.** This is the binding constraint
-  and the reason to submit after Phase C rather than now: `Trainer` is
-  contract-only and `SearchableIndex.extended` raises. Issue #19 closes the
-  second; Phase C closes the first.
-- **Substantial scholarly effort**, judged partly on size, commit history and
-  contributor count. External contributors are a signal rather than a
-  requirement.
+The readiness criteria below are the project's own, informed by how software
+papers are reviewed. They are worth tracking regardless of where anything is
+submitted, because each one is a property a user benefits from.
+
+- **Feature-completeness.** This is the binding constraint. `Trainer` is
+  contract-only and `SearchableIndex.extended` raises, so a reader of
+  `core/ports.py` finds a public protocol with no implementer and a method that
+  refuses to run. Issue #19 closes the second; Phase C closes the first.
+- **Claims match code.** Nothing in the README, the tutorial or the docstrings
+  should describe a capability the source does not provide. This is a standing
+  obligation, not a milestone.
+- **Evidence the library does entity resolution well**, which is a different
+  axis from the engineering substrate and the weaker one today: accuracy is
+  recorded on a single dataset, blocking is measured by pair completeness alone,
+  and there is no scalability envelope.
+- **A public development history with active development**, which this
+  repository has had since 2026-05-19.
 
 The conformance harness (#33) matters more under
 [ADR-0008](../ADRs/0008-published-methods-as-first-party-adapters.md) than it
