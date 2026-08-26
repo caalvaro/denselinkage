@@ -10,6 +10,16 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DenseBlocker` accepts an optional `batch_size` and forwards it to its
   embedder while building an index.
 
+### Fixed
+- `LangChainMatcher` rejects a prompt template that references a placeholder
+  other than `{record_a}` / `{record_b}`, raising plain `ValueError` from
+  `__init__` (#51). Such a template can never render, so every pair previously
+  exhausted the retry budget and came back as a `MatchError`, counting a
+  caller's typo in `LinkageMetrics.n_errors` as model unreliability. API misuse
+  belongs in the `ValueError` tier, outside `DenseLinkageError`, and is now
+  raised there before the model is bound. A template that uses only one of the
+  two fields, or neither, renders and stays accepted.
+
 ## [1.0.0] — 2026-06-06
 
 First **stable** release: the heavy adapters land, so the headline dense

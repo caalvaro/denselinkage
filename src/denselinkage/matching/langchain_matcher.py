@@ -20,6 +20,12 @@ class _Decision(TypedDict):
     rationale: str | None
 
 
+# The variables `match` binds when it renders the prompt, one per pair field. A
+# template placeholder outside this set can never be supplied, so it is API
+# misuse and `__init__` rejects it (issue #51).
+_PROMPT_VARIABLES = frozenset({"record_a", "record_b"})
+
+
 def _field(result: Any, name: str) -> Any:
     """Read ``name`` from a structured-output result that may be a dict (TypedDict
     schema) or an object (pydantic schema)."""
@@ -39,6 +45,13 @@ class LangChainMatcher(Matcher):
     parse text and the prompt never asks for a format. On exhausted ``retry`` the
     matcher yields a ``MatchError(reason=...)`` for that pair (aligned by
     position), never raising into the batch.
+
+    ``__init__`` raises plain ``ValueError`` (API misuse, tier 3) if ``prompt``
+    references any placeholder other than ``{record_a}`` / ``{record_b}``. Such a
+    template cannot render for *any* pair. Left to fail at call time it would
+    spend the whole retry budget per pair and surface as a ``MatchError``, which
+    is reserved for a pair the matcher could not decide. Using only one of the
+    two, or neither, renders and is accepted.
     """
 
     def __init__(
@@ -52,10 +65,21 @@ class LangChainMatcher(Matcher):
         require("langchain_core")
         from langchain_core.prompts import ChatPromptTemplate
 
+        template = ChatPromptTemplate.from_template(prompt)
+        # Checked here, not in match(): the template is fixed at construction, so
+        # a bad one is a caller bug rather than a per-pair outcome. Ordered before
+        # the with_structured_output bind, so a rejected prompt leaves `llm` alone.
+        unknown = sorted(set(template.input_variables) - _PROMPT_VARIABLES)
+        if unknown:
+            raise ValueError(
+                f"prompt references unknown placeholder(s) {unknown}; a matcher "
+                f"prompt may only reference {sorted(_PROMPT_VARIABLES)}, the "
+                "fields match() supplies for each pair"
+            )
         self._retry = retry or RetryPolicy()
         self._max_concurrency = max_concurrency
         structured_llm = llm.with_structured_output(_Decision)
-        self._chain = ChatPromptTemplate.from_template(prompt) | structured_llm
+        self._chain = template | structured_llm
 
     def match(self, pairs: Sequence[CandidatePair]) -> list[MatchDecision | MatchError]:
         inputs = [
