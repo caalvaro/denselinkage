@@ -1,7 +1,7 @@
 """``LangChainMatcher`` — LLM matcher (extra: ``[langchain]``)."""
 
 import time
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import Any, TypedDict
 
 from denselinkage._optional import require
@@ -20,10 +20,14 @@ class _Decision(TypedDict):
     rationale: str | None
 
 
-# The variables `match` binds when it renders the prompt, one per pair field. A
-# template placeholder outside this set can never be supplied, so it is API
-# misuse and `__init__` rejects it (issue #51).
-_PROMPT_VARIABLES = frozenset({"record_a", "record_b"})
+# The single definition of what a prompt may reference: the keys are the names
+# `__init__` validates a template against, and the values are what `match` binds
+# for each pair. Two hand-written copies would drift, and drift in either
+# direction re-creates issue #51 at the site meant to prevent it.
+_PROMPT_FIELDS: dict[str, Callable[[CandidatePair], str]] = {
+    "record_a": lambda pair: pair.record_a.text,
+    "record_b": lambda pair: pair.record_b.text,
+}
 
 
 def _field(result: Any, name: str) -> Any:
@@ -48,7 +52,7 @@ class LangChainMatcher(Matcher):
 
     ``__init__`` raises plain ``ValueError`` (API misuse, tier 3) if ``prompt``
     references any placeholder other than ``{record_a}`` / ``{record_b}``. Such a
-    template cannot render for *any* pair. Left to fail at call time it would
+    template cannot render for a single pair. Left to fail at call time it would
     spend the whole retry budget per pair and surface as a ``MatchError``, which
     is reserved for a pair the matcher could not decide. Using only one of the
     two, or neither, renders and is accepted.
@@ -69,12 +73,16 @@ class LangChainMatcher(Matcher):
         # Checked here, not in match(): the template is fixed at construction, so
         # a bad one is a caller bug rather than a per-pair outcome. Ordered before
         # the with_structured_output bind, so a rejected prompt leaves `llm` alone.
-        unknown = sorted(set(template.input_variables) - _PROMPT_VARIABLES)
+        unknown = sorted(set(template.input_variables) - _PROMPT_FIELDS.keys())
         if unknown:
+            # Rendered as written ("{record_left}", not "record_left") so a
+            # positional "{}" reads as itself and stray whitespace is visible.
+            offenders = ", ".join(f"{{{name}}}" for name in unknown)
+            available = ", ".join(f"{{{name}}}" for name in sorted(_PROMPT_FIELDS))
             raise ValueError(
-                f"prompt references unknown placeholder(s) {unknown}; a matcher "
-                f"prompt may only reference {sorted(_PROMPT_VARIABLES)}, the "
-                "fields match() supplies for each pair"
+                f"prompt references {offenders}, which match() cannot supply for "
+                f"a pair; it may only reference {available}. Escape a literal "
+                "brace as {{ }} if that text was not meant as a placeholder."
             )
         self._retry = retry or RetryPolicy()
         self._max_concurrency = max_concurrency
@@ -83,7 +91,7 @@ class LangChainMatcher(Matcher):
 
     def match(self, pairs: Sequence[CandidatePair]) -> list[MatchDecision | MatchError]:
         inputs = [
-            {"record_a": pair.record_a.text, "record_b": pair.record_b.text}
+            {name: read(pair) for name, read in _PROMPT_FIELDS.items()}
             for pair in pairs
         ]
         decisions: dict[int, MatchDecision] = {}
