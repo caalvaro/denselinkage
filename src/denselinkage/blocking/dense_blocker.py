@@ -13,7 +13,8 @@ class DenseBlocker(Blocker):
     independently (the embedder is a pure strategy; the vector index is a spec
     whose ``build`` mints the artifact). ``similarity_threshold`` / ``top_k``
     are defaults that ``DenseBlockingIndex.query`` may override per call.
-    ``batch_size`` is forwarded to the embedder while building the index."""
+    ``batch_size`` is forwarded to the embedder on both paths: encoding the
+    record corpus here, and encoding every query set the built index is given."""
 
     def __init__(
         self,
@@ -45,4 +46,5 @@ class DenseBlocker(Blocker):
             records_by_id={record.id: record for record in records},
             top_k=self._top_k,
             similarity_threshold=self._similarity_threshold,
+            batch_size=self._batch_size,
         )

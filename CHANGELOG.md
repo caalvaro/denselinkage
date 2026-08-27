@@ -8,7 +8,11 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `DenseBlocker` accepts an optional `batch_size` and forwards it to its
-  embedder while building an index.
+  embedder on both paths: encoding the record corpus in `build`, and encoding
+  every query set the built index is given (#50). The parameter is a memory
+  ceiling for the embedder, so a build-only reading of it would let a query set
+  exhaust the memory the caller sized the setting to fit. It has not appeared in
+  a release, so this corrects the entry rather than adding a `Fixed` line.
 
 ### Fixed
 - `LangChainMatcher` rejects a prompt template that references a placeholder

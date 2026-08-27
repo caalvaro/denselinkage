@@ -15,7 +15,9 @@ class DenseBlockingIndex(BlockingIndex):
     ``CandidatePair`` objects for a query record set. Each pair is oriented
     ``record_a`` = indexed (left/reference) record, ``record_b`` = query record.
     ``top_k`` / ``similarity_threshold`` default to the originating spec's values
-    and may be overridden per query."""
+    and may be overridden per query. ``batch_size`` is the spec's value, applied
+    to every query encode; it is a resource ceiling rather than a retrieval knob,
+    so it is not overridable per call."""
 
     def __init__(
         self,
@@ -25,12 +27,14 @@ class DenseBlockingIndex(BlockingIndex):
         records_by_id: dict[RecordId, Record],
         top_k: int,
         similarity_threshold: float,
+        batch_size: int | None = None,
     ) -> None:
         self._searchable = searchable
         self._embedder = embedder
         self._records_by_id = records_by_id
         self._top_k = top_k
         self._similarity_threshold = similarity_threshold
+        self._batch_size = batch_size
 
     @property
     def searchable(self) -> SearchableIndex:
@@ -72,7 +76,9 @@ class DenseBlockingIndex(BlockingIndex):
             if similarity_threshold is None
             else similarity_threshold
         )
-        query_vectors = self._embedder.encode([record.text for record in records])
+        query_vectors = self._embedder.encode(
+            [record.text for record in records], batch_size=self._batch_size
+        )
         neighbours = self._searchable.search(query_vectors, top_k=k)
         pairs: list[CandidatePair] = []
         for query_record, hits in zip(records, neighbours, strict=True):
