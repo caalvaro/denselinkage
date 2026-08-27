@@ -1,6 +1,7 @@
 """Unit tests for ``DenseBlockingIndex`` query behaviour: pair orientation, the
-query-time threshold override, and artifact reuse. InvalidTopK is covered in
-``test_quickstart_end_to_end``."""
+query-time threshold override, artifact reuse, and the ``batch_size`` the spec
+fixes reaching the embedder on the build *and* the query path (#50). InvalidTopK
+is covered in ``test_quickstart_end_to_end``."""
 
 from collections.abc import Sequence
 
@@ -38,7 +39,12 @@ def _blocker(*, top_k: int = 5, similarity_threshold: float = 0.0) -> DenseBlock
     )
 
 
-def test_build_forwards_explicit_embedder_batch_size() -> None:
+def test_explicit_batch_size_reaches_the_embedder_on_both_paths() -> None:
+    """The whole recorded sequence, so a regression on either call fails.
+
+    ``batch_size`` is chosen to fit a corpus in memory; a query set embedded at
+    the embedder's own default exhausts it on a call the caller never tuned.
+    """
     embedder = _RecordingEmbedder()
     blocker = DenseBlocker(
         embedder=embedder,
@@ -46,18 +52,21 @@ def test_build_forwards_explicit_embedder_batch_size() -> None:
         batch_size=64,
     )
 
-    blocker.build([Record("L1", "acme inc")])
+    index = blocker.build([Record("L1", "acme inc")])
+    index.query([Record("R1", "acme incorporated")])
 
-    assert embedder.batch_sizes == [64]
+    assert embedder.batch_sizes == [64, 64]  # build, then query
 
 
-def test_build_defaults_embedder_batch_size_to_none() -> None:
+def test_batch_size_defaults_to_none_on_both_paths() -> None:
     embedder = _RecordingEmbedder()
     blocker = DenseBlocker(embedder=embedder, vector_index=NumpyFlatIndex())
 
-    blocker.build([Record("L1", "acme inc")])
+    index = blocker.build([Record("L1", "acme inc")])
+    index.query([Record("R1", "acme incorporated")])
 
-    assert embedder.batch_sizes == [None]
+    # None, not a number: the embedder's own default still applies.
+    assert embedder.batch_sizes == [None, None]
 
 
 def test_pair_orientation_is_indexed_a_query_b() -> None:
