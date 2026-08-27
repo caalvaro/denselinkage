@@ -29,7 +29,7 @@ Here is the direct translation from the vocabulary you know to the package:
 | ER stage | Classic approach | denselinkage | API surface | Quality metric |
 | --- | --- | --- | --- | --- |
 | Representation | comparison attributes / blocking-key construction | serialise each row to one text string | {class}`~denselinkage.core.ports.Serializer` | — |
-| **Blocking / indexing** | standard blocking, sorted neighbourhood, canopy, q-gram | embed records, retrieve top-_k_ nearest in a vector index | {class}`~denselinkage.core.ports.Embedder` + {class}`~denselinkage.core.ports.VectorIndex` (via {class}`~denselinkage.blocking.DenseBlocker`) | pair completeness@k, reduction ratio |
+| **Blocking / indexing** | standard blocking, sorted neighbourhood, canopy, q-gram | embed records, retrieve top-_k_ nearest in a vector index | {class}`~denselinkage.core.ports.Embedder` + {class}`~denselinkage.core.ports.VectorIndex` (via {class}`~denselinkage.blocking.DenseBlocker`) | pair completeness@k; reduction ratio is planned in [#53](https://github.com/caalvaro/denselinkage/issues/53) |
 | Comparison | per-field similarity → comparison vector | cosine similarity, carried on each pair | {attr}`CandidatePair.similarity_score <denselinkage.core.models.CandidatePair>` | — |
 | **Classification** | Fellegi–Sunter, threshold, supervised ML | similarity threshold **or** an LLM | {class}`~denselinkage.core.ports.Matcher` ({class}`~denselinkage.matching.ThresholdMatcher`, {class}`~denselinkage.matching.LangChainMatcher`) | precision / recall / F1 |
 | Clustering / merge | transitive closure, hierarchical | connected components (pluggable) | {func}`~denselinkage.clustering.connected_components` / {class}`~denselinkage.core.ports.Clusterer` | B³ precision / recall / F1 |
@@ -304,7 +304,7 @@ matcher (extra `[all]`). Same pipeline, heavier components:
 
 | Stage | Knob | Measure with |
 | --- | --- | --- |
-| Blocking | `top_k`, `similarity_threshold` on {class}`~denselinkage.blocking.DenseBlocker` | {func}`~denselinkage.metrics.pair_completeness_at_k` (PC@k), reduction ratio |
+| Blocking | `top_k`, `similarity_threshold` on {class}`~denselinkage.blocking.DenseBlocker` | {func}`~denselinkage.metrics.pair_completeness_at_k` (PC@k); reduction ratio is planned in [#53](https://github.com/caalvaro/denselinkage/issues/53) |
 | Classification | `ThresholdMatcher(threshold=...)` or the LLM prompt | {func}`~denselinkage.metrics.linkage_metrics` (P/R/F1) |
 | Clustering | the {class}`~denselinkage.core.ports.Clusterer` strategy | {func}`~denselinkage.metrics.clustering_metrics` (B³) |
 
