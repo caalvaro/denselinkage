@@ -10,6 +10,20 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DenseBlocker` accepts an optional `batch_size` and forwards it to its
   embedder while building an index.
 
+### Changed
+- `tune_threshold` walks the sorted scores once instead of rescanning every
+  candidate per cut point, `O((n + g) log (n + g))` for `n` scored candidates
+  and `g` cut points rather than `O(n * g)` (#52). The `ThresholdSweep` it
+  returns is unchanged, including the inclusive `>=` tie boundary, the rule
+  that a pair key carried by several candidates is predicted from its highest
+  score, and the `n_errors` accounting; a seeded differential test pins the new
+  rows against the previous implementation row for row. On the
+  45,880-candidate DBLP-ACM set in `paper/benchmarks/_openai_candidates.json`
+  (44,626 distinct scores, so 44,626 rows) one call drops from 126.6 s to
+  0.080 s on CPython 3.13. Peak traced allocation rises from 15.4 MiB to
+  17.9 MiB, since the sweep keeps one entry per distinct pair key for the
+  whole call where the rescan allocated one set per row and released it.
+
 ### Fixed
 - `LangChainMatcher` rejects a prompt template that references a placeholder
   other than `{record_a}` / `{record_b}`, raising plain `ValueError` from

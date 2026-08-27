@@ -46,9 +46,11 @@ def _metrics_from_keys(
     n_errors: int,
 ) -> LinkageMetrics:
     """Assemble ``LinkageMetrics`` from comparison-key sets — the shared tp/fp/fn
-    formula behind both ``linkage_metrics`` and ``tune_threshold``. ``errored``
-    keys are excluded from false negatives (recall ignores pairs the matcher
-    could not decide); ``n_errors`` is the raw errored-pair count."""
+    formula behind ``linkage_metrics``, and the source of ``tune_threshold``'s
+    empty-prediction row: its ``false_negative`` is the base that the sweep
+    subtracts recovered gold keys from. ``errored`` keys are excluded from false
+    negatives (recall ignores pairs the matcher could not decide); ``n_errors``
+    is the raw errored-pair count."""
     return LinkageMetrics(
         true_positive=len(gold_keys & predicted),
         false_positive=len(predicted - gold_keys),
