@@ -27,12 +27,16 @@ matches recoverable from surface text.
   extra `[sentence-transformers]`): sentence embeddings that capture meaning.
   Reach for it when matches need world knowledge rather than shared characters.
 
-## Scaling vector search
+## Vector index backends
 
-{class}`~denselinkage.indexing.NumpyFlatIndex` is exact and dependency-free but
-brute-force. For large reference sets, switch to
-{class}`~denselinkage.indexing.FaissFlatIndex` (extra `[faiss]`) — same
-{class}`~denselinkage.core.ports.VectorIndex` port, drop-in replacement.
+{class}`~denselinkage.indexing.NumpyFlatIndex` is exact, dependency-free and
+brute-force. {class}`~denselinkage.indexing.FaissFlatIndex` (extra `[faiss]`) is
+brute-force too and returns the same neighbours, behind the same
+{class}`~denselinkage.core.ports.VectorIndex` port. The two differ in what
+`search` allocates: the numpy artifact materialises the whole
+`(n_queries, n_indexed)` score matrix, the FAISS artifact receives back only each
+query's top-_k_ scores and indices. See
+[Semantic + LLM matching](semantic-llm) for the byte formula.
 
 ## Threshold vs LLM matching
 
@@ -47,6 +51,7 @@ brute-force. For large reference sets, switch to
 ## Rule of thumb
 
 Start with `with_defaults()`. Swap the **embedder** first if you are missing
-semantic matches, the **index** if search is too slow, and the **matcher** last
-if similarity cannot separate true from false pairs. Every swap is one
-constructor argument — see [Custom components](custom-components).
+semantic matches, the **index** if the full numpy score matrix does not fit in
+memory, and the **matcher** last if similarity cannot separate true from false
+pairs. Every swap is one constructor argument — see
+[Custom components](custom-components).

@@ -34,6 +34,16 @@ class NumpySearchableIndex(SearchableIndex):
     def search(
         self, queries: Vectors, *, top_k: int
     ) -> list[list[tuple[RecordId, float]]]:
+        """Score every query against every indexed vector, then keep each
+        query's true top ``k = min(top_k, n_indexed)`` neighbours.
+
+        The score matrix is one unchunked allocation: a float32 array of
+        shape ``(n_queries, n_indexed)``, so ``4 * n_queries * n_indexed``
+        bytes. At 100,000 queries against 100,000 indexed records that is
+        4.0e10 bytes, or 37.3 GiB. ``DenseBlockingIndex.query`` encodes and
+        searches the whole query table in one call, so ``n_queries`` is the
+        entire query side of a ``link`` or ``dedupe``.
+        """
         query_matrix = np.asarray(queries, dtype=np.float32)
         n_indexed = len(self._ids)
         if n_indexed == 0:

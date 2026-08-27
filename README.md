@@ -16,9 +16,18 @@ a fast similarity threshold or a large language model — then clusters and scor
 the result.
 
 The core runs on **numpy + pandas alone**. FAISS, sentence-transformers, and
-LangChain are optional extras you reach for when you need approximate-nearest-
-neighbour search at scale, semantic embeddings, or LLM-based matching — `import
-denselinkage` pulls in none of them until you ask.
+LangChain are optional extras you reach for when you need a FAISS-backed vector
+index, semantic embeddings, or LLM-based matching. `import denselinkage` pulls in
+none of them until you ask.
+
+Both shipped index backends are **exact**: each scores every indexed vector and
+returns the true top-k. The `[faiss]` extra runs that same exhaustive search
+through `faiss.IndexFlatIP` and returns the same neighbours, with scores equal to
+within float32 tolerance. The numpy artifact materialises the whole
+`(n_queries, n_indexed)` score matrix before selecting top-k; the FAISS artifact
+gets back only each query's top-k scores and ids. An approximate index that
+trades recall for retrieval cost is [planned, not
+shipped](https://github.com/caalvaro/denselinkage/issues/20).
 
 ## Highlights
 
@@ -26,7 +35,7 @@ denselinkage` pulls in none of them until you ask.
   The heavy ML backends are opt-in extras, and the import graph proves it: CI fails
   if a backend ever leaks into the core.
 - 🔁 **Swap any stage** — the embedder, vector index, and matcher are independent
-  components behind small `Protocol`s. Go from lexical → semantic, brute-force →
+  components behind small `Protocol`s. Go from lexical → semantic, numpy →
   FAISS, threshold → LLM without rewriting your pipeline.
 - 📦 **End to end** — block → match → cluster → evaluate, with linkage, blocking,
   and clustering (B³) **metrics included**.
@@ -122,12 +131,12 @@ Three verbs cover the common shapes — **`link`** (two datasets), **`dedupe`** 
 dataset against itself), and **`match_pairs`** (you already have candidate pairs).
 `index()` builds a reusable reference index, so you embed once and query many times.
 
-## Scaling up: semantic + LLM matching
+## Semantic + LLM matching
 
 The lexical default is fast and free, but it only sees *characters* — it can't tell
 that *Google* and *Alphabet* are the same company. Swap in the heavy adapters for
-**meaning** (semantic embeddings), **scale** (FAISS), and **judgment** (an LLM), all
-behind the same ports:
+**meaning** (semantic embeddings) and **judgment** (an LLM), both behind the same
+ports. The index row is an exact-to-exact swap:
 
 | Stage | Lexical (default) | Semantic + LLM |
 |------:|-------------------|----------------|

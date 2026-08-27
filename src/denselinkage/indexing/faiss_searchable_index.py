@@ -59,6 +59,19 @@ class FaissSearchableIndex(SearchableIndex):
     def search(
         self, queries: Vectors, *, top_k: int
     ) -> list[list[tuple[RecordId, float]]]:
+        """Return each query's true top ``k = min(top_k, n_indexed)``
+        neighbours from the ``faiss.IndexFlatIP``: the same ids
+        ``NumpySearchableIndex.search`` returns for the same input, with
+        scores equal to within float32 tolerance
+        (``test_faiss_matches_numpy_neighbours`` pins them).
+
+        ``faiss.Index.search`` hands back per-query scores and indices of
+        shape ``(n_queries, k)``, where ``NumpySearchableIndex.search``
+        first allocates the whole ``(n_queries, n_indexed)`` score matrix.
+        What FAISS allocates internally is not verifiable from this
+        repository, and neither backend is timed here, so neither is
+        documented as faster.
+        """
         query_matrix = np.ascontiguousarray(queries, dtype=np.float32)
         n_indexed = len(self._ids)
         if n_indexed == 0:
