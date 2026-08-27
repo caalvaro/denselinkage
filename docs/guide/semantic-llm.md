@@ -54,7 +54,7 @@ The first construction downloads the model (cached afterwards under
 `show_progress=True` to `encode` for large reference sets.
 :::
 
-## ANN index — `FaissFlatIndex`
+## Exact vector index — `FaissFlatIndex`
 
 ```python
 from denselinkage.indexing import FaissFlatIndex
@@ -63,10 +63,24 @@ vector_index = FaissFlatIndex()   # exact inner-product (IndexFlatIP) search
 ```
 
 A drop-in for `NumpyFlatIndex` behind the `VectorIndex` port — same neighbours,
-same scores (a differential test pins them together), because it uses FAISS's
-`IndexFlatIP` and so reports cosine for the normalized vectors above. Reach for it
-when the brute-force numpy search becomes the bottleneck on a large reference set;
-for a few thousand records `NumpyFlatIndex` is fine.
+and scores equal to within float32 tolerance (the differential test
+`test_faiss_matches_numpy_neighbours` pins them together), because it uses FAISS's
+`IndexFlatIP` and so reports cosine for the normalized vectors above.
+
+Both backends are exhaustive, so the swap changes neither the candidate set nor
+recall. What it changes is what `search` allocates on the Python side.
+`NumpySearchableIndex.search` first materialises the whole query-by-index score
+matrix, one float32 array of shape `(n_queries, n_indexed)`, which is
+`4 * n_queries * n_indexed` bytes in a single unchunked allocation: at 100,000
+queries against 100,000 indexed records, 4.0e10 bytes, or 37.3 GiB.
+`FaissSearchableIndex.search` receives back only the per-query top-_k_ scores and
+indices, arrays of shape `(n_queries, k)` with `k = min(top_k, n_indexed)`. What
+FAISS allocates internally to produce them is not verifiable from this repository,
+and neither backend is timed here, so no speed claim is made either way; a
+measured envelope is [#56](https://github.com/caalvaro/denselinkage/issues/56).
+
+`DenseBlocker` encodes and searches the whole query table in one call, so
+`n_queries` in that formula is the entire query side of a `link` or `dedupe`.
 
 :::{note}
 Incremental `extended()` and persistence of a FAISS-backed index are out of scope

@@ -14,7 +14,7 @@ Install an extra only when you reach past the dependency-free default stack:
 
 | Extra | Adds | Enables |
 | --- | --- | --- |
-| `faiss` | `faiss-cpu` | {class}`~denselinkage.indexing.FaissFlatIndex` — scalable vector search |
+| `faiss` | `faiss-cpu` | {class}`~denselinkage.indexing.FaissFlatIndex` — exact (flat) inner-product vector search |
 | `sentence-transformers` | `sentence-transformers` | {class}`~denselinkage.embedding.SentenceTransformerEmbedder` — semantic embeddings |
 | `langchain` | `langchain-core`, `langchain-openai` | {class}`~denselinkage.matching.LangChainMatcher` — LLM matching |
 | `all` | all of the above | — |

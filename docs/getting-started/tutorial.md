@@ -18,7 +18,7 @@ have built before — it only changes how blocking and comparison are done.
 
 ```{mermaid}
 flowchart LR
-    R[Records] --> B["Blocking<br/><i>dense: embed → ANN top-k</i>"]
+    R[Records] --> B["Blocking<br/><i>dense: embed → top-k nearest</i>"]
     B --> C["Comparison<br/><i>cosine similarity from the embeddings</i>"]
     C --> D["Classification<br/><i>ThresholdMatcher or LLM</i>"]
     D --> E["Clustering<br/><i>connected components</i>"]
@@ -45,8 +45,8 @@ and exact, but the key is hand-crafted, and a record whose key is wrong (a typo
 in the surname, a missing ZIP) silently never meets its true match.
 
 Dense blocking replaces the key with a **vector**: serialise the record to text,
-embed it, and retrieve the top-_k_ nearest neighbours from an approximate
-nearest-neighbour (ANN) index. "Same bucket" becomes "close in vector space."
+embed it, and retrieve the top-_k_ nearest neighbours from a vector index.
+"Same bucket" becomes "close in vector space."
 
 ```{mermaid}
 flowchart TB
@@ -59,7 +59,7 @@ flowchart TB
     subgraph dense["Dense blocking"]
         direction LR
         d1[Records] --> d2["Embedding<br/>(lexical or semantic)"]
-        d2 --> d3["Vector index (ANN)"]
+        d2 --> d3["Vector index"]
         d3 --> d4["Top-k nearest as pairs"]
     end
 ```
@@ -319,7 +319,7 @@ precision, then check clustering for over-merging.
 | Splink | blocking rules / keys | Fellegi–Sunter (EM-trained) |
 | dedupe | learned predicates | logistic regression (active learning) |
 | Magellan / recordlinkage | keys + feature engineering | supervised ML on comparison vectors |
-| **denselinkage** | **dense retrieval (embeddings + ANN)** | **threshold or LLM, pluggable** |
+| **denselinkage** | **dense retrieval (embeddings + top-k vector search)** | **threshold or LLM, pluggable** |
 
 Bring your ER instincts: swap the hand-tuned blocking key for dense retrieval,
 and pick a threshold or an LLM as the classifier. denselinkage is **single-node

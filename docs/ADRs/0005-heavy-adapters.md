@@ -10,9 +10,10 @@ ADR-0004 shipped the dependency-free beta and deferred the four heavy adapters
 (`FaissFlatIndex`, `FaissSearchableIndex`, `SentenceTransformerEmbedder`,
 `LangChainMatcher`), which raised `NotImplementedError`. This track fills those
 bodies so the **headline method runs** — dense *semantic* blocking
-(sentence-transformer embeddings → FAISS ANN) + LLM matching — alongside the
-lexical reference stack. The work is purely **additive** (extend-never-modify):
-no port or public signature changes, only `NotImplementedError` bodies replaced.
+(sentence-transformer embeddings → a FAISS `IndexFlatIP` index) + LLM matching —
+alongside the lexical reference stack. The work is purely **additive**
+(extend-never-modify): no port or public signature changes, only
+`NotImplementedError` bodies replaced.
 
 ADR-0004 **D-4.7** explicitly deferred one decision to this point: the
 `fail_under = 100` coverage job runs `-m "not adapter and not slow"`, so once the
@@ -84,3 +85,10 @@ the number is chosen at release time.
 - ADR-0001 (spec→artifact; `extended` escape hatch), ADR-0003 (failure taxonomy /
   freeze gate), ADR-0004 (dependency-free beta; D-4.7).
 - `docs/development/roadmap.md`, `CHANGELOG.md`.
+
+## Erratum (2026-08-27)
+
+The Context above originally described the headline stack as
+"sentence-transformer embeddings → FAISS ANN". `FaissFlatIndex` builds a
+`faiss.IndexFlatIP`, which is exact, as D-5.3 in this same ADR already recorded.
+The Context now names the index type. No decision recorded here changed (#49).

@@ -19,6 +19,17 @@ follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   belongs in the `ValueError` tier, outside `DenseLinkageError`, and is now
   raised there before the model is bound. A template that uses only one of the
   two fields, or neither, renders and stays accepted.
+- Corrected what the documentation claims the two index backends do (#49). Both
+  shipped backends perform exact, exhaustive inner-product search:
+  `NumpySearchableIndex` scores every indexed vector against every query vector,
+  and `FaissFlatIndex` builds a `faiss.IndexFlatIP`, FAISS's flat, non-quantized
+  inner-product index. A differential test pins the two to equal neighbour ids
+  and to scores equal within float32 tolerance. The README, the tutorial, the
+  installation table and two guide pages described this as
+  approximate-nearest-neighbour search; they now state the exact behaviour, and
+  the allocation difference a reader can check against the source. An index that
+  trades recall for retrieval cost is #20 and has not shipped. No behaviour
+  changed.
 
 ## [1.0.0] — 2026-06-06
 

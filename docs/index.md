@@ -25,7 +25,7 @@ linkage_metrics(result, gold=LabeledPairs.from_pairs([("A1", "B1")]))
 - **Dependency-free core** — `pip install denselinkage` is just numpy + pandas; the
   heavy backends are opt-in and a CI job proves they never leak into the core.
 - **Swap any stage** — the embedder, vector index, and matcher are independent
-  ports: lexical → semantic, brute-force → FAISS, threshold → LLM, no pipeline
+  ports: lexical → semantic, numpy → FAISS, threshold → LLM, no pipeline
   rewrite.
 - **End to end** — block → match → cluster → evaluate, with linkage, blocking, and
   clustering (B³) **metrics included**.
